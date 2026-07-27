@@ -1,0 +1,76 @@
+{
+  "manifest_version": "1.0",
+  "project": "Vector Tongue",
+  "recorded_by": "RJ Marler",
+  "source_status": "user_supplied_metadata_not_independently_recomputed",
+  "hashchain_record": {
+    "timestamp_utc": "2025-10-18T14:12:43.533183Z",
+    "inventor_name_on_record": "Regan Marler",
+    "contact_email": "rjmarler8@gmail.com",
+    "title_on_record": "VECTOR TONGUE: A System for Multi-Modal, Privacy-Preserving, Low-Latency Voice AI with Federated Telemetry"
+  },
+  "artifacts": [
+    {
+      "path": "VectorTongue_ReganMarler_2025.pdf",
+      "byte_size": 10583,
+      "sha256": "f04952476c2ba4e98a3ecee07d8d98591a20eca2dd58e02a6e183b9f8c2f45de",
+      "role": "provisional_package_file"
+    },
+    {
+      "path": "USPTO_SB16_cover.pdf",
+      "byte_size": 2522,
+      "sha256": "eefc9bc3a26ba58f6c622d3d045d3e6dd7a0193ba95fee27455006c959562a55",
+      "role": "provisional_package_file"
+    },
+    {
+      "path": "drawings_placeholder.pdf",
+      "byte_size": 2642,
+      "sha256": "51ad58afdd4fbab08594f2be02e1cbbcb651b2742c0ae7fb3a92dc7718038474",
+      "role": "provisional_package_file"
+    },
+    {
+      "path": "README_BEFORE_UPLOAD.txt",
+      "byte_size": 1389,
+      "sha256": "859f2c0d3dc75d8d57047b02df17d33c169f45d9d4bc09bd83467282e159ce83",
+      "role": "provisional_package_file"
+    },
+    {
+      "path": "vector_tongue_priority_final.pdf",
+      "sha256": "d302430828b52e3ccde59e2c8df802d5c25a993cec4a5ca290edc6e971e7df90",
+      "role": "priority_declaration",
+      "reported_date": "2025-10-20"
+    },
+    {
+      "path": "VectorTongue_Provisional_ReganMarler.zip",
+      "sha256": "89ee79424350baf61d0f3af95211535bbe414daefd548bbee709e7f32d43488c",
+      "role": "provisional_bundle"
+    },
+    {
+      "path": "vector-tongue-best-ever.zip",
+      "sha256": "c304402af1023dd28bd681d30e3b76b416ba7c0add6ea5487a52c739ee6cec52",
+      "role": "core_streamlit_engine"
+    },
+    {
+      "path": "vector_tongue_simulation_20250804_230140.json",
+      "sha256": "33a6dfb7711accae197c625cccef63740e71d7f39f2fbc06342021de4bdd1cb3",
+      "role": "simulation_benchmark"
+    }
+  ],
+  "polygon": {
+    "reported_publication_month": "2026-02",
+    "reported_marketplace": "OpenSea",
+    "network": "Polygon",
+    "wallet_address": null,
+    "transaction_hash": null,
+    "contract_address": null,
+    "token_id": null,
+    "ipfs_uri": null,
+    "verification_status": "pending_identifiers"
+  },
+  "cautions": [
+    "Hashes were supplied by RJ and have not been recomputed because the referenced files were unavailable.",
+    "A package containing a USPTO cover sheet is not by itself proof that an application was filed or accepted.",
+    "The October title on record is not identical to the narrower output-only cross-model translation framework implemented in this repository.",
+    "No legal conclusion about authorship, inventorship, prior art, patent priority, ownership, or enforceability is made."
+  ]
+}

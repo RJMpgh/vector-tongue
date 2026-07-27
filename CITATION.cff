@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If Vector Tongue contributes to your work, cite this software and its originator."
+title: "Vector Tongue: Output-Only Cross-Model Translation and Drift Evaluation"
+type: software
+authors:
+  - family-names: Marler
+    given-names: RJ
+version: 0.2.0
+date-released: 2026-07-27
+repository-code: "https://github.com/RJMpgh/vector-tongue"
+url: "https://github.com/RJMpgh/vector-tongue"
+keywords:
+  - output-only analysis
+  - model evaluation
+  - behavioral drift
+  - cross-model translation
+  - embeddings
+license: LicenseRef-All-Rights-Reserved
