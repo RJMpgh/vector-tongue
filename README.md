@@ -22,7 +22,7 @@ prompts, compares them with simple baselines, estimates uncertainty, and
 preserves the original 2025 formulation as a versioned historical artifact.
 
 The repository now includes a
-[`preregistered 180-prompt real-model pilot`](experiments/real_models/PREREGISTRATION_BATCH.md).
+[`preregistered 180-prompt real-model pilot`](experiments/real_models/PREREGISTRATION_PILOT_003.md).
 See [`RESULTS.md`](RESULTS.md) for the outcome or the explicit pre-data status.
 
 It does **not** claim access to proprietary model activations, decode an exact

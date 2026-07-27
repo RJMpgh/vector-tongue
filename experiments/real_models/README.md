@@ -14,9 +14,9 @@ frozen, auditable model-to-model pilot.
 - decision criteria written before response collection.
 
 The active run is
-[`vt-openai-pilot-002`](PREREGISTRATION_BATCH.md), which uses one consistent
-Batch API collection mode. Pilot 001's synchronous interruption is preserved
-in [`DEVIATIONS.md`](DEVIATIONS.md).
+[`vt-openai-pilot-003`](PREREGISTRATION_PILOT_003.md), which uses one
+consistent Batch API collection mode and a corrected output ceiling. Earlier
+interruptions are preserved in [`DEVIATIONS.md`](DEVIATIONS.md).
 
 ## One-time setup
 
@@ -61,13 +61,13 @@ must not be used to fill Pilot 002.
 
 | Artifact | Purpose |
 |---|---|
-| `artifacts/vt-openai-pilot-002/responses.csv` | Raw text, exact model IDs, usage, collection mode, and status |
-| `artifacts/vt-openai-pilot-002/batch_*.jsonl` | Raw input, output, and error records |
-| `artifacts/vt-openai-pilot-002/batch_state.json` | Batch identifiers, status, and counts |
-| `artifacts/vt-openai-pilot-002/embedding_index.csv` | Stable mapping from responses to matrix rows |
-| `artifacts/vt-openai-pilot-002/embeddings.npz` | Fixed-encoder vectors and encoder metadata |
-| `artifacts/vt-openai-pilot-002/analysis.json` | Complete machine-readable metrics and prompt-level errors |
-| `artifacts/vt-openai-pilot-002/run_manifest.json` | Code commit and SHA-256 hashes for every run artifact |
+| `artifacts/vt-openai-pilot-003/responses.csv` | Raw text, exact model IDs, usage, collection mode, and status |
+| `artifacts/vt-openai-pilot-003/batch_*.jsonl` | Raw input, output, and error records |
+| `artifacts/vt-openai-pilot-003/batch_state.json` | Batch identifiers, status, and counts |
+| `artifacts/vt-openai-pilot-003/embedding_index.csv` | Stable mapping from responses to matrix rows |
+| `artifacts/vt-openai-pilot-003/embeddings.npz` | Fixed-encoder vectors and encoder metadata |
+| `artifacts/vt-openai-pilot-003/analysis.json` | Complete machine-readable metrics and prompt-level errors |
+| `artifacts/vt-openai-pilot-003/run_manifest.json` | Code commit and SHA-256 hashes for every run artifact |
 | [`../../RESULTS.md`](../../RESULTS.md) | Human-readable positive, null, or negative result |
 
 Artifacts are intentionally versionable. API credentials are not.

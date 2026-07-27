@@ -10,6 +10,8 @@
 - Added a dual ridge solver for high-dimensional, low-sample embedding data.
 - Added a consistent Batch API protocol after preserving an interrupted
   synchronous pilot without analyzing or selectively reusing its responses.
+- Preregistered Pilot 003 with a 512-token response ceiling after Pilot 002 was
+  blocked by five administratively truncated source responses.
 
 ## 0.2.0 — 2026-07-27
 

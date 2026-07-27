@@ -21,7 +21,7 @@ from .openai_runner import (
 )
 from .provenance import verify_manifest
 
-DEFAULT_EXPERIMENT_CONFIG = "experiments/real_models/config-batch.json"
+DEFAULT_EXPERIMENT_CONFIG = "experiments/real_models/config-pilot-003.json"
 
 
 def _parser() -> argparse.ArgumentParser:
