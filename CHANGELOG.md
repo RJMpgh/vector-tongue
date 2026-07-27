@@ -8,6 +8,8 @@
   prompt-family analysis.
 - Added generated honest reporting, cost accounting, and a SHA-256 run manifest.
 - Added a dual ridge solver for high-dimensional, low-sample embedding data.
+- Added a consistent Batch API protocol after preserving an interrupted
+  synchronous pilot without analyzing or selectively reusing its responses.
 
 ## 0.2.0 — 2026-07-27
 

@@ -321,14 +321,24 @@ def _actual_cost(
         cached_tokens = sum(row.cached_input_tokens for row in model_rows)
         output_tokens = sum(row.output_tokens for row in model_rows)
         rates = config.price_usd_per_million_tokens[model]
-        cost = (
-            max(0, input_tokens - cached_tokens) * rates["input"]
-            + cached_tokens * rates.get("cached_input", rates["input"])
-            + output_tokens * rates["output"]
-        ) / 1_000_000.0
+        cost = 0.0
+        for row in model_rows:
+            multiplier = 0.5 if row.collection_mode == "batch" else 1.0
+            cost += (
+                (
+                    max(0, row.input_tokens - row.cached_input_tokens) * rates["input"]
+                    + row.cached_input_tokens * rates.get("cached_input", rates["input"])
+                    + row.output_tokens * rates["output"]
+                )
+                * multiplier
+                / 1_000_000.0
+            )
         total_cost += cost
         by_model[model] = {
             "requests": len(model_rows),
+            "collection_modes": dict(
+                sorted(Counter(row.collection_mode for row in model_rows).items())
+            ),
             "input_tokens": input_tokens,
             "cached_input_tokens": cached_tokens,
             "output_tokens": output_tokens,
@@ -347,7 +357,10 @@ def _actual_cost(
             "estimated_cost_usd": round(embedding_cost, 6),
         },
         "estimated_total_cost_usd": round(total_cost, 6),
-        "note": "Estimate from recorded token usage and the frozen pricing table.",
+        "note": (
+            "Estimate from recorded token usage and the frozen pricing table; "
+            "Batch generation rows receive the documented 50% discount."
+        ),
     }
 
 
@@ -363,7 +376,7 @@ def _gain_cell(gain: dict[str, Any]) -> str:
     return f"{_fmt(gain['estimate'], 3)} [{_fmt(gain['lower'], 3)}, {_fmt(gain['upper'], 3)}]"
 
 
-def _render_results(analysis: dict[str, Any]) -> str:
+def _render_results(analysis: dict[str, Any], *, manifest_path: str) -> str:
     overall = analysis["overall"]
     ridge_gains = overall["gain_vs_baseline"]["ridge_affine"]
     permutation = overall["ridge_calibration_pair_permutation"]
@@ -386,6 +399,12 @@ def _render_results(analysis: dict[str, Any]) -> str:
         "## Frozen design",
         "",
         f"- Experiment: `{analysis['experiment_id']}`",
+        (
+            "- Collection: "
+            + ", ".join(
+                f"`{mode}` × {count}" for mode, count in analysis["collection"]["modes"].items()
+            )
+        ),
         f"- Source: `{analysis['models']['source_requested']}`",
         f"- Target: `{analysis['models']['target_requested']}`",
         (
@@ -501,8 +520,7 @@ def _render_results(analysis: dict[str, Any]) -> str:
             "",
             (
                 "Exact artifact hashes and the code commit are recorded in "
-                "[`experiments/real_models/artifacts/run_manifest.json`]"
-                "(experiments/real_models/artifacts/run_manifest.json)."
+                f"[`{manifest_path}`]({manifest_path})."
             ),
             "",
             "## Limitations",
@@ -677,10 +695,23 @@ def analyze_experiment(config_path: str | pathlib.Path) -> dict[str, Any]:
         "collection": {
             "responses": len(responses),
             "failures": 0,
+            "modes": dict(
+                sorted(Counter(response.collection_mode for response in responses).items())
+            ),
             "total_attempts": sum(response.attempts for response in responses),
             "retried_responses": sum(response.attempts > 1 for response in responses),
-            "mean_latency_seconds": float(
-                np.mean([response.latency_seconds for response in responses])
+            "mean_synchronous_latency_seconds": (
+                float(
+                    np.mean(
+                        [
+                            response.latency_seconds
+                            for response in responses
+                            if response.collection_mode == "synchronous"
+                        ]
+                    )
+                )
+                if any(response.collection_mode == "synchronous" for response in responses)
+                else None
             ),
         },
         "cost": _actual_cost(config, responses, embedding_tokens),
@@ -696,7 +727,10 @@ def analyze_experiment(config_path: str | pathlib.Path) -> dict[str, Any]:
     write_json_atomic(analysis_path, analysis)
 
     results_path = resolve_repo_path(root, config.results_markdown_file)
-    results_path.write_text(_render_results(analysis), encoding="utf-8")
+    results_path.write_text(
+        _render_results(analysis, manifest_path=config.manifest_file),
+        encoding="utf-8",
+    )
 
     manifest_path = resolve_repo_path(root, config.manifest_file)
     artifact_paths = {
@@ -708,6 +742,12 @@ def analyze_experiment(config_path: str | pathlib.Path) -> dict[str, Any]:
         "analysis": analysis_path,
         "results_markdown": results_path,
     }
+    batch_artifacts = sorted(response_path.parent.glob("batch_*.jsonl"))
+    batch_state = response_path.parent / "batch_state.json"
+    if batch_state.is_file():
+        batch_artifacts.append(batch_state)
+    for path in batch_artifacts:
+        artifact_paths[path.stem] = path
     manifest = {
         "schema_version": "1.0.0",
         "experiment_id": config.experiment_id,

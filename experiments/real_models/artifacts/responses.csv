@@ -1,0 +1,721 @@
+prompt_id,family,split,replicate,requested_model,resolved_model,response_id,response_status,incomplete_reason,response_text,input_tokens,cached_input_tokens,output_tokens,total_tokens,created_at_utc,latency_seconds,attempts,error
+fact-001,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_00ddc5c01d2862b9016a67807e5d9c81949bd9d2b9399887de,completed,,"The sky looks blue during the day mainly due to **Rayleigh scattering**: molecules in Earth’s atmosphere scatter shorter-wavelength (blue) light much more strongly than longer-wavelength (red) light. So when you look in any direction away from the Sun, you receive scattered blue light from across the sky. Near **sunset**, sunlight travels through more atmosphere, so much of the blue light gets scattered away before it reaches your eyes. The remaining light is richer in **reds and oranges**, making the sky and sun appear redder.",89,0,113,202,2026-07-27T16:00:00.870871Z,7.613249,1,
+fact-001,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_05990f0ae8d34cd3016a67807e594c8193aed02aacac2f6286,completed,,"The sky appears blue because sunlight is scattered by molecules in Earth’s atmosphere. Shorter wavelengths, like blue and violet, scatter much more strongly than longer wavelengths such as red. Although violet scatters even more, our eyes are less sensitive to it and some is absorbed, so the sky looks blue.
+
+Near sunset, sunlight passes through much more atmosphere. Most of the blue light is scattered out of the direct path, leaving the longer red and orange wavelengths to dominate, so the sky often looks red or orange.",89,0,106,195,2026-07-27T16:00:00.708470Z,7.450337,1,
+fact-002,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0045a48a0ea5a1b4016a67809620b48196b60109a57437aefe,completed,,"Weather is short-term atmospheric conditions, like what’s happening today or this week. Climate is the long-term pattern of those conditions over many years. For example, in a single city, one day might be sunny and mild (weather), while over decades the city averages mild spring temperatures every year (climate).",85,0,66,151,2026-07-27T16:00:23.776770Z,6.062996,1,
+fact-002,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_01d25390ae44b3f7016a67809623388197bc2c9de410bf8797,completed,,"Weather is the short-term condition of the atmosphere at a specific time and place, while climate is the average pattern of weather in a region over many years. For example, if it rains in New York City this afternoon, that is weather. But saying New York City has cold winters and warm, humid summers describes its climate.",85,0,69,154,2026-07-27T16:00:23.973019Z,6.258881,1,
+fact-003,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0ccf692296c04921016a6780961e088196886ba05ae39f0794,completed,,"Ocean tides are caused mainly by the gravitational pull of the Moon and, to a lesser extent, the Sun. As Earth rotates, different ocean areas experience slightly different gravitational “pull strengths,” creating two broad tidal bulges—one facing the Moon more directly and one on the opposite side. The height (tidal range) varies because the relative alignment of the Moon and Sun changes: during new and full moons, their effects combine to produce higher “spring tides,” while during quarter moons they partially cancel, producing lower “neap tides.” Local geography and ocean basin shape also amplify or reduce tide heights.",84,0,124,208,2026-07-27T16:00:24.171237Z,6.45675,1,
+fact-003,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0d3a5cf244c37d35016a6780978cfc81939a33c3e41cfc8bd6,completed,,"Ocean tides are caused mainly by the Moon’s gravity, with the Sun also contributing. The Moon’s pull creates a bulge of water on the side of Earth facing it, and a second bulge on the opposite side due to the Earth–Moon system’s rotation. As Earth spins, most coastlines pass through these bulges, producing high and low tides.
+
+Tide height varies because the Sun and Moon sometimes reinforce each other and sometimes partially cancel. When they line up during new and full moons, tides are larger (spring tides). When they are at right angles during quarter moons, tides are smaller (neap tides). Local coast shape, water depth, and seafloor features also strongly affect tidal height.",84,0,148,232,2026-07-27T16:00:25.725194Z,1.94833,1,
+fact-004,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0af037b02569039a016a67809791d48190bc4c4842d83350f2,completed,,"A seed begins life with an embryo inside a protective seed coat. When conditions are right—typically enough water, oxygen, and suitable temperature—the seed absorbs water and swells. The embryo starts to grow: first the radicle (embryonic root) emerges to anchor the seed and absorb water and minerals. Next, the shoot grows upward, forming stems and leaves. The plant photosynthesizes to produce energy. As it matures, it develops roots, stems, and specialized tissues, eventually reaching reproductive growth. Flowers form, allowing pollination, fertilization, and seed production for the next generation.",83,0,126,209,2026-07-27T16:00:26.342767Z,2.369662,1,
+fact-004,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_075fcc5d6576dc17016a678097bfe48193bf31fa682db8b058,completed,,"A seed becomes a mature flowering plant through germination and growth. When conditions are right—usually enough water, oxygen, and warmth—the seed absorbs water, swells, and the seed coat breaks open. The root emerges first and grows downward to anchor the plant and absorb water and minerals. Then the shoot grows upward, forming stems and leaves. Leaves begin photosynthesis, making food for growth. Over time the plant develops more roots, stems, and leaves, and eventually produces flowers, which can form new seeds.",83,0,107,190,2026-07-27T16:00:26.326636Z,2.155322,1,
+fact-005,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_02a8824918a9aed9016a6780994ae48193ba82fff68fae990e,completed,,"Seasons occur because Earth’s axis is tilted about 23.5° relative to its orbit around the Sun. As Earth travels yearly, different hemispheres tilt toward or away from the Sun. When a hemisphere tilts toward the Sun, it receives more direct sunlight and longer daylight hours, making it warmer (summer). When it tilts away, sunlight is less direct and days are shorter, making it cooler (winter). The changing angle and day length, not Earth’s distance from the Sun, primarily drive the seasons.",80,0,109,189,2026-07-27T16:00:27.063133Z,1.33787,1,
+fact-005,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0b70a42c49789c73016a678099e2dc8194a4955a9c18f92e9a,completed,,"Seasons occur because Earth’s axis is tilted about 23.5 degrees relative to its orbit around the Sun. As Earth travels around the Sun, each hemisphere alternately tilts toward and away from the Sun.
+
+When a hemisphere tilts toward the Sun, it gets more direct sunlight and longer days, so it experiences summer. When it tilts away, sunlight is less direct and days are shorter, so it experiences winter. Spring and fall happen during the transitions between these extremes.
+
+It’s not mainly because Earth is closer to or farther from the Sun.",80,0,116,196,2026-07-27T16:00:27.939493Z,1.612789,1,
+fact-006,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_08f7dcc225cf3797016a678099f5788194b0efcea1bb3d0510,completed,,"Water cycles through evaporation, when the Sun warms oceans, lakes, and rivers so liquid water turns into water vapor and rises into the atmosphere. As the vapor cools higher up, it condenses onto tiny particles, forming clouds. When cloud droplets or ice crystals grow heavy enough, they fall as precipitation—such as rain, snow, sleet, or hail. Afterward, water is collected when it runs off into rivers and lakes, soaks into the ground as groundwater, or is stored in snow and ice.",84,0,108,192,2026-07-27T16:00:28.046648Z,1.703833,1,
+fact-006,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0162afc084baa988016a67809aae008196bbdee5398a234822,completed,,"The water cycle begins with **evaporation**, when the Sun heats water in oceans, lakes, and rivers and turns it into water vapor. This vapor rises into the air and cools, causing **condensation**, where it forms tiny droplets and clouds. When the droplets become heavy enough, they fall as **precipitation** such as rain, snow, or hail. The water then **collects** in rivers, lakes, oceans, and underground, where it can evaporate again and repeat the cycle.",84,0,108,192,2026-07-27T16:00:28.491025Z,1.427823,1,
+fact-007,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_063c04e437ac46c9016a67809b853c81958c7ad1761cf2b92c,completed,,"Mass is the amount of matter in an object and is measured in kilograms (kg). It does not change with location. Weight is the force gravity exerts on an object and is measured in newtons (N). Because weight depends on gravitational strength, it changes with location (for example, you weigh less on the Moon than on Earth, but your mass stays the same). Mathematically, weight equals mass times gravitational acceleration: \(W = mg\).",81,0,96,177,2026-07-27T16:00:29.610717Z,1.671151,1,
+fact-007,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_00c15873c138973a016a67809ba6388196811657be10f9cb61,completed,,"Mass is the amount of matter in an object, and it stays the same regardless of location. It’s measured in kilograms or grams.
+
+Weight is the force of gravity acting on that mass, so it can change depending on the gravitational field. It’s measured in newtons.
+
+For example, a person’s mass is the same on Earth and the Moon, but their weight is much less on the Moon because gravity is weaker there.",81,0,90,171,2026-07-27T16:00:29.494625Z,1.44791,1,
+fact-008,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0a59986c450e7d04016a67809c15e88196955c925b792eb985,completed,,"Vaccines train the immune system by showing it a safe “look-alike” of a disease-causing germ. This can be done using a weakened or inactivated form of the germ, a harmless piece of it (like a protein or sugar coat), or genetic instructions that help cells make that piece. The immune system responds by activating B cells and T cells and forming long-lived memory cells. Because it’s not the full disease-causing organism (or it can’t replicate effectively), the vaccine doesn’t cause the target illness, though mild side effects can occur.",86,0,117,203,2026-07-27T16:00:29.810856Z,1.319752,1,
+fact-008,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0115d27a0ed7bbcf016a67809d1034819399f1774d32152d61,completed,,"Vaccines expose the immune system to a safe version or piece of a germ, such as a weakened, killed, or fragmentary form, or instructions for making one of its proteins. This lets immune cells recognize the target and build defenses, including antibodies and memory cells, without the full pathogen causing disease. Later, if the real germ enters the body, the immune system responds much faster and more strongly, often stopping infection before symptoms develop or making illness much milder.",86,0,98,184,2026-07-27T16:00:31.014783Z,1.520087,1,
+fact-009,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_02d37f1fddf98990016a67809d383481908381b473bbdb2cb2,completed,,"Metal usually feels colder because it conducts heat away from your skin much faster than wood. Your body warms the surface it touches; with metal, heat flows quickly into the metal’s cooler interior, so the skin temperature drops and you perceive “cold.” Wood is a poorer conductor and has more trapped air in its structure, so it transfers heat more slowly, keeping your skin warmer. Even if both surfaces are at the same air temperature, their different thermal conductivity and heat capacity make metal feel colder.",86,0,102,188,2026-07-27T16:00:32.670375Z,3.059599,1,
+fact-009,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0f1bfe55d3e089d3016a67809d6340819089029c8bb1f046f3,completed,,"Metal usually feels colder than wood because it draws heat away from your skin much faster. Both objects are in the same room and are often at the same temperature, but metal has much higher thermal conductivity, so it pulls heat from your hand quickly. Wood is a poor conductor, so it slows that heat transfer and feels warmer. Your skin senses the rate of heat loss, not just the actual temperature.",86,0,84,170,2026-07-27T16:00:31.150735Z,1.339822,1,
+fact-010,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0d284d9c6acdb0e5016a67809e9428819487a9e32a3be6c808,completed,,"Bees are key pollinators for many flowering plants. As they forage for nectar and pollen, they move between flowers and transfer pollen grains from the male anthers to the female stigma or receptive parts. This cross-pollination enables fertilization, leading to seed and fruit formation. Bees also help maintain plant genetic diversity by mixing pollen from different individuals. In return, flowers provide nectar, pollen, and sometimes shelter, while evolved traits like bright colors and nectar guides attract bees effectively.",83,0,101,184,2026-07-27T16:00:32.270785Z,1.255939,1,
+fact-010,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_042d7c90f757a1be016a67809ebb348195b523cdabf863e189,completed,,"Bees play a key role in the reproduction of many flowering plants by acting as pollinators. As they visit flowers to collect nectar and pollen, pollen grains stick to their bodies and are transferred to other flowers. This movement of pollen from the male part of one flower to the female part of another enables fertilization, leading to the production of seeds and often fruits. Bees are especially important because many plants depend on them for successful pollination.",83,0,93,176,2026-07-27T16:00:32.995219Z,1.844435,1,
+fact-011,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0a15c73ba756b3d8016a67809fdad0819698c7f2a755b886a9,completed,,"A rainbow forms when sunlight enters many water droplets and is refracted, separated into different colors, reflected inside the droplet, and then refracted again as it exits. The light bends as it enters (dispersion), spreads into a spectrum because different wavelengths bend by different amounts, and reflects off the back of the droplet. When the light leaves, it bends again toward your eyes, producing a bright arc at a specific angle. Different droplets produce light that lines up for those angles, creating the rainbow.",85,0,106,191,2026-07-27T16:00:33.860289Z,1.589452,1,
+fact-011,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0efe4d9faf1872f3016a6780a03d148194b84b986599f5e079,completed,,"A rainbow forms when sunlight enters tiny water droplets in the air and is bent, or refracted, as it slows down. Inside the droplet, the light reflects off the back surface, then refracts again as it exits. Different colors bend by slightly different amounts, so the white sunlight spreads out into a spectrum. Each droplet sends only one color toward your eyes at a specific angle, and together many droplets create the colored arc you see.",85,0,94,179,2026-07-27T16:00:34.264659Z,1.594201,1,
+fact-012,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0b81792d82880b2f016a6780a08fa8819389394142677369c7,completed,,"Red blood cells (erythrocytes) mainly transport oxygen from the lungs to the body’s tissues and carry carbon dioxide back to the lungs. They contain hemoglobin, a protein that binds oxygen in the bloodstream and releases it where oxygen is needed. As tissues use oxygen, red blood cells pick up carbon dioxide, helping move it to the lungs for exhalation.",86,0,79,165,2026-07-27T16:00:34.626514Z,1.631221,1,
+fact-012,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_025718ff2b45019f016a6780a16c58819381b4dd86ad3fd057,completed,,"Red blood cells mainly carry oxygen from the lungs to the body’s tissues and help bring some carbon dioxide back to the lungs to be exhaled. They do this using hemoglobin, a protein that binds oxygen. Their flexible shape helps them move easily through small blood vessels.",86,0,59,145,2026-07-27T16:00:35.286390Z,1.425924,1,
+fact-013,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_016218334da0a294016a6780a1d6e081938d7ec0d113fde975,completed,,"The Moon shows phases because you’re seeing different portions of its sunlit half as the Moon orbits Earth. The Moon itself doesn’t produce light; sunlight illuminates the half facing the Sun. As the Moon moves in its orbit, the angle between the Sun, Earth, and Moon changes, so Earth views progressively more or less of that illuminated half. That produces the cycle: new moon, waxing crescent, first quarter, waxing gibbous, full moon, then the waning phases back to new moon.",86,0,108,194,2026-07-27T16:00:35.686836Z,1.422052,1,
+fact-013,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0a6caf878b99f077016a6780a231588197ba7bcb374192cf3f,completed,,"The Moon shows phases because it orbits Earth, and we see different portions of its sunlit half from our viewpoint. The Sun always lights up half of the Moon, but as the Moon moves around Earth over about a month, the angle between the Sun, Moon, and Earth changes. That makes the Moon appear new, crescent, quarter, gibbous, and full at different times. The phases are not caused by Earth’s shadow; that only happens during a lunar eclipse.",86,0,102,188,2026-07-27T16:00:36.142892Z,1.516261,1,
+fact-014,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_093e33fc5552d0f1016a6780a2e5888193ac57dc04d5dd993a,completed,,"When a bell rings, it creates vibrations in the metal. Those vibrations push and pull on nearby air molecules, compressing and rarefying them to form a sound wave. The wave travels outward in all directions: high-pressure regions become low-pressure regions and repeat, carrying energy through the air. The listener’s eardrum is struck by the arriving pressure changes, causing the eardrum and inner ear bones/fluid to vibrate. The inner ear converts these vibrations into nerve signals, which the brain interprets as sound.",85,0,110,195,2026-07-27T16:00:37.366853Z,2.080397,1,
+fact-014,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_062b74ce0056ef70016a6780a33fac8197993c9a2e30bdb2d1,completed,,"When a bell rings, it vibrates and makes the surrounding air particles move back and forth. This creates pressure waves—compressions and rarefactions—that travel outward through the air. The waves carry energy, not the air itself over long distances. When they reach a listener’s ear, they make the eardrum vibrate. Those vibrations are passed through the middle ear and converted by the inner ear into nerve signals, which the brain interprets as sound.",85,0,97,182,2026-07-27T16:00:37.138935Z,1.452038,1,
+fact-015,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0530b09f8b7c982d016a6780a3b57c81959bf03db645c0aad2,completed,,"A **bacterium** is a living, single-celled organism. It has its own cell structure, can carry out basic life processes on its own, and reproduces by dividing. Antibiotics can often kill bacteria because they use bacterial cell machinery.
+
+A **virus** is much simpler and not considered fully living. It cannot reproduce on its own; it must enter a host cell and use the host’s machinery to make new viruses. Viruses are generally not affected by antibiotics, though antivirals may help.",88,0,108,196,2026-07-27T16:00:37.854936Z,1.711982,1,
+fact-015,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_052478ec57a164e9016a6780a4b44c819681fce7193276afdd,completed,,"A **bacterium** is a living single-celled organism. It can grow and reproduce on its own, and many bacteria live harmlessly in or on our bodies. Some cause disease, but many are helpful.
+
+A **virus** is much smaller and not considered fully alive in the same way. It cannot reproduce by itself; it must enter a living cell and use that cell’s machinery to make more viruses.
+
+So, basic difference: **bacteria are independent cells, while viruses need host cells to multiply.**",88,0,109,197,2026-07-27T16:00:38.718902Z,1.579903,1,
+fact-016,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_09417641df6a52d8016a6780a512688190a6f7b8f8b6fead82,completed,,"Objects fall toward Earth because Earth’s gravity pulls on them. Every object with mass creates a gravitational pull on other masses, and Earth is so massive that its pull strongly accelerates nearby objects downward. When you release an object, the only significant force (ignoring air resistance) is gravity, so it accelerates toward Earth at roughly 9.8 m/s². The speed increases the longer it falls, producing the familiar effect of objects dropping to the ground.",82,0,97,179,2026-07-27T16:00:38.882786Z,1.51587,1,
+fact-016,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0f27e86a5f67c5f0016a6780a56aa88195aca653461e34fd4e,completed,,"Objects fall toward Earth when released because Earth exerts a gravitational force on them. Gravity pulls everything with mass toward other masses, and Earth is very massive, so its pull is strong near the surface. When you let go of an object, gravity accelerates it downward unless another force, like air resistance or a support, acts to hold it up. In free fall, the object speeds up as it moves toward the ground.",82,0,89,171,2026-07-27T16:00:39.683028Z,1.828024,1,
+fact-017,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0a8770423a675277016a6780a6484c819691516588311eb3a2,completed,,"Photosynthesis stores energy from sunlight by converting it into chemical energy inside sugars. In plants, algae, and some bacteria, light is captured by chlorophyll in the chloroplasts (or analogous structures). Light energy drives reactions that split water and release oxygen, producing energy-rich molecules (ATP) and reducing power (NADPH). During the Calvin cycle, this ATP and NADPH are used to fix carbon dioxide, building carbohydrates such as glucose that store the captured energy in chemical bonds.",82,0,101,183,2026-07-27T16:00:40.054356Z,1.335387,1,
+fact-017,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_05630869f4e9b5b9016a6780a6748c819496a75b26e2a77486,completed,,"Photosynthesis stores sunlight energy by converting it into chemical energy. Chlorophyll in chloroplasts absorbs light, exciting electrons. That energy is used to split water and drive a series of reactions that make ATP and NADPH, which are energy-carrying molecules. The plant then uses ATP and NADPH to build sugars like glucose from carbon dioxide. The energy from sunlight ends up stored in the chemical bonds of these sugars, where it can be used later.",82,0,95,177,2026-07-27T16:00:40.471134Z,1.58829,1,
+fact-018,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_006c5d9e746e50f2016a6780a740208193a46dcf7dfca272b0,completed,,"When liquid water freezes, its molecules slow down and start arranging into a more rigid, crystalline lattice (ice). Water molecules form an extensive hydrogen-bond network, so many bonds lock into place and the structure becomes open and ordered. Because the lattice is less densely packed than liquid water, the solid expands and becomes less dense. Molecules still vibrate, but their motion is greatly restricted compared with the liquid state.",84,0,87,171,2026-07-27T16:00:40.990776Z,1.307684,1,
+fact-018,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0e279d3e81534a32016a6780a79f888193bf4a4d651982310e,completed,,"When liquid water freezes, the water molecules lose thermal energy and move more slowly. Hydrogen bonds then hold the molecules in a more ordered arrangement, forming a crystal lattice. In ordinary ice, this lattice spaces the molecules farther apart than in liquid water, which is why ice is less dense and floats. The molecules are still vibrating, but they are no longer freely flowing past one another.",84,0,80,164,2026-07-27T16:00:41.261574Z,1.207143,1,
+fact-019,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0f695f0cd6375115016a6780a8089881908edc92b70f3dcae0,completed,,"Leap years are added to keep the calendar aligned with Earth’s orbit around the Sun. A year isn’t exactly 365 days—it’s about 365.25 days—so without adjustment the calendar would drift earlier each year. By adding an extra day (Feb. 29) every four years, the calendar corrects this extra time and keeps seasons occurring around the same dates. The rule has extra refinements (skipping some leap years) because the actual fraction isn’t exactly 1/4.",83,0,105,188,2026-07-27T16:00:42.227071Z,1.755872,1,
+fact-019,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0af84b45b3bd1dbd016a6780a88cb08196a68ca48c99b5564f,completed,,"Leap years are added to keep the calendar aligned with Earth’s orbit around the Sun. A year is not exactly 365 days; it’s about 365.2422 days. That extra fraction adds up over time, so if we used only 365-day years, the seasons would slowly shift on the calendar. By adding one extra day every four years, we correct for most of that difference. In the Gregorian calendar, a few century years are exceptions to keep the adjustment more accurate.",83,0,102,185,2026-07-27T16:00:42.546375Z,1.555514,1,
+fact-020,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0241fe37323a3896016a6780a8d4348194959596e1158ba69b,completed,,"A computer processor (CPU) performs the core computations and controls the execution of programs. It reads instructions from memory, carries them out using its arithmetic/logic units, and coordinates data flow between other components. Memory (RAM) temporarily stores data and instructions that the processor needs while programs run. RAM is fast but volatile, so its contents are cleared when the computer powers off. Longer-term storage is handled by drives (like SSDs), not by RAM.",84,0,95,179,2026-07-27T16:00:42.722759Z,1.461123,1,
+fact-020,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_06c000dd39b412b4016a6780a9d5cc8196ac24c76fcc24866f,completed,,"A computer processor, or CPU, is the part that carries out instructions and performs calculations. It acts like the “brain” of the computer, deciding what to do next and processing data step by step.
+
+Memory stores the data and instructions the CPU is currently using. Short-term memory, like RAM, lets the computer work quickly on active tasks, while longer-term storage keeps files and programs even when the computer is turned off.",84,0,89,173,2026-07-27T16:00:43.666895Z,1.439754,1,
+fact-021,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0d4547897343c4cf016a6780aa1c30819081350d6b692068c0,completed,,"Salt (such as sodium chloride) helps melt ice because it lowers the freezing point of water, a process called freezing point depression. When salt dissolves into the ice’s surface moisture, it creates a saltwater solution that doesn’t freeze as easily as pure water. As a result, the ice turns into a slushy liquid and can break apart, spreading the melting across the road. Salt also slightly weakens ice by changing the conditions at the ice–water interface.",84,0,98,182,2026-07-27T16:00:43.838725Z,1.292275,1,
+fact-021,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0719d7723f7a6761016a6780aa47488197bfed37891bb29baf,completed,,"Salt helps melt ice by lowering water’s freezing point. When salt is spread on ice, it dissolves in the thin layer of liquid water that’s usually present on the surface. This forms salty water, or brine, which can stay liquid at temperatures below 0°C (32°F). As more ice melts into the brine, the process continues until the temperature gets too low for the salt to work well. That’s why road salt is effective in winter, especially when it’s not extremely cold.",84,0,106,190,2026-07-27T16:00:44.402551Z,1.67972,1,
+fact-022,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_031545765014fdb1016a6780ab43f48190866be2bf3f1a1afc,completed,,"The kidneys help maintain internal balance (homeostasis) by filtering blood to remove wastes and controlling key substances. They regulate water balance by adjusting how much urine to release, preventing dehydration or excess fluid. They balance salts and electrolytes (like sodium, potassium, and chloride) by reabsorbing or excreting them as needed. They maintain acid–base balance by managing hydrogen ion and bicarbonate levels. They also help control blood pressure and support red blood cell production by producing hormones.",84,0,101,185,2026-07-27T16:00:45.356280Z,1.689299,1,
+fact-022,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_05e63760ec028086016a6780af81dc81949c7fa4d6d08b3f02,completed,,"The kidneys help maintain the body’s internal balance, or homeostasis, by filtering the blood and removing wastes, excess water, and extra salts in urine. They regulate fluid levels, helping control blood volume and blood pressure. They also keep electrolyte levels, such as sodium, potassium, and calcium, within a healthy range. In addition, the kidneys help maintain the body’s acid-base balance by adjusting how much acid or bicarbonate is excreted or retained.",84,0,96,180,2026-07-27T16:00:49.353472Z,5.514677,3,
+fact-023,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0d60de26e932a686016a6780abf6d48194878313e8dbce5ea7,completed,,"Renewable energy sources are replenished naturally on a human timescale and generally have lower long-term depletion risk. Examples include solar, wind, hydro, geothermal, and biomass. Nonrenewable energy sources are finite and take millions of years to form, so they will eventually run out. Examples include coal, oil, and natural gas, as well as nuclear fuel (uranium). While both can produce pollution, nonrenewables typically emit more greenhouse gases when used, contributing more to climate change.",85,0,103,188,2026-07-27T16:00:45.995224Z,1.592608,1,
+fact-023,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_02020814d21856fa016a6780ae92508197ab95e28543693eec,completed,,"Renewable energy sources are naturally replenished on a human timescale, so they can be used repeatedly without being permanently depleted. Examples include solar, wind, hydroelectric, geothermal, and biomass.
+
+Nonrenewable energy sources are finite and take millions of years to form, so they can run out if used faster than they are replaced. Examples include coal, oil, natural gas, and uranium for nuclear power.
+
+In short: renewable sources are replenished quickly; nonrenewable sources are limited and depletable.",85,0,107,192,2026-07-27T16:00:48.621026Z,3.264655,2,
+fact-024,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_057b426cdf1dbf2a016a6780ad8f4081948c2cb007316f0a52,completed,,"An ordinary lunar phase happens because the Moon orbits Earth and we see different portions of its sunlit half—so the Moon appears crescent, half, or full, with no Earth shadow involved. An eclipse occurs when the Sun, Earth, and Moon (or Earth, Moon, and Sun) line up closely enough for one body’s shadow to fall on another: a lunar eclipse happens when Earth’s shadow covers the Moon. During an eclipse, the Moon typically darkens or changes color, not just its “lit fraction.”",84,0,110,194,2026-07-27T16:00:47.645167Z,1.649885,1,
+fact-024,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0a3e26ef05395077016a6780af3b608194883e6a9a530db972,completed,,"An ordinary lunar phase is just the changing view of the Moon’s sunlit half as it orbits Earth, caused by the Sun-Earth-Moon geometry. The Moon is always lit on one side; we simply see different amounts of that lit side.
+
+An eclipse is a special event where one body casts a shadow on another. In a lunar eclipse, Earth’s shadow falls on the Moon; in a solar eclipse, the Moon blocks the Sun from view. Eclipses require near-perfect alignment, so they happen much less often than phases.",84,0,113,197,2026-07-27T16:00:49.386563Z,1.741079,1,
+fact-025,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_09fbb31d490f64ab016a6780b02ed881978a8f9cb8da74e68d,completed,,"A compass needle generally points north because Earth has a magnetic field. The needle is magnetized, so it experiences a torque that aligns its magnetic moment with the external magnetic field lines. Near the surface, those magnetic field lines point toward the magnetic north region, so the needle settles in that direction. (This is based on Earth’s magnetic field, not true geographic north, so declination can cause a slight offset.)",82,0,87,169,2026-07-27T16:00:50.346729Z,1.725627,1,
+fact-025,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_09a56c8b34028b4e016a6780b116988196a7b8f60df5e31f74,completed,,"A compass needle points north because it is a small magnet that aligns itself with Earth’s magnetic field. Earth acts like a giant magnet with magnetic poles near, but not exactly at, the geographic poles. The north-seeking end of the needle is attracted to Earth’s magnetic south pole, which is located near the geographic North Pole. That’s why the needle usually points toward north, though it can be slightly off because magnetic north and true north are not the same.",82,0,97,179,2026-07-27T16:00:51.716376Z,2.362843,1,
+fact-026,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_079455d624d49c56016a6780b12688819797cffe52137e2736,completed,,"Fermentation is a metabolic process where microorganisms (like yeast or bacteria) break down sugars without using oxygen. They convert glucose and other sugars into simpler products such as organic acids (e.g., lactic acid), alcohol (ethanol), and carbon dioxide, depending on the organism and conditions. During fermentation, enzymes transform sugar step-by-step through pathways such as glycolysis, producing energy for the microbes. As sugars decrease, fermentation also creates new flavor, aroma, and texture compounds and can lower pH, which helps preserve foods.",82,0,110,192,2026-07-27T16:00:51.930624Z,2.544003,1,
+fact-026,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_003de011b03d767a016a6780b1f1008193b77c7ad49a3c468e,completed,,"Fermentation is a process where microorganisms like yeast or bacteria break down sugars without using oxygen. They use the sugar for energy, and in the process, the sugar is converted into other substances such as alcohol, carbon dioxide, and acids.
+
+For example:
+- **Yeast fermentation** turns sugar into **alcohol and carbon dioxide**.
+- **Lactic acid fermentation** turns sugar into **lactic acid**, which happens in some bacteria and muscle cells.
+
+This is why fermentation is used to make bread, beer, yogurt, and many other foods.",82,0,114,196,2026-07-27T16:00:52.278713Z,1.931913,1,
+fact-027,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_08567722f466d1fd016a6780b352788190a29258486c15b562,completed,,"Insulating materials slow heat transfer because they reduce the pathways and efficiency for heat flow. In solids, heat is carried mainly by moving particles and vibrations (phonons); insulators have a disordered structure and fewer free charge carriers, so phonon movement is limited. In gases, heat transfer by conduction is weak because particles are far apart, and convection is minimized when the insulating material traps gas. Many insulators also reflect or absorb infrared radiation, further slowing heat transfer.",83,0,98,181,2026-07-27T16:00:53.559340Z,1.842896,1,
+fact-027,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0bb914d87cabe0e4016a6780c791488193a79ed8ed79217b22,completed,,"Insulating materials slow heat transfer because they reduce the movement of thermal energy through conduction, convection, and sometimes radiation. Many insulators, like foam, wool, or trapped air, contain lots of tiny air pockets. Air is a poor conductor of heat, and the trapped pockets prevent the air from circulating, which limits convection. In solids like fiberglass, the material’s structure makes it harder for vibrating particles to pass energy along quickly. As a result, heat moves through the material much more slowly.",83,0,103,186,2026-07-27T16:01:13.471188Z,21.540504,5,
+fact-028,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_03b7ecbfcb95c2b0016a6780b3dc9881949abfb456fe706408,completed,,"DNA is the long molecular “instruction” material in cells. Sections of DNA that carry specific hereditary information are called genes. A chromosome is a long, organized package of DNA (along with proteins) that contains many genes. So, genes are segments within DNA, and DNA is packaged into chromosomes; one chromosome typically holds thousands of genes, depending on the organism.",84,0,76,160,2026-07-27T16:00:53.626476Z,1.347688,1,
+fact-028,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0ddbb59da449fd8d016a6780b6962c8194bf50931311038a27,completed,,"DNA is the molecule that stores genetic information. A gene is a specific segment of DNA that contains instructions for making a functional product, usually a protein or RNA. A chromosome is a long, tightly packed DNA molecule with associated proteins that carries many genes. So, DNA is the material, genes are functional sections of that material, and chromosomes are the organized structures that package and contain the DNA in cells.",84,0,84,168,2026-07-27T16:00:56.816998Z,3.257592,2,
+fact-029,factual,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_017b593831de0b23016a6780b52d9c81949e2504c02ee01911,completed,,"Weathering is the breakdown of rocks and minerals at or near Earth’s surface due to physical, chemical, or biological processes—without the material necessarily moving far. Examples include freeze-thaw cracking, oxidation (rusting), and root action.  
+
+Erosion is the removal and transport of weathered material by agents like water, wind, ice, or gravity. For instance, flowing rivers and wind currents carry away loosened particles.  
+
+In short: weathering breaks things down; erosion moves the broken material.",81,0,106,187,2026-07-27T16:00:55.028629Z,1.402106,1,
+fact-029,factual,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0e00488e9fbe5bc4016a6780b6996481978052752b9dfe9053,completed,,"Weathering is the breakdown of rock **in place** by physical, chemical, or biological processes. Erosion is the **movement** of broken rock and sediment from one place to another by water, wind, ice, or gravity.
+
+In short:
+- **Weathering = breaks down**
+- **Erosion = carries away**
+
+Example: A cliff crumbles from rain and freezing—that’s weathering. If the碎 pieces are then washed into a river and moved downstream, that’s erosion.",81,0,103,184,2026-07-27T16:00:56.646488Z,1.617785,1,
+fact-030,factual,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0a3a2997f753bd55016a6780b8428c81909d4c17858a8b1c5d,completed,,"A sealed bag of air expands as it rises because the surrounding atmospheric pressure decreases with altitude. The air inside the bag still has roughly the same amount of gas (fixed moles) and initially the same temperature, so when the outside pressure drops the pressure difference no longer holds the bag’s volume constant. By gas laws, decreasing external pressure allows the gas to occupy a larger volume, increasing the internal volume until the internal pressure again matches the lower external pressure (with temperature effects modifying the exact behavior).",89,0,103,192,2026-07-27T16:00:57.962969Z,1.316407,1,
+fact-030,factual,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_065cd4992f767660016a6780bc685c8195a2e009ca52b4839e,completed,,"A sealed bag of air expands as it rises because the outside atmospheric pressure gets lower with altitude. The air inside the bag is still pushing outward, and when the external pressure decreases, that inward push is reduced. The gas inside then takes up more space until the internal pressure balances the new, lower outside pressure.
+
+This is explained by the gas law: for a fixed amount of gas, lower pressure means larger volume if temperature stays roughly the same.",89,0,93,182,2026-07-27T16:01:02.654264Z,5.837192,3,
+reason-001,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_01282164b9710bbe016a6780bd3abc8194857a05cbbd7d6987,completed,,"All but 9 wander away means only **9 sheep remain**.  
+Interpretation: “All but 9” translates to “everything except 9,” so the number remaining is the one that is not wandering—**9**.",97,0,52,149,2026-07-27T16:01:02.679686Z,4.716638,3,
+reason-001,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0be59f5e3fd0adea016a6780bf9ff48193aca9d833251e2c5d,completed,,"9 sheep remain. The phrase “all but 9 wander away” means every sheep except 9 wandered away, so 9 did not wander away and stayed.",97,0,37,134,2026-07-27T16:01:05.153304Z,2.498972,2,
+reason-002,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0dbea0e8bac94534016a6780bfb5f88197a069f831a8c168c2,completed,,"Average speed = total distance ÷ total time.  
+Total distance = 120 + 90 = 210 km.  
+Total time = 2 + 1.5 = 3.5 hours.  
+So, average speed = 210 ÷ 3.5 = 60 km/h.",104,0,66,170,2026-07-27T16:01:05.442798Z,2.763067,2,
+reason-002,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_00e783bc9b8a5a17016a6780c225188197a6a11787e8d23fdf,completed,,"Average speed = total distance ÷ total time.
+
+- Total distance = 120 + 90 = 210 km  
+- Total time = 2 + 1.5 = 3.5 hours  
+
+Average speed = 210 ÷ 3.5 = **60 km/h**",104,0,63,167,2026-07-27T16:01:07.463553Z,2.310125,2,
+reason-003,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_01618a63757f3710016a6780c70c74819580130c04bf770d04,completed,,"Because every label is wrong, initially no box contains what its own label says. For three boxes:
+
+- If you first draw from the box labeled **apples**, then:
+  - If you draw an **orange**, you can conclude that box actually contains oranges, so you can relabel it **oranges**.
+  - If you draw a **mixed** (or an item indicating mixed—i.e., the “mixed” box contains something that isn’t pure apples or pure oranges), then you can relabel that box **mixed**.
+
+In either case, after the first draw you can identify exactly one box’s correct label, and the remaining two must swap accordingly. Thus, the **minimum first draw is 1 item** from any one box (e.g., the “apples” box).",102,0,167,269,2026-07-27T16:01:16.814747Z,11.371879,1,
+reason-003,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_03e287242b7a00fc016a6780c309bc8193ba01b086fa4e3c9d,completed,,"Draw one fruit from the box labeled **mixed**. Since every label is wrong, that box cannot be mixed, so it contains only apples or only oranges.
+
+- If you draw an **apple**, the “mixed” box is actually **apples**.
+- Then the box labeled **oranges** cannot be oranges, and cannot be apples already used, so it must be **mixed**.
+- The remaining box labeled **apples** must be **oranges**.
+
+So **one first draw** is enough to determine all labels.",102,0,113,215,2026-07-27T16:01:09.198815Z,1.735192,1,
+reason-004,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_096a457ab2eb64be016a6780c4c28881948b2b12657aaa94ea,completed,,"Let the pen cost \(x\). Then the book costs \(x+21\).  
+Together:  
+\[
+x+(x+21)=27
+\]
+\[
+2x+21=27 \Rightarrow 2x=6 \Rightarrow x=3
+\]
+So the pen costs \(\$3\), and the book costs \(\$3+21=\$24\).",99,0,88,187,2026-07-27T16:01:10.414807Z,1.215919,1,
+reason-004,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0269bdd19388d166016a6780c5fcb8819684c497c35fd43ac6,completed,,"Let the pen cost **x** dollars. Then the book costs **x + 21** dollars.
+
+Together:
+**x + (x + 21) = 27**
+
+So:
+**2x + 21 = 27**
+**2x = 6**
+**x = 3**
+
+So the **pen costs $3** and the **book costs $24**.",99,0,82,181,2026-07-27T16:01:11.682770Z,1.267889,1,
+reason-005,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0bd9dab2423f6394016a6780c73e40819596a8ac23cb546f49,completed,,"We’re given two facts: (1) Every **glim** is a **tor** (Glim → Tor), and (2) No **tor** is a **vep** (Tor → not Vep).  
+Chaining them: if something is a glim, it must be a tor; but no tor can be a vep, so a glim cannot be a vep.  
+
+Therefore, **no glim can be a vep**.",99,0,98,197,2026-07-27T16:01:13.162806Z,1.479966,1,
+reason-005,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0e574389ea2d282c016a6780c8c6488195b90760936ac05a28,completed,,"No. If every glim is a tor, then all glims are inside the set of tors. If no tor is a vep, then nothing in the set of tors can be a vep. So a glim cannot be a vep, because that would make it both a tor and a vep, which is impossible under the given statements. Therefore, **no glim can be a vep**.",99,0,87,186,2026-07-27T16:01:15.698887Z,2.536007,1,
+reason-006,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_09cdae34ac39017e016a6780c9096c81908e7a1208a2313899,completed,,"From noon to midnight is 12 hours, i.e., 12 ÷ 2 = 6 intervals of 2 hours.  
+In each 2-hour interval, the clock loses 5 minutes, so total loss is 6 × 5 = 30 minutes.  
+Since it loses time, it will display 30 minutes **earlier** than midnight: **11:30 PM**.",101,0,86,187,2026-07-27T16:01:14.898772Z,1.427537,1,
+reason-006,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0ad0db1721034d9e016a6780ce57b081908392d4948140f371,completed,,"The clock loses 5 minutes every 2 real hours, so over 12 hours it loses:
+
+- \(12 \div 2 = 6\) intervals
+- \(6 \times 5 = 30\) minutes
+
+Starting correct at noon, when the real time is midnight 12 hours later, the clock will display **11:30 PM**.",101,0,79,180,2026-07-27T16:01:20.088770Z,5.189924,3,
+reason-007,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_02dd1f4ac2a37ec7016a6780cf304c8195b1fcc48c40b61337,completed,,"Let the amounts paid by the three smaller payments be \(x\) each. The fourth friend pays twice as much, \(2x\).  
+Total: \(3x + 2x = 5x = 54\).  
+So \(x = 54/5 = 10.8\).  
+
+- Each of the three friends: \(x = \$10.80\)  
+- The fourth friend: \(2x = 2 \cdot 10.8 = \$21.60\)",98,0,111,209,2026-07-27T16:01:20.991168Z,5.292213,3,
+reason-007,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_00ade0c9f10a7098016a6780d462ec819383e2d6d79562db7d,completed,,"Let each of the three smaller payments be \(x\). Then the fourth person pays \(2x\).
+
+So:
+\[
+3x + 2x = 54
+\]
+\[
+5x = 54
+\]
+\[
+x = 10.8
+\]
+
+So the three friends each pay **$10.80**, and the fourth friend pays **$21.60**.",98,0,87,185,2026-07-27T16:01:26.277096Z,9.462282,4,
+reason-008,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0abf2137aa372bbd016a6780cfa6d881968dbcefdce652897a,completed,,"Total marbles: \(4 + 3 + 3 = 10\).  
+Non-red marbles are the blue and green ones: \(3 + 3 = 6\).  
+So the probability of drawing a non-red marble is:
+\[
+\frac{6}{10} = \frac{3}{5} = 0.6.
+\]",102,0,80,182,2026-07-27T16:01:21.338706Z,1.249869,1,
+reason-008,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0da530581b6192c0016a6780d4c1308197a1859641032545f1,completed,,"There are \(4 + 3 + 3 = 10\) marbles total.  
+Non-red marbles = blue + green = \(3 + 3 = 6\).
+
+So the probability of drawing a non-red marble is:
+
+\[
+\frac{6}{10} = \frac{3}{5}
+\]
+
+**Answer: \(\frac{3}{5}\)**",102,0,85,187,2026-07-27T16:01:26.899694Z,5.90845,3,
+reason-009,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0d97d9b26d2b0c95016a6780d426508197a3e8dd04ecfa558e,completed,,"Let the number be \(10a+b\) with digits \(a\) and \(b\).  
+Given \(a+b=9\). Reversing gives \(10b+a\), and
+\[
+(10b+a)-(10a+b)=27 \;\Rightarrow\; 9(b-a)=27 \;\Rightarrow\; b-a=3.
+\]
+Solve with \(a+b=9\):
+\[
+a+(a+3)=9 \Rightarrow 2a=6 \Rightarrow a=3,\quad b=6.
+\]
+So the number is \(\boxed{36}\). (Check: reverse \(63\), and \(63-36=27\).)",99,0,152,251,2026-07-27T16:01:27.179037Z,5.840254,2,
+reason-009,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0615c637532f4303016a6780e0e2dc8197bfd93035c22db3ce,completed,,"Let the tens digit be \(x\) and the ones digit be \(y\).
+
+\[
+x+y=9
+\]
+
+The number is \(10x+y\), and the reversed number is \(10y+x\).  
+Reversing increases it by 27:
+
+\[
+10y+x = 10x+y+27
+\]
+
+\[
+9(y-x)=27 \Rightarrow y-x=3
+\]
+
+Now solve the system:
+
+\[
+x+y=9,\quad y-x=3
+\]
+
+Add the equations:
+
+\[
+2y=12 \Rightarrow y=6
+\]
+
+Then \(x=3\).
+
+So the number is **36**.",99,0,147,246,2026-07-27T16:01:38.847999Z,12.570898,4,
+reason-010,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0800a3b44656fd28016a6780d7d1648195911c2bf1a03066a4,completed,,"To scale up from 6 to 14 servings, multiply by \( \frac{14}{6} \).
+
+\[
+450 \text{ g} \times \frac{14}{6} = 450 \times \frac{7}{3} = 1050 \text{ g}
+\]
+
+So you need **1050 grams of flour** for **14 servings**.",95,0,83,178,2026-07-27T16:01:29.719597Z,2.819833,2,
+reason-010,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0e703702f610512d016a6780da7f10819691041d3ae4dc321a,completed,,"Use a proportion:
+
+- 450 grams for 6 servings
+- \( 450 \div 6 = 75 \) grams per serving
+- \( 75 \times 14 = 1050 \) grams
+
+So, **14 servings need 1050 grams of flour**.",95,0,64,159,2026-07-27T16:01:31.988967Z,4.80987,3,
+reason-011,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_01a04ad0e700d6e4016a6780da9f288190b663812af5a69635,completed,,"Scale: 1 cm corresponds to 8 km.  
+Real distance = 7.5 cm × 8 km/cm = 60 km.",100,0,34,134,2026-07-27T16:01:32.174987Z,2.455314,2,
+reason-011,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_09ead799e6184c3b016a6780db8ec0819384b6a7028b09696e,completed,,"Use the scale:
+
+- 1 cm = 8 km  
+- 7.5 cm = \(7.5 \times 8\) km
+
+So the real distance is **60 kilometers**.",100,0,46,146,2026-07-27T16:01:33.325626Z,1.336584,1,
+reason-012,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0c0d98f27f3ca424016a6780dbbf3c81958fd11dab94e3fec8,completed,,"Look at the differences:  
+\(6-2=4,\;12-6=6,\;20-12=8,\;30-20=10\).  
+The differences increase by 2 each time, so the next differences are 12 and 14.  
+Thus the next terms are:  
+\(30+12=42\) and \(42+14=56\).  
+
+**Next two terms: 42, 56.**  
+**Rule:** \(a_n = n(n+1)\) (i.e., the sequence is \(n^2+n\) for \(n=1,2,3,\dots\)).",98,0,139,237,2026-07-27T16:01:33.944036Z,1.76898,1,
+reason-012,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0a9a0a54b8a0e783016a6780dce5048196abaeef514d25d09c,completed,,"The pattern is:
+
+- \(2 = 1 \times 2\)
+- \(6 = 2 \times 3\)
+- \(12 = 3 \times 4\)
+- \(20 = 4 \times 5\)
+- \(30 = 5 \times 6\)
+
+So the rule is: **multiply consecutive integers**: \(n(n+1)\).
+
+The next two terms are:
+
+- \(6 \times 7 = 42\)
+- \(7 \times 8 = 56\)
+
+**Answer:** 42, 56; rule: \(n(n+1)\) or consecutive products.",98,0,138,236,2026-07-27T16:01:34.859042Z,1.533342,1,
+reason-013,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_00b36656ab08b282016a6780e1307c81949a53958886f4c3eb,completed,,"Perimeter \(P=2(L+W)=50\). With \(L=15\),
+\[
+2(15+W)=50 \Rightarrow 15+W=25 \Rightarrow W=10\text{ m}.
+\]
+Area \(A=L\cdot W=15\cdot 10=150\text{ m}^2.\)
+
+**Width: 10 m.  
+Area: 150 m².**",92,0,97,189,2026-07-27T16:01:38.933050Z,4.988943,3,
+reason-013,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0dd1afdb66971b7e016a6780e2b47881969d7d1beb87c66831,completed,,"For a rectangle, the perimeter is:
+
+\[
+P = 2(L + W)
+\]
+
+Given \(P = 50\) and \(L = 15\):
+
+\[
+50 = 2(15 + W)
+\]
+
+\[
+25 = 15 + W
+\]
+
+\[
+W = 10
+\]
+
+So the **width is 10 meters**.
+
+Now find the area:
+
+\[
+A = L \times W = 15 \times 10 = 150
+\]
+
+So the **area is 150 square meters**.",92,0,120,212,2026-07-27T16:01:40.576133Z,5.71701,3,
+reason-014,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_06d8ab7b63ae86cb016a6780e276f08195b58ce4a47076c126,completed,,"First apply the 25% discount:  
+\(80 \times (1 - 0.25) = 80 \times 0.75 = 60\).
+
+Then add 10% tax to the discounted price:  
+\(60 \times (1 + 0.10) = 60 \times 1.10 = 66\).
+
+So, the final price is **$66**.",98,0,88,186,2026-07-27T16:01:40.269995Z,1.421527,1,
+reason-014,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_032568728e20406c016a6780e29a68819784a7cdcb249ab3be,completed,,"Start with $80.
+
+- 25% discount: $80 × 0.25 = $20 off
+- Discounted price: $80 - $20 = $60
+- Add 10% tax: $60 × 0.10 = $6
+- Final price: $60 + $6 = **$66**
+
+**Final answer: $66**",98,0,80,178,2026-07-27T16:01:40.158893Z,1.225775,1,
+reason-015,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_02722e5046d09f70016a6780e3c40c81949f5a21c91200664f,completed,,"With 5 machines making 5 parts in 5 minutes, the total production rate is \(1\) part per minute (since \(5 \text{ parts} / 5 \text{ minutes} = 1\)).
+
+Assuming machines work at equal independent rates, 100 machines will produce \(100\) times as fast, i.e. \(100\) parts per minute.
+
+So time to make 100 parts is
+\[
+\frac{100\ \text{parts}}{100\ \text{parts/min}} = 1\ \text{minute}.
+\]
+
+**Answer: 1 minute.**",98,0,134,232,2026-07-27T16:01:44.406906Z,4.247944,1,
+reason-015,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_08f1e50c3fdf23f0016a6780ef57e88196883031ac99465775,completed,,"If 5 machines make 5 parts in 5 minutes, then each machine makes 1 part in 5 minutes.
+
+So 100 machines, working at the same rate, make 100 parts in the same 5 minutes.
+
+**Answer: 5 minutes**",98,0,58,156,2026-07-27T16:01:52.882807Z,12.612784,4,
+reason-016,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_00fdd043bfa04bfa016a6780e87e588195af8f90d2717ee708,completed,,"Choose one of the two fair coins (either way it’s the same). Each coin flip is independent with probability \(1/2\) of head. “Exactly one head” in two flips means either \(HT\) or \(TH\).  
+\[
+P(HT \text{ or } TH)=\frac12\cdot\frac12+\frac12\cdot\frac12=\frac14+\frac14=\frac12.
+\]  
+So the probability of exactly one head is \(\boxed{\tfrac12}\).",95,0,115,210,2026-07-27T16:01:46.540121Z,5.963925,2,
+reason-016,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0364b5af14ff09ed016a6780ec8fbc81958992ed55d7b3685a,completed,,"Since both coins are fair, selecting one coin doesn’t matter: you are flipping a fair coin twice.
+
+The possible outcomes are:
+
+- HH
+- HT
+- TH
+- TT
+
+Exactly one head occurs in HT or TH, which is 2 outcomes out of 4.
+
+So the probability is:
+
+\[
+\frac{2}{4}=\frac{1}{2}
+\]
+
+**Answer: \(\tfrac{1}{2}\)**",95,0,97,192,2026-07-27T16:01:50.316500Z,5.90952,3,
+reason-017,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0279569ad338b8ab016a6780ea26e481908a04e39edd831ee1,completed,,"This forms a right triangle where the ladder is the hypotenuse. The wall height is 12 ft and the base distance is 5 ft. By the Pythagorean theorem:
+
+\[
+L^2 = 12^2 + 5^2 = 144 + 25 = 169
+\]
+
+\[
+L = \sqrt{169} = 13
+\]
+
+So, the ladder is **13 feet** long.",95,0,95,190,2026-07-27T16:01:48.022921Z,1.482721,1,
+reason-017,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0017b57e46a56f18016a6780eba2688194a82217a3ef28c7d9,completed,,"Use the Pythagorean theorem:
+
+\[
+\text{ladder length}^2 = 12^2 + 5^2 = 144 + 25 = 169
+\]
+
+\[
+\text{ladder length} = \sqrt{169} = 13
+\]
+
+So, the ladder is **13 feet** long.",95,0,77,172,2026-07-27T16:01:49.318858Z,1.295871,1,
+reason-018,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_01dfe1d22a2d7d41016a6780ee57648194834c8514ae94c80a,completed,,"A valid order with ordinary dependencies is:
+
+1. **Wake up**  
+2. **Get dressed**  
+3. **Commute**  
+4. **Start work**",95,0,39,134,2026-07-27T16:01:51.476250Z,2.15732,2,
+reason-018,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0d786165e93a76c6016a6780f915548196bb1f3ae2db167f11,completed,,"A valid order is:
+
+1. Wake up  
+2. Get dressed  
+3. Commute  
+4. Start work
+
+This follows ordinary dependencies: you need to wake up before getting dressed, get dressed before commuting, and arrive at work before starting work.",95,0,56,151,2026-07-27T16:02:02.691224Z,12.374668,3,
+reason-019,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0a14825bbe8f9512016a6780ef13548193809df7c439a628a6,completed,,"Let the tank capacity be \(C\) liters. Initially it’s one-third full, so it contains \(\frac{C}{3}\).
+
+After adding 40 liters, it becomes three-fifths full, so it contains \(\frac{3C}{5}\). Thus,
+\[
+\frac{C}{3} + 40 = \frac{3C}{5}.
+\]
+Multiply by 15:
+\[
+5C + 600 = 9C.
+\]
+So,
+\[
+600 = 4C \quad \Rightarrow \quad C = 150.
+\]
+**The tank’s capacity is \(\boxed{150}\) liters.**",98,0,144,242,2026-07-27T16:01:53.041464Z,1.565137,1,
+reason-019,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_07e86e94e53ba839016a6780f93e3481969af67c3a3dccc76e,completed,,"Let the tank’s capacity be \(C\) liters.
+
+It is initially \(\frac{1}{3}C\) full. After adding 40 liters, it becomes \(\frac{3}{5}C\) full.
+
+So:
+\[
+\frac{3}{5}C - \frac{1}{3}C = 40
+\]
+
+Find a common denominator:
+\[
+\frac{9}{15}C - \frac{5}{15}C = 40
+\]
+\[
+\frac{4}{15}C = 40
+\]
+
+Thus:
+\[
+C = 40 \times \frac{15}{4} = 150
+\]
+
+The tank’s capacity is **150 liters**.",98,0,159,257,2026-07-27T16:02:03.295658Z,10.412313,4,
+reason-020,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0471620599ee6330016a6780f4b4788193acafbb47c77e89fd,completed,,"They close the distance at the sum of their speeds: \(20+25=45\) km/h.  
+Time to meet: \(90 \div 45 = 2\) hours.  
+
+So, the cyclists meet after **2 hours** from the start.",100,0,59,159,2026-07-27T16:01:57.968918Z,4.927473,3,
+reason-020,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_08701edba3c5f4bd016a6780f5a2848194b6ad5020f6aac1b1,completed,,"They close the gap at a combined speed of \(20 + 25 = 45\) km/h.
+
+Time to meet:
+\[
+\frac{90}{45} = 2
+\]
+
+So, they meet after **2 hours**.",100,0,55,155,2026-07-27T16:01:59.235018Z,1.265757,1,
+reason-021,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_07069d91ab6069af016a6780f85dac8194a5d213ae8ec66ff2,completed,,"The password format is: 1 letter followed by 2 different digits.
+
+- Choices for the letter: \(26\).
+- Choices for the first digit: \(10\) (0–9).
+- Choices for the second digit: \(9\) (must be different from the first digit).
+
+Total possibilities:
+\[
+26 \times 10 \times 9 = 2340
+\]
+So, there are **2340** possible passwords.",101,0,97,198,2026-07-27T16:02:02.279539Z,3.04445,2,
+reason-021,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0c68cddad059a593016a6781022940819389f38acdab61cdec,completed,,"There are:
+
+- **26** choices for the letter
+- **10** choices for the first digit
+- **9** choices for the second digit, since it must be different from the first
+
+So the total number of passwords is:
+
+**26 × 10 × 9 = 2340**
+
+**Answer: 2340**",101,0,73,174,2026-07-27T16:02:11.660340Z,9.380734,4,
+reason-022,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0891884a971fcb9a016a6780fa4f7c8197b6e783e9fd783753,completed,,"The meeting starts at **14:35** and lasts **1 hour 50 minutes**.
+
+- Add 1 hour: **15:35**
+- Add 50 minutes: **16:25**
+
+**Ending time: 16:25.**",95,0,55,150,2026-07-27T16:02:03.734648Z,1.043297,1,
+reason-022,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0aceca8b6c6d0e45016a6780faeef0819399d4fd6606aa9e3a,completed,,"14:35 + 1 hour 50 minutes = 16:25.
+
+The meeting ends at **16:25**.",95,0,30,125,2026-07-27T16:02:04.203710Z,0.907984,1,
+reason-023,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_06af12c9067c3091016a6780fb5474819686ff53cbba4a3cdc,completed,,"When rolling a fair six-sided die twice, there are \(6 \times 6 = 36\) equally likely outcomes. A sum of 7 occurs for the pairs:
+\((1,6), (2,5), (3,4), (4,3), (5,2), (6,1)\).
+That’s \(6\) favorable outcomes. So the probability is
+\[
+\frac{6}{36}=\frac{1}{6}.
+\]",92,0,104,196,2026-07-27T16:02:05.066623Z,1.33193,1,
+reason-023,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0eff46000e2be1d2016a6780fbd0b08190ba98f4d37f9e455e,completed,,"When rolling a fair six-sided die twice, there are \(6 \times 6 = 36\) equally likely outcomes.
+
+The outcomes with sum \(7\) are:
+\[
+(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)
+\]
+So there are \(6\) favorable outcomes.
+
+Thus, the probability is:
+\[
+\frac{6}{36} = \frac{1}{6}
+\]
+
+**Answer: \(\boxed{\frac{1}{6}}\)**",92,0,123,215,2026-07-27T16:02:05.647070Z,1.443302,1,
+reason-024,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_069278223686b2a5016a678100bb8481909b3a8215d2dbd3c0,completed,,"First mark up $48 by 30%:  
+Marked price = \(48 \times 1.30 = 62.40\).
+
+Then discount the marked price by 20% (pay 80% of it):  
+Sale price = \(62.40 \times 0.80 = 49.92\).
+
+So, the sale price is **$49.92**.",105,0,84,189,2026-07-27T16:02:10.788105Z,5.721396,3,
+reason-024,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0cf081064bb6b99b016a678105ffa88190aa9a2499a740e333,completed,,"First find the marked price:
+
+- Markup = 30% of 48 = 0.30 × 48 = 14.40  
+- Marked price = 48 + 14.40 = 62.40  
+
+Now apply the 20% discount:
+
+- Discount = 20% of 62.40 = 0.20 × 62.40 = 12.48  
+- Sale price = 62.40 − 12.48 = **49.92**
+
+**Sale price: $49.92**",105,0,115,220,2026-07-27T16:02:15.842259Z,10.19515,4,
+reason-025,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_09087ddaf9ace2f8016a67810c1c448190810044fce3e18fe7,completed,,"Yes, the conclusion is valid. From “all poets are writers,” it follows that any poet is a writer. The premise “some teachers are poets” means there exists at least one teacher who is also a poet. That teacher, being a poet, must therefore be a writer. Hence “some teachers are writers” follows necessarily.",96,0,71,167,2026-07-27T16:02:21.951061Z,11.162873,3,
+reason-025,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0750ee0ec7719544016a67810353888190935ff41139c75b09,completed,,"Yes, the conclusion is valid.
+
+Reason:  
+- All poets are writers.  
+- Some teachers are poets.  
+
+So the teachers that are poets must also be writers. Therefore, at least some teachers are writers. This is a valid syllogism.",96,0,56,152,2026-07-27T16:02:12.772885Z,1.112472,1,
+reason-026,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0bd593041a62a4f2016a6781062c048197acd6af5e1d44b6f7,completed,,"Let the common perimeter be 40.
+
+- Square: \(4s=40 \Rightarrow s=10\). Area \(A_s=s^2=100\).
+- Circle: \(2\pi r=40 \Rightarrow r=\frac{20}{\pi}\). Area \(A_c=\pi r^2=\pi\left(\frac{20}{\pi}\right)^2=\frac{400}{\pi}\approx 127.3\).
+
+Since \(127.3>100\), the circle’s area is larger. (In exact form, \(A_c=\frac{400}{\pi}\) and \(A_s=100\), so \(A_c>A_s\).)",95,0,151,246,2026-07-27T16:02:16.486380Z,3.713426,2,
+reason-026,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0cf1db414079289a016a678107734c81909ce1d7fb0801caf9,completed,,"Equal perimeter \(= 40\).
+
+- **Square:** side \(= 40/4 = 10\), so area \(= 10^2 = 100\).
+- **Circle:** circumference \(= 40\), so \(2\pi r = 40 \Rightarrow r = 20/\pi\).  
+  Area \(= \pi r^2 = \pi(20/\pi)^2 = 400/\pi \approx 127.3\).
+
+**Comparison:**  
+The **circle has the larger area**.
+
+- Square area: **100**
+- Circle area: **\(400/\pi \approx 127.3\)**",95,0,141,236,2026-07-27T16:02:17.696460Z,1.854109,1,
+reason-027,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0e35c0a738336734016a678118d284819686eb27c3475bbeba,completed,,"Let the integers be \(n-1\), \(n\), and \(n+1\). Their sum is
+\[
+(n-1)+n+(n+1)=3n=72.
+\]
+So \(n=24\). The integers are \(23\), \(24\), and \(25\).",85,0,71,156,2026-07-27T16:02:34.452418Z,17.965969,5,
+reason-027,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0210b830f5564e2d016a67810d585c8193a0f78ed83f73181b,completed,,"Let the three consecutive integers be \(n-1\), \(n\), and \(n+1\).
+
+Their sum is:
+\[
+(n-1) + n + (n+1) = 3n = 72
+\]
+So,
+\[
+n = 24
+\]
+
+The integers are **23, 24, and 25**.",85,0,80,165,2026-07-27T16:02:23.177868Z,5.481341,3,
+reason-028,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_00968224f7f5df7d016a6781118f1881959955bc12d4897570,completed,,"The car uses 8 liters per 100 km, so for 375 km it needs:
+\( 8 \times \frac{375}{100} = 8 \times 3.75 = 30 \) liters.
+
+**Estimated fuel needed: 30 liters.**",95,0,61,156,2026-07-27T16:02:27.080506Z,5.129371,3,
+reason-028,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0f1087423da9a1ef016a67811724888190b2448b3d0cb8c7ca,completed,,"At 8 liters per 100 km, a 375 km trip would use:
+
+\( 375 \div 100 \times 8 = 30 \)
+
+So the car will need about **30 liters of fuel**.",95,0,50,145,2026-07-27T16:02:32.546842Z,9.368914,4,
+reason-029,reasoning,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_043e9fb70cf8cd86016a678112b0d0819696d5c7d318cc3da3,completed,,"The total of the 20 correct scores should be based on the class average.
+
+Original entered total: \(76 \times 20 = 1520\).
+
+One score was entered as 65 instead of 56, so the entered total is too high by \(65 - 56 = 9\).
+
+Correct total: \(1520 - 9 = 1511\).
+
+Corrected average: \(1511 \div 20 = 75.55\).",100,0,99,199,2026-07-27T16:02:28.466760Z,1.386186,1,
+reason-029,reasoning,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0bac380e0e3c5368016a67811c7cc88197b6bfe25a086f7055,completed,,"The original total was:
+
+- \(76 \times 20 = 1520\)
+
+The score was entered as 65 instead of 56, so the total was too high by:
+
+- \(65 - 56 = 9\)
+
+Correct total:
+
+- \(1520 - 9 = 1511\)
+
+Corrected average:
+
+- \(1511 \div 20 = 75.55\)
+
+**Corrected average = 75.55**",100,0,98,198,2026-07-27T16:02:38.346851Z,9.880017,4,
+reason-030,reasoning,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_03ea6419ebe5a73b016a67811831d48197b24f6d8f98ce9989,completed,,"Let each crate weigh \(x\) kg. With 8 crates plus the 180 kg cart, the total is the maximum:  
+\[
+8x + 180 = 900
+\]
+So
+\[
+8x = 720 \quad \Rightarrow \quad x = 90
+\]
+Each crate’s mass is **90 kg**.",102,0,78,180,2026-07-27T16:02:33.858746Z,1.31181,1,
+reason-030,reasoning,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0d3cc456f01b414c016a678120fd0481958438c3dba4cb23df,completed,,"Let each crate weigh \(x\) kg.
+
+Eight crates plus a 180 kg cart total 900 kg:
+\[
+8x + 180 = 900
+\]
+\[
+8x = 720
+\]
+\[
+x = 90
+\]
+
+Each crate has a mass of **90 kilograms**.",102,0,70,172,2026-07-27T16:02:42.615070Z,8.756256,3,
+summary-001,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_099f769cb5f7af41016a67811a23b88196bdfc7ae7f67f92c5,completed,,"After surveys found working families couldn’t visit on weekdays, a neighborhood library extended weekend hours, which increased attendance and led it to keep the new schedule.",110,0,34,144,2026-07-27T16:02:35.838141Z,1.385665,1,
+summary-001,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_025650077cdfe39f016a67811ce1ac81978431ddd6a71f1ae7,completed,,"After surveys revealed that working families rarely could visit on weekdays, the neighborhood library extended its weekend hours, which increased attendance and led it to keep the new schedule.",110,0,36,146,2026-07-27T16:02:38.245760Z,2.407558,2,
+summary-002,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_03fe7328038916b1016a678121a41081939a5ae9aeaab21a7b,completed,,"- Replaced old motors, installed sensors, and trained operators to modernize factory operations.  
+- Resulted in an 18% reduction in electricity use while maintaining steady output.",107,0,40,147,2026-07-27T16:02:42.989696Z,4.743869,3,
+summary-002,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_04252abad8f169fe016a67812672b081979e5f86958c5d9d5b,completed,,"- The factory upgraded by replacing old motors, adding sensors, and training operators.  
+- As a result, electricity use dropped 18% while production stayed the same.",107,0,38,145,2026-07-27T16:02:48.038271Z,9.691382,4,
+summary-003,summarization,heldout,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:03:00.377096Z,17.761948,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-003,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0c3d17c5bc50432c016a67812adb6481949f76b51f016c3825,completed,,"Researchers planted native grasses along a riverbank, and within two seasons their roots reduced erosion, improved water clarity, and brought insects back.",106,0,31,137,2026-07-27T16:02:52.111186Z,9.121422,4,
+summary-004,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0c61218726c59d1d016a678131c4d48197a68cf74d3ce401c2,completed,,"The committee delayed voting because there were two different cost estimates that didn’t match, and members wanted to have an outside reviewer check the numbers before agreeing to spend the money.",102,0,38,140,2026-07-27T16:02:59.156261Z,11.11789,4,
+summary-004,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0340532a45d4f968016a67812d369c81958980c98300b3f537,completed,,"The committee delayed the vote because the two cost estimates didn’t match, and members wanted an outside review before spending any money.",102,0,29,131,2026-07-27T16:02:54.421745Z,2.310496,2,
+summary-005,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_077881b8ee574c9c016a6781361d4081958e843e5f8060a93d,completed,,"**Headline:** Free Breakfast Boosts Attendance and Participation at Local School  
+**Summary:** After introducing free breakfast for every student, the school saw fewer late arrivals and higher morning class participation.",100,0,41,141,2026-07-27T16:03:03.737515Z,9.315709,4,
+summary-005,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_08544ec1e66db5f3016a678132c24c8194b3233677f25a617b,completed,,"**Headline:** Free School Breakfast Boosts Attendance and Morning Engagement
+
+**Summary:** A school’s decision to offer free breakfast to all students led to fewer late arrivals and greater participation in morning classes.",100,0,43,143,2026-07-27T16:03:00.412832Z,1.256495,1,
+summary-006,summarization,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_067505b3787afae6016a678133fa088196a9de18cc01ed654d,completed,,"Repairing the one aging bridge now provides a durable, high-impact solution that reduces the risk of major failure on that specific structure. Spreading the budget across four smaller bridges with temporary fixes lowers immediate risk across more locations, but it’s less reliable long-term: temporary measures may need repeat funding and could still leave all bridges vulnerable. In short, it’s a choice between concentrated, lasting resilience for one critical asset versus broader, short-term risk mitigation with potentially higher future costs.",101,0,99,200,2026-07-27T16:03:01.772527Z,1.395391,1,
+summary-006,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0f644f3cd1a5def9016a67813ca2f08196982c9ea101415dd5,completed,,"The tradeoff is between depth and breadth. Repairing one aging bridge now would likely provide a lasting, permanent solution for a major piece of infrastructure, but it leaves the four smaller bridges with only limited attention. Spreading the same budget across temporary fixes helps keep all four smaller bridges usable in the short term, but those repairs may wear out soon and won’t solve the underlying problems. It’s a choice between securing one critical asset or reducing immediate risk across several smaller ones.",101,0,99,200,2026-07-27T16:03:10.618365Z,10.205482,4,
+summary-007,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_00c396a342132563016a678136c01481938a91ea9d1a6310ce,completed,,"A software update enhanced battery life, but it also removed compatibility with some older accessories. This change upset several long-time users who depended on those devices.",101,0,34,135,2026-07-27T16:03:04.265083Z,2.492481,2,
+summary-007,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0915a69dbc685f5f016a67813faadc8196afbd248824067a6f,completed,,"The update extended battery life, but it dropped support for several older accessories, which upset some long-time users.",101,0,26,127,2026-07-27T16:03:12.939544Z,9.202002,4,
+summary-008,summarization,calibration,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:03:25.041912Z,20.776763,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-008,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_06941df8832e6cf1016a678147505c81959addf6e6da52d1ed,completed,,"Volunteers turned an empty lot into a garden, donated half the harvest, and used the rest for free cooking classes.",106,0,28,134,2026-07-27T16:03:21.011591Z,10.393159,3,
+summary-009,summarization,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_09f532e20fb21918016a6781408cd0819485819d6758123b64,completed,,"Heavy rain saturated the hillside, which caused the retaining wall to fail. The resulting debris then blocked the road, leading to delayed deliveries.",101,0,31,132,2026-07-27T16:03:13.875131Z,0.93518,1,
+summary-009,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0af60f7bb1ac04ac016a67814193a481979027dbce2219db6d,completed,,"Heavy rain saturated the hillside, which caused the retaining wall to fail. The wall failure led to debris blocking the road, and that blockage delayed deliveries.",101,0,34,135,2026-07-27T16:03:15.167441Z,1.292026,1,
+summary-010,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0130114162515443016a6781469f048195a2395d69940d469f,completed,,"Coral reefs are like underwater homes for lots of sea animals. They also act like natural shields by slowing waves before they hit the beach. But when the ocean water gets too warm, the coral can get sick and die, which hurts the animals that live there.",105,0,57,162,2026-07-27T16:03:20.032150Z,4.864642,3,
+summary-010,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0863f3ea8af41d68016a678158bb60819590e6ab227325e4ce,completed,,"Coral reefs are like underwater homes for lots of sea animals. They also act like a natural wall that helps calm big waves before they hit the shore. But coral reefs can get hurt if the ocean gets too warm, because warm water makes it harder for them to stay healthy.",105,0,60,165,2026-07-27T16:03:38.448961Z,18.416742,5,
+summary-011,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0683d8ae5aa19e1d016a67814ac4c8819687019fa3fe8392d3,completed,,"**Main claim:** The transit pilot improved service reliability (buses arriving every ten minutes) and increased ridership, notably in the evenings.
+
+**Evidence:** After implementing the ten-minute arrival schedule, ridership increased by **22%**, with the largest gains occurring **during evening hours**.",101,0,62,163,2026-07-27T16:03:24.345127Z,3.333465,2,
+summary-011,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_090c855d22bfdaf0016a67814fed788195a171c8c3855680b0,completed,,"Main claim: Making buses arrive every ten minutes increased ridership.
+
+Evidence: In the transit pilot, ridership grew by 22 percent, with especially strong growth during evenings.",101,0,39,140,2026-07-27T16:03:29.497231Z,5.152039,3,
+summary-012,summarization,calibration,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:03:45.388352Z,20.34638,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-012,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0213ed887dbd1d29016a67815121fc81949434b197fc4f85f1,completed,,"Residents generally support the creation of a new park, but there is disagreement over its main purpose. Some favor sports fields, others want it to preserve quiet natural habitat, and others prefer space for events and gatherings.",102,0,46,148,2026-07-27T16:03:30.794348Z,1.297047,1,
+summary-013,summarization,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0597b1a8cb46a6c9016a678153c6c881958d8bb38eb87cfcef,completed,,Prototype is working on sample data and the security review is complete. Deployment is currently on hold pending a vendor contract.,102,0,27,129,2026-07-27T16:03:33.179218Z,2.384797,2,
+summary-013,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_089fe1057cc84e2a016a678154d21c81958f5e3a92952565aa,completed,,"Prototype is working on sample data, security review is complete, and deployment is pending vendor contract finalization.",102,0,25,127,2026-07-27T16:03:34.171098Z,0.991819,1,
+summary-014,summarization,calibration,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:03:57.694589Z,23.523394,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-014,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0f9a1864347a0436016a67815a0e40819082f5d7dfc4be2536,completed,,"Early observations suggest the treatment may help, but because the study is small and lacks a control group, the results remain uncertain.",103,0,29,132,2026-07-27T16:03:39.443655Z,0.994618,1,
+summary-015,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0132a9dba937aedf016a67815ee878819591a44cb0f0312642,completed,,"**Decision:** Choose the slower database migration process.
+
+**Rationale:** The slower approach includes rollback checkpoints, which helps mitigate issues and lowers the risk of data loss.",99,0,37,136,2026-07-27T16:03:44.509631Z,5.065914,3,
+summary-015,summarization,calibration,1,gpt-5.4-mini-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:04:06.640215Z,22.130566,5,"InternalServerError: <html>
+<head>
+    <title>502 Bad Gateway</title>
+</head>
+<body>
+    <h1>502 Bad Gateway</h1>
+    <p>server closed connection</p>
+</body>
+</html>"
+summary-016,summarization,calibration,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:04:02.263568Z,16.875158,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-016,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0c894e79f87f14fb016a67816d4ef881968849aa4caddac9cb,completed,,"The museum first cataloged its collection, then photographed each object. After that, it linked the records online and invited scholars to submit corrections.",102,0,32,134,2026-07-27T16:03:58.714360Z,1.019717,1,
+summary-017,summarization,heldout,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:04:25.494308Z,26.779867,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per day (RPD): Limit 50, Used 50, Requested 1. Please try again in 28m48s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-017,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0dc7daa3ebfe429f016a678171df4081979c96d5b2233f6948,completed,,"Recommendation: Use the cheaper filter for ordinary use, since it performs as well as the premium option in standard conditions. However, avoid it for heavy industrial applications, because it wears out sooner under high-load use and may require more frequent replacement.",102,0,52,154,2026-07-27T16:04:03.783161Z,1.51953,1,
+summary-018,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0eefbee29ad44bd7016a678175046c8195b36142fb8438bbfd,completed,,"A cooperative pooled orders from local farms, lowering delivery costs. Members accepted fewer product choices in exchange for fresher food.",104,0,28,132,2026-07-27T16:04:06.321081Z,2.537859,2,
+summary-018,summarization,calibration,1,gpt-5.4-mini-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:04:34.371077Z,28.049905,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-mini-2026-03-17 (for limit gpt-5.4-mini) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-019,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0e8c1f322f9ee7e1016a6781815d608190b956e34083b2896c,completed,,"The clinic faced long phone wait times for appointments. To solve this, it introduced online scheduling, allowing patients to book times without calling. At the same time, the clinic kept a staffed phone line so patients without internet access could still receive help and schedule appointments.",104,0,56,160,2026-07-27T16:04:19.021272Z,12.380793,3,
+summary-019,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_05552a77183e9382016a678182983081959363bcb340ed9180,completed,,"The problem was that patients faced long phone wait times when trying to schedule appointments. The clinic responded by adding an online scheduling option to reduce pressure on the phone line, while still keeping a staffed phone line available for patients who do not have internet access. This approach improved convenience and access for tech-savvy patients without excluding those who rely on traditional phone support.",104,0,75,179,2026-07-27T16:04:20.419127Z,1.397702,1,
+summary-020,summarization,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0b0b6d536b81fc6a016a678183f7cc81978f400fa911d42209,completed,,"A project deadline was missed after the requirements were changed twice. The final approval was received three days later than scheduled, contributing to the delay.",98,0,32,130,2026-07-27T16:04:21.415365Z,0.996157,1,
+summary-020,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0d0b229e32bbaa63016a678184f638819385a4a431a4139545,completed,,"The deadline was missed after the requirements changed twice, and the final approval came three days later than expected.",98,0,25,123,2026-07-27T16:04:22.782802Z,1.367358,1,
+summary-021,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0a618850ee010c19016a67818654c481948e79ea9327be3303,completed,,"**Title:** Hourly Performance Comparison of Three Insulation Materials in Identical Enclosures  
+
+**Abstract:**  
+This experiment evaluated the thermal insulating performance of three insulation materials by installing each in an identical box design. Internal temperatures were recorded every hour over the test period under the same environmental conditions. By comparing temperature profiles and the rate of temperature change, the study quantified how effectively each material reduced heat transfer. Results indicate measurable differences in insulation effectiveness, providing practical insight for selecting insulation materials based on desired thermal stability and energy efficiency.",96,0,108,204,2026-07-27T16:04:24.134797Z,1.351926,1,
+summary-021,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0657e59cf0a1f6c0016a678187b9688195b320ee3388f55150,completed,,"**Title:** Comparing Thermal Performance of Three Insulation Materials in Identical Boxes
+
+**Abstract:**  
+This experiment evaluated the insulating effectiveness of three different materials using identical boxes under the same conditions. Internal temperature was measured at hourly intervals to assess how well each material retained heat over time. The results allowed for direct comparison of thermal performance, with the best insulation identified by the slowest temperature decline and highest sustained internal temperature.",96,0,87,183,2026-07-27T16:04:25.638652Z,1.503782,1,
+summary-022,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0971ceefa67a4c68016a678199a32c81959fdc637f9988d6f2,completed,,"Customer complaints increased following a confusing redesign of the form. The problem appears to be clearer labeling—after we restored more intuitive labels, users made fewer mistakes and incomplete submissions dropped.",98,0,39,137,2026-07-27T16:04:43.059499Z,17.565138,5,
+summary-022,summarization,calibration,1,gpt-5.4-mini-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:04:45.916701Z,20.277983,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-mini-2026-03-17 (for limit gpt-5.4-mini) in organization [REDACTED_ORG] on requests per day (RPD): Limit 50, Used 50, Requested 1. Please try again in 28m48s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-023,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_08659242cc8faa35016a678195c8148194933c19d944fdbf8f,completed,,"All three are advocating for redundancy in critical plans: the engineer supports redundant power systems, the nurse supports backup medication storage, and the planner supports alternate evacuation routes to ensure continuity when primary options fail.",99,0,43,142,2026-07-27T16:04:39.386261Z,5.015128,3,
+summary-023,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_0815515b94a012d2016a678196f2d88197adf91fcf79380dec,completed,,The shared point is **redundancy and contingency planning**—each favors having an alternative or backup option in case the primary one fails.,99,0,32,131,2026-07-27T16:04:40.290747Z,0.904398,1,
+summary-024,summarization,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0223d23c0e187e5c016a678197d59c8194a53910c890c42b99,completed,,"In the 1990s, the lake became polluted, with high phosphorus contributing to algae growth. After cleanup efforts began, phosphorus levels were reduced, leading to a decline in algae. Over time, as water quality improved, fish populations gradually recovered.",105,0,54,159,2026-07-27T16:04:41.335070Z,1.044257,1,
+summary-024,summarization,heldout,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_01846aaf2db0e2db016a67819d88d0819495f9b8cf39d2b311,completed,,"Over time, the lake improved from a polluted state in the 1990s to a healthier ecosystem. Cleanup efforts reduced phosphorus levels, which led to a decline in algae growth. As water quality improved, fish populations gradually recovered.",105,0,50,155,2026-07-27T16:04:47.164418Z,5.829279,2,
+summary-025,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_033a9548ab19cb40016a6781a848f8819684cf04e82afb41fd,completed,,"The event must accommodate 300 attendees with wheelchair accessibility, be reachable via public transportation, and keep the total venue cost under $4,000.",106,0,33,139,2026-07-27T16:04:57.744203Z,14.684636,4,
+summary-025,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_099288ad91a7264e016a6781a086fc8197a4e8dd0dff1b7a9c,completed,,"The venue must accommodate 300 people, be wheelchair accessible, be accessible by public transit, and have a total cost under $4,000.",106,0,33,139,2026-07-27T16:04:49.982059Z,4.065304,2,
+summary-026,summarization,calibration,1,gpt-5.4-nano-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:05:05.468340Z,18.303844,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-nano-2026-03-17 (for limit gpt-5.4-nano) in organization [REDACTED_ORG] on requests per day (RPD): Limit 50, Used 50, Requested 1. Please try again in 28m48s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-026,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_078e060ad1008480016a6781a18c548190953ab93380d9cd7a,completed,,"Remote work reduces commuting time, but it requires intentional documentation and planned overlapping hours to avoid communication gaps.",97,0,24,121,2026-07-27T16:04:52.138834Z,2.156706,1,
+summary-027,summarization,heldout,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_0559846e289a7b75016a6781a50c0c8195a91f20ca77ddc33a,completed,,"The new curriculum was associated with improved student scores in two schools. However, the results may not reflect district-wide impact because participation relied on teacher volunteers, which could introduce selection bias. In addition, the sample may be too limited and may not be representative of the broader district, limiting generalizability of the findings.",102,0,67,169,2026-07-27T16:04:54.729830Z,2.590896,2,
+summary-027,summarization,heldout,1,gpt-5.4-mini-2026-03-17,,,failed,,,0,0,0,0,2026-07-27T16:05:12.308416Z,17.578512,5,"RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5.4-mini-2026-03-17 (for limit gpt-5.4-mini) in organization [REDACTED_ORG] on requests per min (RPM): Limit 10, Used 10, Requested 1. Please try again in 6s. Visit https://platform.openai.com/account/rate-limits to learn more. You can increase your rate limit by adding a payment method to your account at https://platform.openai.com/account/billing.', 'type': 'requests', 'param': None, 'code': 'rate_limit_exceeded'}}"
+summary-028,summarization,calibration,1,gpt-5.4-nano-2026-03-17,gpt-5.4-nano-2026-03-17,resp_05673089a2eb1c74016a6781aacdd48193932d60675db606f0,completed,,"1) Check the seal.  
+2) Connect the hose and open the valve slowly.  
+3) Inspect for leaks before using.",102,0,31,133,2026-07-27T16:05:00.453610Z,2.709348,2,
+summary-028,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_077794ab5817af5d016a6781ac03688193b884915c3b7d43d6,completed,,"1. Check the seal.  
+2. Connect the hose and open the valve slowly.  
+3. Inspect for leaks before use.",102,0,31,133,2026-07-27T16:05:01.202449Z,0.748774,1,
+summary-029,summarization,calibration,1,gpt-5.4-mini-2026-03-17,gpt-5.4-mini-2026-03-17,resp_02ec1cfaad44b616016a6781b4eb1c8196aced6cb9036de1e0,completed,,"The bakery reduced waste by nearly half by tracking leftovers, baking fewer late-day batches, and donating safe unsold goods.",103,0,28,131,2026-07-27T16:05:10.196703Z,4.728304,3,

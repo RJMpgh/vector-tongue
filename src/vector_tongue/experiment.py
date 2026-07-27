@@ -114,6 +114,7 @@ class ResponseRecord:
     requested_model: str
     resolved_model: str
     response_id: str
+    collection_mode: str
     response_status: str
     incomplete_reason: str
     response_text: str
@@ -318,7 +319,10 @@ def read_response_records(path: str | pathlib.Path) -> list[ResponseRecord]:
     records: list[ResponseRecord] = []
     with source.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
-        missing = set(RESPONSE_FIELDS).difference(reader.fieldnames or ())
+        # `collection_mode` was added after the interrupted synchronous pilot.
+        # Preserve read compatibility with that already-published artifact.
+        required_fields = set(RESPONSE_FIELDS).difference({"collection_mode"})
+        missing = required_fields.difference(reader.fieldnames or ())
         if missing:
             raise ValueError(f"response CSV is missing: {', '.join(sorted(missing))}")
         for row in reader:
@@ -331,6 +335,7 @@ def read_response_records(path: str | pathlib.Path) -> list[ResponseRecord]:
                     requested_model=row["requested_model"],
                     resolved_model=row["resolved_model"],
                     response_id=row["response_id"],
+                    collection_mode=row.get("collection_mode") or "synchronous",
                     response_status=row["response_status"],
                     incomplete_reason=row["incomplete_reason"],
                     response_text=row["response_text"],
@@ -355,7 +360,11 @@ def write_response_records(path: str | pathlib.Path, records: list[ResponseRecor
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(destination.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=RESPONSE_FIELDS)
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=RESPONSE_FIELDS,
+            lineterminator="\n",
+        )
         writer.writeheader()
         for record in records:
             writer.writerow(dataclasses.asdict(record))
@@ -394,7 +403,11 @@ def write_embedding_index(path: str | pathlib.Path, records: list[EmbeddingRecor
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(destination.suffix + ".tmp")
     with temporary.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=EMBEDDING_INDEX_FIELDS)
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=EMBEDDING_INDEX_FIELDS,
+            lineterminator="\n",
+        )
         writer.writeheader()
         for record in records:
             writer.writerow(dataclasses.asdict(record))

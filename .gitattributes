@@ -1,0 +1,3 @@
+# Generated model text may intentionally contain Markdown hard-break spaces.
+experiments/real_models/artifacts/*.csv whitespace=-trailing-space
+experiments/real_models/artifacts/**/*.csv whitespace=-trailing-space

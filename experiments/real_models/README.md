@@ -13,7 +13,10 @@ frozen, auditable model-to-model pilot.
 - paired bootstrap intervals and calibration-pair permutation controls;
 - decision criteria written before response collection.
 
-Read [`PREREGISTRATION.md`](PREREGISTRATION.md) before running anything.
+The active run is
+[`vt-openai-pilot-002`](PREREGISTRATION_BATCH.md), which uses one consistent
+Batch API collection mode. Pilot 001's synchronous interruption is preserved
+in [`DEVIATIONS.md`](DEVIATIONS.md).
 
 ## One-time setup
 
@@ -41,35 +44,30 @@ shows a conservative maximum cost estimate. It makes no API calls.
 ## Run the complete pilot
 
 ```bash
-vector-tongue experiment run --acknowledge-api-cost
-```
-
-The stages are resumable and can also be run separately:
-
-```bash
-vector-tongue experiment collect --acknowledge-api-cost
+vector-tongue experiment batch-submit --acknowledge-api-cost
+vector-tongue experiment batch-sync
 vector-tongue experiment embed --acknowledge-api-cost
 vector-tongue experiment analyze
 ```
 
-For a low-cost connectivity check, collect only the first prompt from both
-models:
+Batch work can finish any time within 24 hours. Run `batch-sync` again until
+both model batches are complete. It imports results by `custom_id`; batch output
+order is deliberately ignored.
 
-```bash
-vector-tongue experiment collect --limit 1 --acknowledge-api-cost
-```
-
-Running full collection later resumes from those successful rows.
+The original synchronous collector remains available for other protocols, but
+must not be used to fill Pilot 002.
 
 ## Produced artifacts
 
 | Artifact | Purpose |
 |---|---|
-| `artifacts/responses.csv` | Raw text, exact model IDs, usage, latency, retries, and status |
-| `artifacts/embedding_index.csv` | Stable mapping from responses to matrix rows |
-| `artifacts/embeddings.npz` | Fixed-encoder vectors and encoder metadata |
-| `artifacts/analysis.json` | Complete machine-readable metrics and prompt-level errors |
-| `artifacts/run_manifest.json` | Code commit and SHA-256 hashes for every run artifact |
+| `artifacts/vt-openai-pilot-002/responses.csv` | Raw text, exact model IDs, usage, collection mode, and status |
+| `artifacts/vt-openai-pilot-002/batch_*.jsonl` | Raw input, output, and error records |
+| `artifacts/vt-openai-pilot-002/batch_state.json` | Batch identifiers, status, and counts |
+| `artifacts/vt-openai-pilot-002/embedding_index.csv` | Stable mapping from responses to matrix rows |
+| `artifacts/vt-openai-pilot-002/embeddings.npz` | Fixed-encoder vectors and encoder metadata |
+| `artifacts/vt-openai-pilot-002/analysis.json` | Complete machine-readable metrics and prompt-level errors |
+| `artifacts/vt-openai-pilot-002/run_manifest.json` | Code commit and SHA-256 hashes for every run artifact |
 | [`../../RESULTS.md`](../../RESULTS.md) | Human-readable positive, null, or negative result |
 
 Artifacts are intentionally versionable. API credentials are not.

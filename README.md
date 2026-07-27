@@ -22,7 +22,7 @@ prompts, compares them with simple baselines, estimates uncertainty, and
 preserves the original 2025 formulation as a versioned historical artifact.
 
 The repository now includes a
-[`preregistered 180-prompt real-model pilot`](experiments/real_models/PREREGISTRATION.md).
+[`preregistered 180-prompt real-model pilot`](experiments/real_models/PREREGISTRATION_BATCH.md).
 See [`RESULTS.md`](RESULTS.md) for the outcome or the explicit pre-data status.
 
 It does **not** claim access to proprietary model activations, decode an exact
@@ -113,11 +113,15 @@ prompts, and evaluates once on 54 held-out prompts.
 python -m pip install -r experiments/real_models/requirements.lock
 python -m pip install -e .
 vector-tongue experiment validate
-vector-tongue experiment run --acknowledge-api-cost
+vector-tongue experiment batch-submit --acknowledge-api-cost
+vector-tongue experiment batch-sync
+vector-tongue experiment embed --acknowledge-api-cost
+vector-tongue experiment analyze
 ```
 
-Collection is resumable. The generated report preserves positive, null, and
-negative results and records exact artifact hashes. See the
+Collection uses OpenAI's asynchronous Batch API and imports results by stable
+request ID. The generated report preserves positive, null, and negative results
+and records exact artifact hashes. See the
 [`experiment runbook`](experiments/real_models/README.md).
 
 ## Evaluate real paired embeddings

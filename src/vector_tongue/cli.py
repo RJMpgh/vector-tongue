@@ -10,13 +10,18 @@ from collections.abc import Sequence
 from .demo import synthetic_translation_dataset
 from .empirical import analyze_experiment
 from .evaluation import evaluate_translator
-from .experiment import protocol_summary
+from .experiment import ExperimentConfig, protocol_summary
 from .io import load_embedding_pairs_csv, write_json
 from .models import OrthogonalTranslator, RidgeTranslator
-from .openai_runner import collect_responses, embed_responses
+from .openai_runner import (
+    collect_responses,
+    embed_responses,
+    submit_response_batches,
+    sync_response_batches,
+)
 from .provenance import verify_manifest
 
-DEFAULT_EXPERIMENT_CONFIG = "experiments/real_models/config.json"
+DEFAULT_EXPERIMENT_CONFIG = "experiments/real_models/config-batch.json"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -80,6 +85,23 @@ def _parser() -> argparse.ArgumentParser:
     )
     analyze.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
 
+    batch_submit = experiment_commands.add_parser(
+        "batch-submit",
+        help="submit incomplete responses through the asynchronous Batch API",
+    )
+    batch_submit.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+    batch_submit.add_argument(
+        "--acknowledge-api-cost",
+        action="store_true",
+        help="confirm that this stage submits billable API work",
+    )
+
+    batch_sync = experiment_commands.add_parser(
+        "batch-sync",
+        help="check Batch API status and import completed responses",
+    )
+    batch_sync.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+
     run = experiment_commands.add_parser(
         "run", help="collect, embed, analyze, and report the complete pilot"
     )
@@ -140,19 +162,35 @@ def _require_cost_acknowledgement(args: argparse.Namespace) -> None:
         )
 
 
+def _reject_synchronous_batch_protocol(config_path: str) -> None:
+    config = ExperimentConfig.load(config_path)
+    if config.status == "preregistered_batch_pilot":
+        raise SystemExit(
+            "This preregistration requires one consistent Batch API collection "
+            "mode. Use experiment batch-submit and batch-sync."
+        )
+
+
 def run_experiment_command(args: argparse.Namespace) -> int:
     if args.experiment_command == "validate":
         payload = dataclasses.asdict(protocol_summary(args.config))
     elif args.experiment_command == "collect":
         _require_cost_acknowledgement(args)
+        _reject_synchronous_batch_protocol(args.config)
         payload = collect_responses(args.config, limit=args.limit)
     elif args.experiment_command == "embed":
         _require_cost_acknowledgement(args)
         payload = embed_responses(args.config, batch_size=args.batch_size)
     elif args.experiment_command == "analyze":
         payload = analyze_experiment(args.config)
+    elif args.experiment_command == "batch-submit":
+        _require_cost_acknowledgement(args)
+        payload = submit_response_batches(args.config)
+    elif args.experiment_command == "batch-sync":
+        payload = sync_response_batches(args.config)
     elif args.experiment_command == "run":
         _require_cost_acknowledgement(args)
+        _reject_synchronous_batch_protocol(args.config)
         payload = {
             "collection": collect_responses(args.config),
             "embedding": embed_responses(

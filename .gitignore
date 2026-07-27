@@ -11,3 +11,5 @@ results/
 .env
 .env.local
 experiments/real_models/artifacts/*.tmp
+experiments/real_models/artifacts/**/*.tmp
+experiments/real_models/artifacts/**/*.tmp.npz

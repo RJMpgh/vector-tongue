@@ -3,6 +3,7 @@ import json
 import os
 import pathlib
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -20,7 +21,11 @@ from vector_tongue.experiment import (
     write_embedding_index,
     write_response_records,
 )
-from vector_tongue.openai_runner import collect_responses
+from vector_tongue.openai_runner import (
+    collect_responses,
+    submit_response_batches,
+    sync_response_batches,
+)
 
 
 class EmpiricalMathTests(unittest.TestCase):
@@ -89,8 +94,102 @@ class FakeOpenAI:
         self.responses = FakeResponses()
 
 
+class FakeBatchFiles:
+    contents = {}
+    counter = 0
+
+    def create(self, *, file, purpose):
+        self.__class__.counter += 1
+        file_id = f"file-input-{self.counter}"
+        self.__class__.contents[file_id] = file.read().decode("utf-8")
+        return types.SimpleNamespace(id=file_id)
+
+    def content(self, file_id):
+        return types.SimpleNamespace(text=self.__class__.contents[file_id])
+
+
+class FakeBatchService:
+    batches = {}
+
+    def create(self, *, input_file_id, endpoint, completion_window, metadata):
+        batch_id = f"batch-{metadata['model_side']}"
+        self.__class__.batches[batch_id] = {
+            "input_file_id": input_file_id,
+            "side": metadata["model_side"],
+        }
+        return types.SimpleNamespace(id=batch_id, status="validating")
+
+    def retrieve(self, batch_id):
+        details = self.__class__.batches[batch_id]
+        output_file_id = f"file-output-{details['side']}"
+        requests = [
+            json.loads(line)
+            for line in FakeBatchFiles.contents[details["input_file_id"]].splitlines()
+        ]
+        outputs = []
+        for request in reversed(requests):
+            body = request["body"]
+            prompt_id = body["metadata"]["prompt_id"]
+            outputs.append(
+                json.dumps(
+                    {
+                        "custom_id": request["custom_id"],
+                        "response": {
+                            "status_code": 200,
+                            "request_id": f"request-{prompt_id}",
+                            "body": {
+                                "id": f"response-{prompt_id}-{body['model']}",
+                                "model": body["model"],
+                                "status": "completed",
+                                "created_at": 1760000000,
+                                "output": [
+                                    {
+                                        "type": "message",
+                                        "content": [
+                                            {
+                                                "type": "output_text",
+                                                "text": (
+                                                    f"Batch response for {prompt_id} "
+                                                    f"from {body['model']}."
+                                                ),
+                                            }
+                                        ],
+                                    }
+                                ],
+                                "usage": {
+                                    "input_tokens": 10,
+                                    "output_tokens": 15,
+                                    "total_tokens": 25,
+                                    "input_tokens_details": {"cached_tokens": 0},
+                                },
+                            },
+                        },
+                        "error": None,
+                    }
+                )
+            )
+        FakeBatchFiles.contents[output_file_id] = "\n".join(outputs) + "\n"
+        counts = types.SimpleNamespace(total=len(requests), completed=len(requests), failed=0)
+        return types.SimpleNamespace(
+            id=batch_id,
+            status="completed",
+            output_file_id=output_file_id,
+            error_file_id=None,
+            request_counts=counts,
+        )
+
+
+class FakeBatchOpenAI:
+    def __init__(self, **kwargs):
+        self.files = FakeBatchFiles()
+        self.batches = FakeBatchService()
+
+
 class EmpiricalPipelineTests(unittest.TestCase):
     def setUp(self):
+        FakeBatchFiles.contents = {}
+        FakeBatchFiles.counter = 0
+        FakeBatchService.batches = {}
         self.root = pathlib.Path(__file__).parents[1]
         self.temp = tempfile.TemporaryDirectory(dir=self.root)
         self.directory = pathlib.Path(self.temp.name)
@@ -160,6 +259,27 @@ class EmpiricalPipelineTests(unittest.TestCase):
         self.assertEqual(second["new_requests"], 0)
         self.assertEqual(second["successful_responses"], 2)
 
+    def test_batch_collection_uses_custom_ids_not_output_order(self):
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": "test-key"}):
+            with mock.patch(
+                "vector_tongue.openai_runner._openai_class",
+                return_value=FakeBatchOpenAI,
+            ):
+                submitted = submit_response_batches(self.config_path)
+                resubmitted = submit_response_batches(self.config_path)
+                synced = sync_response_batches(self.config_path)
+        self.assertEqual(set(submitted["batches"]), {"source", "target"})
+        self.assertEqual(set(submitted["submitted_sides"]), {"source", "target"})
+        self.assertEqual(resubmitted["submitted_sides"], [])
+        self.assertEqual(FakeBatchFiles.counter, 2)
+        self.assertTrue(synced["complete"])
+        with (self.directory / "responses.csv").open(encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertEqual(len(rows), 8)
+        self.assertEqual({row["collection_mode"] for row in rows}, {"batch"})
+        self.assertEqual(rows[0]["prompt_id"], "p1")
+        self.assertEqual(rows[-1]["prompt_id"], "p4")
+
     def test_analysis_writes_honest_result_and_manifest(self):
         response_records = []
         index_records = []
@@ -188,6 +308,7 @@ class EmpiricalPipelineTests(unittest.TestCase):
                         requested_model=model,
                         resolved_model=model,
                         response_id=response_id,
+                        collection_mode="test",
                         response_status="completed",
                         incomplete_reason="",
                         response_text=f"Text for {prompt_id} from {model}",
