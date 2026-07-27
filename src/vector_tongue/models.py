@@ -88,11 +88,7 @@ class TargetMeanTranslator(TranslationModel):
         return np.tile(self._target_mean, (x.shape[0], 1))
 
     def parameters(self) -> dict[str, Any]:
-        return {
-            "target_mean": None
-            if self._target_mean is None
-            else self._target_mean.tolist()
-        }
+        return {"target_mean": None if self._target_mean is None else self._target_mean.tolist()}
 
 
 @dataclasses.dataclass
@@ -127,6 +123,11 @@ class RidgeTranslator(TranslationModel):
     name: str = "ridge_affine"
     _weights: FloatMatrix | None = None
     _intercept: NDArray[np.float64] | None = None
+    _dual_source: FloatMatrix | None = None
+    _dual_coefficients: FloatMatrix | None = None
+    _source_mean: NDArray[np.float64] | None = None
+    _target_mean: NDArray[np.float64] | None = None
+    _solver: str = "unfitted"
 
     def __post_init__(self) -> None:
         if self.regularization < 0.0:
@@ -138,23 +139,71 @@ class RidgeTranslator(TranslationModel):
         y_mean = y.mean(axis=0)
         centered_x = x - x_mean
         centered_y = y - y_mean
-        gram = centered_x.T @ centered_x
-        penalty = self.regularization * np.eye(x.shape[1], dtype=np.float64)
-        self._weights = np.linalg.solve(gram + penalty, centered_x.T @ centered_y)
-        self._intercept = y_mean - x_mean @ self._weights
+        self._weights = None
+        self._intercept = None
+        self._dual_source = None
+        self._dual_coefficients = None
+        self._source_mean = None
+        self._target_mean = None
+
+        if x.shape[0] < x.shape[1] and self.regularization > 0.0:
+            # Linear ridge has an equivalent dual form. Solving the sample-space
+            # system prevents a prohibitively large d-by-d solve for embeddings.
+            gram = centered_x @ centered_x.T
+            penalty = self.regularization * np.eye(x.shape[0], dtype=np.float64)
+            self._dual_source = centered_x
+            self._dual_coefficients = np.linalg.solve(gram + penalty, centered_y)
+            self._source_mean = x_mean
+            self._target_mean = y_mean
+            self._solver = "dual"
+        else:
+            if self.regularization == 0.0:
+                self._weights = np.linalg.lstsq(centered_x, centered_y, rcond=None)[0]
+            else:
+                gram = centered_x.T @ centered_x
+                penalty = self.regularization * np.eye(x.shape[1], dtype=np.float64)
+                self._weights = np.linalg.solve(gram + penalty, centered_x.T @ centered_y)
+            self._intercept = y_mean - x_mean @ self._weights
+            self._solver = "primal"
         return self
 
     def predict(self, source: ArrayLike) -> FloatMatrix:
         x = as_matrix(source, name="source")
-        if self._weights is None or self._intercept is None:
-            raise RuntimeError("model must be fitted before prediction")
-        if x.shape[1] != self._weights.shape[0]:
-            raise ValueError("source dimension differs from fitted dimension")
-        return x @ self._weights + self._intercept
+        if self._solver == "dual":
+            if (
+                self._dual_source is None
+                or self._dual_coefficients is None
+                or self._source_mean is None
+                or self._target_mean is None
+            ):
+                raise RuntimeError("model must be fitted before prediction")
+            if x.shape[1] != self._dual_source.shape[1]:
+                raise ValueError("source dimension differs from fitted dimension")
+            kernel = (x - self._source_mean) @ self._dual_source.T
+            return kernel @ self._dual_coefficients + self._target_mean
+        if self._solver == "primal":
+            if self._weights is None or self._intercept is None:
+                raise RuntimeError("model must be fitted before prediction")
+            if x.shape[1] != self._weights.shape[0]:
+                raise ValueError("source dimension differs from fitted dimension")
+            return x @ self._weights + self._intercept
+        raise RuntimeError("model must be fitted before prediction")
 
     def parameters(self) -> dict[str, Any]:
+        if self._solver == "dual":
+            return {
+                "regularization": self.regularization,
+                "solver": self._solver,
+                "dual_source": None if self._dual_source is None else self._dual_source.tolist(),
+                "dual_coefficients": None
+                if self._dual_coefficients is None
+                else self._dual_coefficients.tolist(),
+                "source_mean": None if self._source_mean is None else self._source_mean.tolist(),
+                "target_mean": None if self._target_mean is None else self._target_mean.tolist(),
+            }
         return {
             "regularization": self.regularization,
+            "solver": self._solver,
             "weights": None if self._weights is None else self._weights.tolist(),
             "intercept": None if self._intercept is None else self._intercept.tolist(),
         }
@@ -180,11 +229,7 @@ class OrthogonalTranslator(TranslationModel):
 
     def predict(self, source: ArrayLike) -> FloatMatrix:
         x = as_matrix(source, name="source")
-        if (
-            self._rotation is None
-            or self._source_mean is None
-            or self._target_mean is None
-        ):
+        if self._rotation is None or self._source_mean is None or self._target_mean is None:
             raise RuntimeError("model must be fitted before prediction")
         if x.shape[1] != self._rotation.shape[0]:
             raise ValueError("source dimension differs from fitted dimension")
@@ -193,10 +238,6 @@ class OrthogonalTranslator(TranslationModel):
     def parameters(self) -> dict[str, Any]:
         return {
             "rotation": None if self._rotation is None else self._rotation.tolist(),
-            "source_mean": None
-            if self._source_mean is None
-            else self._source_mean.tolist(),
-            "target_mean": None
-            if self._target_mean is None
-            else self._target_mean.tolist(),
+            "source_mean": None if self._source_mean is None else self._source_mean.tolist(),
+            "target_mean": None if self._target_mean is None else self._target_mean.tolist(),
         }

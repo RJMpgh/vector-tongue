@@ -8,10 +8,15 @@ import json
 from collections.abc import Sequence
 
 from .demo import synthetic_translation_dataset
+from .empirical import analyze_experiment
 from .evaluation import evaluate_translator
+from .experiment import protocol_summary
 from .io import load_embedding_pairs_csv, write_json
 from .models import OrthogonalTranslator, RidgeTranslator
+from .openai_runner import collect_responses, embed_responses
 from .provenance import verify_manifest
+
+DEFAULT_EXPERIMENT_CONFIG = "experiments/real_models/config.json"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -39,6 +44,52 @@ def _parser() -> argparse.ArgumentParser:
     )
     proof.add_argument("manifest")
     proof.add_argument("--artifact-root")
+
+    experiment = subcommands.add_parser(
+        "experiment",
+        help="validate or run the frozen real-model experiment",
+    )
+    experiment_commands = experiment.add_subparsers(dest="experiment_command", required=True)
+    validate_experiment = experiment_commands.add_parser(
+        "validate", help="validate the protocol without making API calls"
+    )
+    validate_experiment.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+
+    collect = experiment_commands.add_parser("collect", help="collect resumable model responses")
+    collect.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+    collect.add_argument("--limit", type=int)
+    collect.add_argument(
+        "--acknowledge-api-cost",
+        action="store_true",
+        help="confirm that this stage makes billable API calls",
+    )
+
+    embed = experiment_commands.add_parser(
+        "embed", help="embed every completed response with the frozen encoder"
+    )
+    embed.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+    embed.add_argument("--batch-size", type=int, default=64)
+    embed.add_argument(
+        "--acknowledge-api-cost",
+        action="store_true",
+        help="confirm that this stage makes billable API calls",
+    )
+
+    analyze = experiment_commands.add_parser(
+        "analyze", help="fit, evaluate, control, and generate RESULTS.md"
+    )
+    analyze.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+
+    run = experiment_commands.add_parser(
+        "run", help="collect, embed, analyze, and report the complete pilot"
+    )
+    run.add_argument("--config", default=DEFAULT_EXPERIMENT_CONFIG)
+    run.add_argument("--batch-size", type=int, default=64)
+    run.add_argument(
+        "--acknowledge-api-cost",
+        action="store_true",
+        help="confirm that collection and embedding make billable API calls",
+    )
 
     return parser
 
@@ -80,6 +131,42 @@ def run_verify_proof(manifest: str, artifact_root: str | None) -> int:
     return 1 if {"mismatch", "invalid_hash"}.intersection(statuses) else 0
 
 
+def _require_cost_acknowledgement(args: argparse.Namespace) -> None:
+    if not args.acknowledge_api_cost:
+        raise SystemExit(
+            "This stage makes billable OpenAI API calls. Review "
+            "`vector-tongue experiment validate`, then rerun with "
+            "--acknowledge-api-cost."
+        )
+
+
+def run_experiment_command(args: argparse.Namespace) -> int:
+    if args.experiment_command == "validate":
+        payload = dataclasses.asdict(protocol_summary(args.config))
+    elif args.experiment_command == "collect":
+        _require_cost_acknowledgement(args)
+        payload = collect_responses(args.config, limit=args.limit)
+    elif args.experiment_command == "embed":
+        _require_cost_acknowledgement(args)
+        payload = embed_responses(args.config, batch_size=args.batch_size)
+    elif args.experiment_command == "analyze":
+        payload = analyze_experiment(args.config)
+    elif args.experiment_command == "run":
+        _require_cost_acknowledgement(args)
+        payload = {
+            "collection": collect_responses(args.config),
+            "embedding": embed_responses(
+                args.config,
+                batch_size=args.batch_size,
+            ),
+            "analysis": analyze_experiment(args.config),
+        }
+    else:
+        raise ValueError(f"unknown experiment command: {args.experiment_command}")
+    print(json.dumps(payload, indent=2))
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
@@ -89,6 +176,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_evaluate(args)
     if args.command == "verify-proof":
         return run_verify_proof(args.manifest, args.artifact_root)
+    if args.command == "experiment":
+        return run_experiment_command(args)
     parser.error(f"unknown command: {args.command}")
     return 2
 

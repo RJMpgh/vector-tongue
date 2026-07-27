@@ -1,5 +1,9 @@
 # Preregisterable Research Protocol
 
+The first frozen implementation of this protocol is the
+[`vt-openai-pilot-001 preregistration`](../experiments/real_models/PREREGISTRATION.md).
+Its configuration and prompts must not be changed after outcomes are inspected.
+
 ## Research question
 
 Can a translation operator learned from matched outputs of two models predict

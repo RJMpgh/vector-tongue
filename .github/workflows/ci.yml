@@ -25,5 +25,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run demonstration
         run: vector-tongue demo --output /tmp/vector-tongue-demo.json
+      - name: Validate frozen real-model protocol
+        run: vector-tongue experiment validate
       - name: Verify provenance manifest structure
         run: vector-tongue verify-proof provenance/vector_tongue_priority_manifest.json

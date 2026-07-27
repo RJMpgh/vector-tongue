@@ -9,3 +9,5 @@ dist/
 results/
 .DS_Store
 .env
+.env.local
+experiments/real_models/artifacts/*.tmp

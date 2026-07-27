@@ -26,6 +26,7 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = ["build>=1.2", "ruff>=0.6"]
+experiment = ["openai>=1.68"]
 
 [project.scripts]
 vector-tongue = "vector_tongue.cli:main"

@@ -21,6 +21,10 @@ operators in a shared external embedding space, evaluates them on unseen
 prompts, compares them with simple baselines, estimates uncertainty, and
 preserves the original 2025 formulation as a versioned historical artifact.
 
+The repository now includes a
+[`preregistered 180-prompt real-model pilot`](experiments/real_models/PREREGISTRATION.md).
+See [`RESULTS.md`](RESULTS.md) for the outcome or the explicit pre-data status.
+
 It does **not** claim access to proprietary model activations, decode an exact
 future sentence from an embedding, or prove that a model has a private
 language.
@@ -98,6 +102,23 @@ python -m unittest discover -s tests -v
 
 The demonstration uses synthetic vectors with a known transformation. It
 checks the experiment machinery; it is not evidence about real models.
+
+## Run the preregistered real-model pilot
+
+The pilot compares two dated OpenAI model snapshots on 180 frozen prompts,
+embeds their responses with one fixed encoder, fits only on 126 calibration
+prompts, and evaluates once on 54 held-out prompts.
+
+```bash
+python -m pip install -r experiments/real_models/requirements.lock
+python -m pip install -e .
+vector-tongue experiment validate
+vector-tongue experiment run --acknowledge-api-cost
+```
+
+Collection is resumable. The generated report preserves positive, null, and
+negative results and records exact artifact hashes. See the
+[`experiment runbook`](experiments/real_models/README.md).
 
 ## Evaluate real paired embeddings
 
@@ -177,26 +198,6 @@ Other plausible uses include:
 
 These are proposed uses, not validated product claims.
 
-## Priority and provenance
-
-The repository records:
-
-- RJ Marler's GitHub public disclosure dated August 5, 2025;
-- user-supplied SHA-256 values and timestamp metadata for later priority and
-  provisional-package artifacts;
-- fields for Polygon transaction, contract, token, and IPFS identifiers.
-
-The referenced files and complete Polygon identifiers were not available during
-repository construction, so their hashes and on-chain linkage have **not** been
-independently recomputed or verified here. Run:
-
-```bash
-vector-tongue verify-proof provenance/vector_tongue_priority_manifest.json
-```
-
-Missing artifacts are reported as missing—not silently treated as verified.
-See [Priority and Provenance](docs/PRIORITY_AND_PROVENANCE.md).
-
 ## Scientific status
 
 Implemented and tested:
@@ -208,10 +209,17 @@ Implemented and tested:
 - three declared baselines;
 - prompt-level bootstrap intervals;
 - shuffled-pair negative-control machinery;
+- a frozen 180-prompt real-model collection pipeline;
+- exact model, response, usage, retry, and encoder metadata capture;
+- paired-bootstrap intervals for baseline advantage;
+- calibration-pair permutation refitting against untouched held-out targets;
+- per-family analysis and machine-generated positive/null/negative reporting;
+- run manifests binding data artifacts to a code commit;
 - deterministic synthetic demonstration;
 - provenance-manifest and local hash validation.
 
-Not yet established:
+Consult [`RESULTS.md`](RESULTS.md) before asserting any empirical advantage.
+Until that file contains a completed run, the following remains unestablished:
 
 - predictive advantage on a preregistered real multi-model dataset;
 - stability across encoders, prompt families, time, or providers;
@@ -234,6 +242,7 @@ tests/                 deterministic unit and integration tests
 docs/                  mathematics, protocol, claims, and provenance
 provenance/            machine-readable artifact-hash manifest
 examples/              input schema and reproducible examples
+experiments/            frozen real-model protocol and versioned run artifacts
 ```
 
 ## Authorship and citation

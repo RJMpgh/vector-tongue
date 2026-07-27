@@ -1,0 +1,50 @@
+{
+  "protocol_version": "1.0.0",
+  "experiment_id": "vt-openai-pilot-001",
+  "status": "preregistered_pilot",
+  "preregistered_utc": "2026-07-27T15:47:05Z",
+  "prompt_file": "experiments/real_models/prompts.csv",
+  "source_model": "gpt-5.4-nano-2026-03-17",
+  "target_model": "gpt-5.4-mini-2026-03-17",
+  "endpoint": "responses",
+  "instructions": "Respond to the task itself. Give only the answer, not hidden chain-of-thought or a discussion of these instructions. Aim for 60 to 100 words unless the task explicitly requires another form. Do not browse or use tools. If factual uncertainty matters, state it briefly. Do not mention your model name.",
+  "reasoning_effort": "none",
+  "max_output_tokens": 180,
+  "store_responses": false,
+  "replicates": 1,
+  "embedding_model": "text-embedding-3-large",
+  "embedding_dimensions": 256,
+  "ridge_regularization": 1.0,
+  "bootstrap_resamples": 2000,
+  "permutation_resamples": 500,
+  "confidence": 0.95,
+  "seed": 1729,
+  "concurrency": 3,
+  "request_timeout_seconds": 90,
+  "max_retries": 5,
+  "calibration_label": "calibration",
+  "heldout_label": "heldout",
+  "responses_file": "experiments/real_models/artifacts/responses.csv",
+  "embeddings_file": "experiments/real_models/artifacts/embeddings.npz",
+  "embedding_index_file": "experiments/real_models/artifacts/embedding_index.csv",
+  "analysis_file": "experiments/real_models/artifacts/analysis.json",
+  "manifest_file": "experiments/real_models/artifacts/run_manifest.json",
+  "results_markdown_file": "RESULTS.md",
+  "pricing_source": "https://developers.openai.com/api/docs/pricing",
+  "pricing_checked_utc": "2026-07-27T15:47:05Z",
+  "price_usd_per_million_tokens": {
+    "gpt-5.4-nano-2026-03-17": {
+      "input": 0.2,
+      "cached_input": 0.02,
+      "output": 1.25
+    },
+    "gpt-5.4-mini-2026-03-17": {
+      "input": 0.75,
+      "cached_input": 0.075,
+      "output": 4.5
+    },
+    "text-embedding-3-large": {
+      "input": 0.13
+    }
+  }
+}

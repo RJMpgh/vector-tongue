@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Added a preregistered 180-prompt real-model pilot with dated model snapshots.
+- Added resumable OpenAI response collection and fixed-encoder embedding.
+- Added paired gain intervals, calibration-pair permutation controls, and
+  prompt-family analysis.
+- Added generated honest reporting, cost accounting, and a SHA-256 run manifest.
+- Added a dual ridge solver for high-dimensional, low-sample embedding data.
+
 ## 0.2.0 — 2026-07-27
 
 - Reframed prediction as held-out cross-model translation.
