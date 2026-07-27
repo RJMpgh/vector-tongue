@@ -1,0 +1,42 @@
+{
+  "batches": {
+    "source": {
+      "batch_id": "batch_6a67845ab1048190a275e4ca9ead3cc0",
+      "error_file_id": null,
+      "imported": true,
+      "imported_at_utc": "2026-07-27T16:18:49.390855Z",
+      "input_file_id": "file-WYayWAPiGDsAuvpX22P3hV",
+      "input_path": "experiments/real_models/artifacts/vt-openai-pilot-002/batch_input_source.jsonl",
+      "model": "gpt-5.4-nano-2026-03-17",
+      "output_file_id": "file-5Q5fW218cSeTUrKMaktetr",
+      "request_count": 180,
+      "request_counts": {
+        "completed": 180,
+        "failed": 0,
+        "total": 180
+      },
+      "status": "completed"
+    },
+    "target": {
+      "batch_id": "batch_6a67845c2418819089506c5434b4abd8",
+      "error_file_id": "file-UhYP7xCPzxretaY9VGjeK5",
+      "imported": false,
+      "input_file_id": "file-HZjJu4DnQZPa2rpHCu8FD8",
+      "input_path": "experiments/real_models/artifacts/vt-openai-pilot-002/batch_input_target.jsonl",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "output_file_id": null,
+      "request_count": 180,
+      "request_counts": {
+        "completed": 0,
+        "failed": 0,
+        "total": 180
+      },
+      "status": "cancelled"
+    }
+  },
+  "completion_window": "24h",
+  "endpoint": "/v1/responses",
+  "experiment_id": "vt-openai-pilot-002",
+  "schema_version": "1.0.0",
+  "submitted_at_utc": "2026-07-27T16:16:18.592402Z"
+}

@@ -34,6 +34,9 @@ responses returned `status=incomplete` with `reason=max_output_tokens` after
 reaching the frozen 180-token ceiling. This is an administrative collection
 failure under the preregistered exclusion rule, so Pilot 002 will not be
 embedded or analyzed. At the Pilot 003 freeze time, the target batch remained
-in provider processing. Only status, reason, token usage, and output structure
-were inspected to diagnose the failure; response text and semantic outcomes
-were not inspected.
+in provider processing. It was then cancelled to avoid paying for data that
+could not enter the blocked pilot and terminated with zero completed requests.
+The final Pilot 002 artifact therefore contains 175 usable source responses,
+five incomplete source responses, and no target responses. Only status, reason,
+token usage, and output structure were inspected to diagnose the failure;
+response text and semantic outcomes were not inspected.
