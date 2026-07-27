@@ -7,6 +7,7 @@ import dataclasses
 import json
 from collections.abc import Sequence
 
+from .anchors import load_anchor_registry
 from .demo import synthetic_translation_dataset
 from .evaluation import evaluate_translator
 from .io import load_embedding_pairs_csv, write_json
@@ -39,6 +40,12 @@ def _parser() -> argparse.ArgumentParser:
     )
     proof.add_argument("manifest")
     proof.add_argument("--artifact-root")
+
+    anchors = subcommands.add_parser(
+        "validate-anchors",
+        help="validate and summarize a Marlerian Anchor Registry",
+    )
+    anchors.add_argument("registry")
 
     return parser
 
@@ -80,6 +87,12 @@ def run_verify_proof(manifest: str, artifact_root: str | None) -> int:
     return 1 if {"mismatch", "invalid_hash"}.intersection(statuses) else 0
 
 
+def run_validate_anchors(registry_path: str) -> int:
+    registry = load_anchor_registry(registry_path)
+    print(json.dumps(registry.summary(), indent=2))
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
@@ -89,6 +102,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_evaluate(args)
     if args.command == "verify-proof":
         return run_verify_proof(args.manifest, args.artifact_root)
+    if args.command == "validate-anchors":
+        return run_validate_anchors(args.registry)
     parser.error(f"unknown command: {args.command}")
     return 2
 

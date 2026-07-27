@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RJMpgh/vector-tongue/schemas/marlerian-anchor-registry.schema.json",
+  "title": "Marlerian Anchor Registry",
+  "description": "A versioned, contestable semantic reference registry for cross-model calibration.",
+  "type": "object",
+  "required": [
+    "registry_id",
+    "version",
+    "status",
+    "language",
+    "description",
+    "governance",
+    "anchors"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[a-z0-9.-]+)?$"
+    },
+    "status": {
+      "enum": [
+        "illustrative-draft",
+        "candidate",
+        "stable",
+        "deprecated"
+      ]
+    },
+    "language": {
+      "type": "string",
+      "minLength": 2
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyText"
+    },
+    "governance": {
+      "type": "object",
+      "required": [
+        "steward",
+        "principles",
+        "change_policy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "steward": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "principles": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "change_policy": {
+          "$ref": "#/$defs/nonEmptyText"
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/anchor"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$"
+    },
+    "nonEmptyText": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nonEmptyTextArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/nonEmptyText"
+      }
+    },
+    "pathStage": {
+      "type": "object",
+      "required": [
+        "stage_id",
+        "position",
+        "description",
+        "expected_invariants"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "stage_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "position": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "expected_invariants": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        }
+      }
+    },
+    "evaluationPrompt": {
+      "type": "object",
+      "required": [
+        "prompt_id",
+        "text",
+        "expected_properties",
+        "prohibited_inferences"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "prompt_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "text": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "expected_properties": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "prohibited_inferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyText"
+          }
+        }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": [
+        "anchor_id",
+        "label",
+        "operational_definition",
+        "invariants",
+        "inclusions",
+        "exclusions",
+        "boundary_cases",
+        "confounders",
+        "path",
+        "evaluation_prompts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "anchor_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "label": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "operational_definition": {
+          "$ref": "#/$defs/nonEmptyText"
+        },
+        "invariants": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "inclusions": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "exclusions": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "boundary_cases": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "confounders": {
+          "$ref": "#/$defs/nonEmptyTextArray"
+        },
+        "path": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/pathStage"
+          }
+        },
+        "evaluation_prompts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evaluationPrompt"
+          }
+        }
+      }
+    }
+  }
+}

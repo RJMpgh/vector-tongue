@@ -43,6 +43,16 @@ class IoCliTests(unittest.TestCase):
                 2,
             )
 
+    def test_validate_anchor_registry(self):
+        root = pathlib.Path(__file__).parents[1]
+        code = main(
+            [
+                "validate-anchors",
+                str(root / "anchors" / "marlerian-baseline-v0.1.json"),
+            ]
+        )
+        self.assertEqual(code, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

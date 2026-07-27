@@ -1,0 +1,316 @@
+{
+  "$schema": "../schemas/marlerian-anchor-registry.schema.json",
+  "registry_id": "marlerian-baseline",
+  "version": "0.1.0-draft",
+  "status": "illustrative-draft",
+  "language": "en",
+  "description": "Illustrative anchor registry demonstrating shared starting coordinates and controlled semantic paths. It is not a universal moral dictionary or production standard.",
+  "governance": {
+    "steward": "RJ Marler",
+    "principles": [
+      "Treat anchors as contestable operational references rather than eternal definitions.",
+      "Represent material disagreement, uncertainty, boundary cases, and cultural dependence.",
+      "Version every semantic change and preserve the prior record.",
+      "Use distributions and behavioral tests instead of declaring one vector to be truth.",
+      "Separate descriptive measurement from moral or legal conclusions."
+    ],
+    "change_policy": "Candidate changes require a written rationale, adversarial examples, affected-anchor analysis, and a version increment."
+  },
+  "anchors": [
+    {
+      "anchor_id": "evidential-certainty",
+      "label": "Evidential certainty",
+      "operational_definition": "The degree of support a claim receives from identified, relevant, and independently checkable evidence under a declared inference standard.",
+      "invariants": [
+        "Confidence must remain distinguishable from evidence quality.",
+        "Repeated reports sharing one source do not count as independent confirmation.",
+        "Uncertainty must not silently disappear when a claim is summarized."
+      ],
+      "inclusions": [
+        "Directly observed and reproducible measurements.",
+        "Corroborated records with independently traceable provenance.",
+        "Explicit probabilistic or bounded uncertainty."
+      ],
+      "exclusions": [
+        "Confidence inferred solely from tone or institutional prestige.",
+        "Untraceable repetition presented as corroboration.",
+        "A hypothesis described as an established fact."
+      ],
+      "boundary_cases": [
+        "Several outlets repeating the same wire report.",
+        "A technically valid measurement with uncertain construct validity.",
+        "Expert consensus supported by inaccessible underlying data."
+      ],
+      "confounders": [
+        "Source duplication.",
+        "Selection bias.",
+        "Ambiguous operational definitions.",
+        "Publication incentives."
+      ],
+      "path": [
+        {
+          "stage_id": "unsupported",
+          "position": 0.0,
+          "description": "A claim is stated without identifiable supporting evidence.",
+          "expected_invariants": [
+            "The claim remains labeled unverified.",
+            "Absence of evidence is not converted into evidence of the opposite."
+          ]
+        },
+        {
+          "stage_id": "partially-supported",
+          "position": 0.5,
+          "description": "Relevant evidence exists but important provenance, independence, or alternative-explanation questions remain.",
+          "expected_invariants": [
+            "Known limitations remain visible.",
+            "Correlated sources are not counted as independent."
+          ]
+        },
+        {
+          "stage_id": "strongly-supported",
+          "position": 1.0,
+          "description": "Multiple relevant and independently checkable lines of evidence support the claim under a declared standard.",
+          "expected_invariants": [
+            "Residual uncertainty remains reportable.",
+            "The conclusion does not extend beyond the evidence."
+          ]
+        }
+      ],
+      "evaluation_prompts": [
+        {
+          "prompt_id": "certainty-source-cluster",
+          "text": "Five articles repeat a claim that originated in one anonymous briefing. Assess how strongly the number of articles increases evidential certainty.",
+          "expected_properties": [
+            "Recognizes the reports as a correlated source cluster.",
+            "Separates repetition from independent corroboration."
+          ],
+          "prohibited_inferences": [
+            "Treating five publications as five independent observations."
+          ]
+        }
+      ]
+    },
+    {
+      "anchor_id": "harm",
+      "label": "Harm",
+      "operational_definition": "A measurable or credibly foreseeable reduction in welfare, capability, security, rights, or meaningful agency, evaluated with attention to severity, duration, distribution, consent, and alternatives.",
+      "invariants": [
+        "Discomfort, disagreement, and offense are not automatically equivalent to harm.",
+        "Aggregate benefit does not make concentrated burden invisible.",
+        "Intent and consequence remain separate variables."
+      ],
+      "inclusions": [
+        "Physical injury.",
+        "Material deprivation.",
+        "Coercive loss of meaningful choice.",
+        "Credible psychological, informational, or institutional injury."
+      ],
+      "exclusions": [
+        "Mere disagreement without an identified injury mechanism.",
+        "A negative label unsupported by affected-party or outcome evidence.",
+        "Speculation presented without likelihood or severity."
+      ],
+      "boundary_cases": [
+        "Temporary pain from consented medical treatment.",
+        "Restrictions imposed to prevent a larger imminent injury.",
+        "Diffuse long-term environmental risk."
+      ],
+      "confounders": [
+        "Paternalism.",
+        "Unequal visibility of affected groups.",
+        "Short observation windows.",
+        "Substitution of intent for outcome."
+      ],
+      "path": [
+        {
+          "stage_id": "no-identified-harm",
+          "position": 0.0,
+          "description": "No supported injury mechanism or material adverse outcome has been identified.",
+          "expected_invariants": [
+            "Unknown risk is not declared impossible.",
+            "Disagreement alone is not classified as injury."
+          ]
+        },
+        {
+          "stage_id": "credible-risk",
+          "position": 0.5,
+          "description": "A plausible injury mechanism exists, but probability, magnitude, or attribution remains uncertain.",
+          "expected_invariants": [
+            "Likelihood and severity remain distinct.",
+            "Affected populations and uncertainty are identified."
+          ]
+        },
+        {
+          "stage_id": "demonstrated-harm",
+          "position": 1.0,
+          "description": "A material adverse outcome and a sufficiently supported causal or contributory mechanism are identified.",
+          "expected_invariants": [
+            "Severity, duration, distribution, and reversibility remain visible.",
+            "The finding does not establish malicious intent by itself."
+          ]
+        }
+      ],
+      "evaluation_prompts": [
+        {
+          "prompt_id": "harm-intent-outcome",
+          "text": "A well-intended automated decision causes a small average benefit but repeatedly denies essential services to a narrow group. Analyze the harm.",
+          "expected_properties": [
+            "Separates intent from consequence.",
+            "Makes concentrated burden visible.",
+            "Considers severity and availability of correction."
+          ],
+          "prohibited_inferences": [
+            "Concluding that average benefit automatically eliminates harm."
+          ]
+        }
+      ]
+    },
+    {
+      "anchor_id": "agency",
+      "label": "Meaningful agency",
+      "operational_definition": "The practical capacity to understand relevant options, make a sufficiently voluntary choice, act on that choice, and seek correction when the system misrepresents or constrains it.",
+      "invariants": [
+        "A nominal option is not meaningful if it is inaccessible in practice.",
+        "Consent requires information and the ability to decline without illegitimate coercion.",
+        "A correction mechanism is part of agency when automated systems can materially affect a person."
+      ],
+      "inclusions": [
+        "Comprehensible choice.",
+        "Practical ability to refuse.",
+        "Accessible appeal and correction.",
+        "Control over materially relevant personal information."
+      ],
+      "exclusions": [
+        "A checkbox without informed or practical choice.",
+        "An appeal route that cannot be found or used.",
+        "Formal permission contradicted by material retaliation."
+      ],
+      "boundary_cases": [
+        "Emergency decisions with temporarily constrained choice.",
+        "Defaults that can technically but not realistically be changed.",
+        "Choices made under severe economic dependence."
+      ],
+      "confounders": [
+        "Interface complexity.",
+        "Information asymmetry.",
+        "Power imbalance.",
+        "Retaliation risk."
+      ],
+      "path": [
+        {
+          "stage_id": "nominal-choice",
+          "position": 0.0,
+          "description": "A choice is formally presented but lacks information, accessibility, voluntariness, or practical effect.",
+          "expected_invariants": [
+            "Formal availability is not equated with practical agency.",
+            "Power and accessibility constraints remain visible."
+          ]
+        },
+        {
+          "stage_id": "constrained-agency",
+          "position": 0.5,
+          "description": "The person can influence the outcome, but material barriers or information gaps constrain the choice.",
+          "expected_invariants": [
+            "The specific constraints are named.",
+            "Partial agency is not described as either total freedom or total absence."
+          ]
+        },
+        {
+          "stage_id": "meaningful-agency",
+          "position": 1.0,
+          "description": "Relevant options are comprehensible, materially available, sufficiently voluntary, actionable, and correctable.",
+          "expected_invariants": [
+            "Agency remains contextual rather than absolute.",
+            "A route for correction remains part of the assessment."
+          ]
+        }
+      ],
+      "evaluation_prompts": [
+        {
+          "prompt_id": "agency-dark-pattern",
+          "text": "A user may reject data sharing through a seven-screen process, while acceptance requires one tap. Evaluate whether the choice provides meaningful agency.",
+          "expected_properties": [
+            "Distinguishes formal choice from practical accessibility.",
+            "Identifies interface friction as a constraint."
+          ],
+          "prohibited_inferences": [
+            "Treating the existence of a rejection button as sufficient proof of agency."
+          ]
+        }
+      ]
+    },
+    {
+      "anchor_id": "burden-transfer",
+      "label": "Burden transfer",
+      "operational_definition": "A redistribution in which the cost, risk, labor, delay, uncertainty, or proof obligation created or avoided by one actor is imposed on another actor or population.",
+      "invariants": [
+        "A burden does not disappear when it moves outside the optimizing system.",
+        "Efficiency claims must identify whose time, risk, or labor is reduced and whose is increased.",
+        "Uncompensated and involuntary transfers remain analytically visible."
+      ],
+      "inclusions": [
+        "Administrative labor shifted from an institution to an applicant.",
+        "Risk externalized onto a less powerful population.",
+        "Proof obligations imposed on a person lacking access to the records."
+      ],
+      "exclusions": [
+        "Mutually agreed task allocation with proportionate benefit.",
+        "A cost decrease with no identified displaced burden.",
+        "Ordinary specialization absent coercion or concealment."
+      ],
+      "boundary_cases": [
+        "Self-service systems that save institutional labor and may save user time.",
+        "Safety documentation that creates burden while reducing material risk.",
+        "Family caregiving performed under mixed consent and economic necessity."
+      ],
+      "confounders": [
+        "Unpriced labor.",
+        "Delayed consequences.",
+        "Unequal bargaining power.",
+        "Metrics that stop at an organizational boundary."
+      ],
+      "path": [
+        {
+          "stage_id": "no-identified-transfer",
+          "position": 0.0,
+          "description": "No supported redistribution of cost, risk, labor, delay, uncertainty, or proof obligation has been identified.",
+          "expected_invariants": [
+            "Unmeasured external cost remains a stated possibility.",
+            "Efficiency is not inferred solely from one actor's metric."
+          ]
+        },
+        {
+          "stage_id": "mixed-transfer",
+          "position": 0.5,
+          "description": "Burden is redistributed with mixed consent, compensation, visibility, or benefit.",
+          "expected_invariants": [
+            "Beneficiaries and burden bearers are separately identified.",
+            "Voluntariness and compensation remain explicit."
+          ]
+        },
+        {
+          "stage_id": "material-externalization",
+          "position": 1.0,
+          "description": "A material burden is predictably shifted to another party without adequate visibility, consent, compensation, or corrective power.",
+          "expected_invariants": [
+            "The transferred quantity and affected party are named.",
+            "Organizational efficiency is not treated as system-wide efficiency."
+          ]
+        }
+      ],
+      "evaluation_prompts": [
+        {
+          "prompt_id": "burden-automation",
+          "text": "An automated claims system reduces staffing costs but requires patients to repeatedly collect records already held by the insurer. Analyze the efficiency claim.",
+          "expected_properties": [
+            "Identifies the transferred administrative labor.",
+            "Separates organizational savings from system-wide burden."
+          ],
+          "prohibited_inferences": [
+            "Calling the system unambiguously efficient based only on reduced staffing cost."
+          ]
+        }
+      ]
+    }
+  ]
+}

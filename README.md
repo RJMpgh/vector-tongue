@@ -177,6 +177,31 @@ Other plausible uses include:
 
 These are proposed uses, not validated product claims.
 
+## Marlerian Anchor Registry
+
+Pairwise translation answers “how does Model A map to Model B?” The proposed
+**Marlerian Anchor Registry** adds a common reference space:
+
+\[
+T_m:z_m\rightarrow M.
+\]
+
+Each model receives its own calibrated map into \(M\). Models are not forced to
+produce identical answers; they are evaluated from declared shared coordinates
+and along versioned semantic paths.
+
+Each registry anchor includes an operational definition, invariants,
+inclusions, exclusions, boundary cases, confounders, ordered path stages, and
+evaluation prompts. The first illustrative draft includes evidential certainty,
+harm, meaningful agency, and burden transfer.
+
+```bash
+vector-tongue validate-anchors anchors/marlerian-baseline-v0.1.json
+```
+
+See the full
+[Marlerian Anchor Registry specification](docs/MARLERIAN_ANCHOR_REGISTRY.md).
+
 ## Priority and provenance
 
 The repository records:
@@ -210,6 +235,7 @@ Implemented and tested:
 - shuffled-pair negative-control machinery;
 - deterministic synthetic demonstration;
 - provenance-manifest and local hash validation.
+- Marlerian Anchor Registry validation and model-to-reference calibration.
 
 Not yet established:
 
@@ -233,6 +259,8 @@ prototype_v1/          preserved 2025 proof of concept
 tests/                 deterministic unit and integration tests
 docs/                  mathematics, protocol, claims, and provenance
 provenance/            machine-readable artifact-hash manifest
+anchors/               versioned semantic anchor registries
+schemas/               machine-readable registry contracts
 examples/              input schema and reproducible examples
 ```
 

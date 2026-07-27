@@ -26,6 +26,7 @@ that evaluation math is not coupled to one vendor.
 | `models.py` | translation hypotheses and baselines |
 | `evaluation.py` | held-out metrics and cross-validation |
 | `statistics.py` | bootstrap intervals and permutation controls |
+| `anchors.py` | anchor-registry validation and reference-space calibration |
 | `provenance.py` | artifact hashing and manifest validation |
 | `io.py` | portable CSV/JSON interfaces |
 | `cli.py` | reproducible command-line entry points |
@@ -41,3 +42,17 @@ Future versions can add:
 - longitudinal change-point detection;
 - provider adapters in a separate optional package;
 - signed result manifests.
+
+## Shared anchor layer
+
+Pairwise translation remains useful for direct model comparisons. The
+Marlerian Anchor Registry adds a hub-and-spoke alternative:
+
+\[
+z_m\rightarrow T_m(z_m)\in M.
+\]
+
+The registry supplies versioned operational anchors and controlled paths.
+`AnchorSpaceCalibrator` estimates a model-specific affine map into the shared
+reference representation. This is a calibration mechanism, not a claim that
+one numerical reference contains universal semantic truth.

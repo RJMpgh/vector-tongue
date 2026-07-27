@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added the Marlerian Anchor Registry specification.
+- Added a machine-readable schema and illustrative four-anchor draft.
+- Added registry validation, hashing, CLI support, and reference-space
+  calibration.
+
 ## 0.2.0 — 2026-07-27
 
 - Reframed prediction as held-out cross-model translation.

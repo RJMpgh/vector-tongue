@@ -10,6 +10,16 @@
 | 6 | Exact target text can be reconstructed without querying the target | Not demonstrated |
 | 7 | Output geometry reveals a proprietary model's internal latent language | Not inferable |
 
+## Marlerian Anchor Registry claim ladder
+
+| Level | Claim | Status |
+|---|---|---|
+| A1 | Shared anchors can be represented in a versioned machine-readable format | Implemented |
+| A2 | Anchor paths can be structurally validated | Implemented |
+| A3 | Model observations can be mapped into one declared reference space | Implemented |
+| A4 | Shared calibration improves cross-model comparability | Not yet established |
+| A5 | The draft anchors are culturally neutral or universal | Explicitly not claimed |
+
 ## Output-only means output-only
 
 Vector Tongue observes prompts, outputs, public configuration metadata, and
@@ -40,3 +50,10 @@ definition and evidence beyond geometric distance.
 A timestamp or blockchain record may help document that an artifact existed,
 subject to verification. It does not prove that a scientific claim is correct,
 novel over all prior work, patented, or legally enforceable.
+
+## Baseline governance
+
+A common semantic baseline can conceal the assumptions of its designers. The
+Marlerian Anchor Registry must therefore remain versioned, contestable,
+multilingual, and capable of representing disagreement. Numerical encoding is
+not evidence of neutrality.

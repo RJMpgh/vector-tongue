@@ -84,3 +84,16 @@ target-mean, and mean-shift baselines?
 - exclusions and retry counts;
 - complete baseline results;
 - negative and null results.
+
+## Optional shared-anchor arm
+
+For experiments using the Marlerian Anchor Registry:
+
+1. freeze and hash the registry version;
+2. keep registry-development prompts outside final evaluation;
+3. fit one model-to-reference map using calibration anchors;
+4. test unseen anchor prompts and intermediate path stages;
+5. report residual disagreement before and after calibration;
+6. compare shared-reference calibration against direct pairwise mappings;
+7. replicate with translated and adversarial boundary cases;
+8. report whose judgments defined expected properties.

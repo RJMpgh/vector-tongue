@@ -1,5 +1,12 @@
 """Vector Tongue: output-only cross-model behavioral translation."""
 
+from .anchors import (
+    Anchor,
+    AnchorRegistry,
+    AnchorRegistryError,
+    AnchorSpaceCalibrator,
+    load_anchor_registry,
+)
 from .data import EmbeddingPair, PairDataset
 from .evaluation import EvaluationReport, evaluate_translator
 from .geometry import DriftComponents, drift_components, marler_drift_v1
@@ -11,6 +18,10 @@ from .models import (
 )
 
 __all__ = [
+    "Anchor",
+    "AnchorRegistry",
+    "AnchorRegistryError",
+    "AnchorSpaceCalibrator",
     "DriftComponents",
     "EmbeddingPair",
     "EvaluationReport",
@@ -21,6 +32,7 @@ __all__ = [
     "TranslationModel",
     "drift_components",
     "evaluate_translator",
+    "load_anchor_registry",
     "marler_drift_v1",
 ]
 
