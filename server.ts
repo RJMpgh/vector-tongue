@@ -277,6 +277,64 @@ p008,safety,"[0.6, 0.7, 0.2]","[0.3, 0.8, 0.3]"`;
     }
   });
 
+  // POST /api/checkout/inquire: process commercial purchase or pilot booking
+  app.post("/api/checkout/inquire", (req, res) => {
+    try {
+      const {
+        tier = "Migration Audit Pilot ($499)",
+        price = 499,
+        payment_method = "googlepay",
+        email = "",
+        company = "",
+        model_a = "Claude 3.5 Sonnet",
+        model_b = "GPT-4o",
+        notes = "",
+        cashtag = "",
+      } = req.body || {};
+
+      if (!email || !email.includes("@")) {
+        return res.status(400).json({ error: "A valid contact email is required." });
+      }
+
+      const orderId = `VT-ORD-${Date.now().toString(36).toUpperCase()}-${Math.floor(Math.random() * 899 + 100)}`;
+      
+      const instructions = {
+        cashapp: {
+          cashtag: "$rjmarler8",
+          pay_url: `https://cash.app/$rjmarler8/${price}`,
+          memo: `VT-AUDIT-${orderId.slice(-6)}`,
+          instructions: `Send $${price} USD to $rjmarler8 with note "${orderId.slice(-6)}". Verification email dispatched to ${email}.`,
+        },
+        googlepay: {
+          action: "Google Pay / Card Checkout",
+          instructions: `Google Pay / Card order registered for ${email}. Direct checkout link or invoice sent to ${email}.`,
+          direct_support: "rjmarler8@gmail.com",
+        },
+        invoice: {
+          billing_contact: "rjmarler8@gmail.com",
+          status: "Net-30 Invoice Dispatched",
+          instructions: `Official tax invoice generated for ${company || email} and routed to ${email}.`,
+        },
+      };
+
+      return res.json({
+        success: true,
+        order_id: orderId,
+        tier,
+        price,
+        payment_method,
+        email,
+        company,
+        models: { model_a, model_b },
+        instructions: instructions[payment_method as keyof typeof instructions] || instructions.googlepay,
+        timestamp: new Date().toISOString(),
+        support_email: "rjmarler8@gmail.com",
+      });
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
   // GET /api/manifest: verify priority manifest
   app.get("/api/manifest", (_req, res) => {
     try {

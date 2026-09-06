@@ -1,10 +1,22 @@
 import React from "react";
-import { Activity, Compass, Cpu, FileCheck, Layers, ShieldCheck, Sparkles, Terminal } from "lucide-react";
+import {
+  Activity,
+  Compass,
+  Cpu,
+  DollarSign,
+  FileCheck,
+  Layers,
+  Megaphone,
+  ShieldCheck,
+  Sparkles,
+  Terminal,
+} from "lucide-react";
 
 export type ActiveTab =
   | "observability"
   | "gate"
   | "benchmark"
+  | "marketing"
   | "demo"
   | "evaluate"
   | "drift"
@@ -14,13 +26,15 @@ export type ActiveTab =
 interface HeaderProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
+  onOpenPricing: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
+export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenPricing }) => {
   const tabs = [
     { id: "observability", label: "Model Observability & Migration", icon: Activity, badge: "Primary" },
     { id: "gate", label: "CI/CD Release Gate", icon: ShieldCheck, badge: "GitHub Action" },
     { id: "benchmark", label: "VT-Bench v1", icon: Layers, badge: "14 Axes" },
+    { id: "marketing", label: "Launch & Advertise", icon: Megaphone, badge: "Outreach" },
     { id: "demo", label: "Synthetic Lab", icon: Sparkles, badge: "Deterministic" },
     { id: "evaluate", label: "Dataset Evaluator", icon: Terminal, badge: "CSV Upload" },
     { id: "drift", label: "Drift & Historical v1", icon: Compass, badge: "Math" },
@@ -71,6 +85,14 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 </button>
               );
             })}
+
+            <button
+              onClick={onOpenPricing}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white rounded-lg text-xs font-bold transition-all shadow-md shadow-emerald-500/20 whitespace-nowrap cursor-pointer shrink-0"
+            >
+              <DollarSign className="w-3.5 h-3.5" />
+              <span>Pricing & Paywall</span>
+            </button>
           </nav>
         </div>
       </div>

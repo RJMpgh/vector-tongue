@@ -12,6 +12,7 @@ import {
   Clock,
   Code2,
   Cpu,
+  DollarSign,
   Download,
   FileSpreadsheet,
   FileText,
@@ -112,7 +113,11 @@ const DEMO_PRESETS: DemoPreset[] = [
   },
 ];
 
-export const ObservabilityWorkbench: React.FC = () => {
+interface ObservabilityWorkbenchProps {
+  onOpenPricing?: () => void;
+}
+
+export const ObservabilityWorkbench: React.FC<ObservabilityWorkbenchProps> = ({ onOpenPricing }) => {
   // Mode: Simple (Focused developer workflow) vs Professional (Deep ML diagnostics)
   const [productMode, setProductMode] = useState<"simple" | "professional">("simple");
 
@@ -370,13 +375,25 @@ ${audit.high_risk_prompts
               </button>
             </div>
 
-            <button
-              onClick={() => setPilotModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500/20 to-indigo-500/20 hover:from-amber-500/30 hover:to-indigo-500/30 border border-amber-500/40 text-amber-200 text-xs font-semibold rounded-xl shadow-lg transition-all cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Request Migration Pilot</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPilotModalOpen(true)}
+                className="flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-amber-500/20 to-indigo-500/20 hover:from-amber-500/30 hover:to-indigo-500/30 border border-amber-500/40 text-amber-200 text-xs font-semibold rounded-xl shadow-lg transition-all cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Request Pilot</span>
+              </button>
+
+              {onOpenPricing && (
+                <button
+                  onClick={onOpenPricing}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all cursor-pointer"
+                >
+                  <DollarSign className="w-3.5 h-3.5" />
+                  <span>Buy License</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

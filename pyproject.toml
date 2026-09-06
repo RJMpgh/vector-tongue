@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vector-tongue"
+version = "0.2.0"
+description = "A falsifiable, output-only framework for learning and testing behavioral translation between AI models."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "All rights reserved. See LICENSE." }
+authors = [
+    { name = "RJ Marler", email = "rjmarler8@gmail.com" }
+]
+keywords = ["ai", "machine-learning", "llm-observability", "vector-translation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.scripts]
+vector-tongue = "vector_tongue.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["vector_tongue*"]
