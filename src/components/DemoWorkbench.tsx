@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Play, Sparkles, RefreshCw, AlertTriangle, CheckCircle2, TrendingUp, Info } from "lucide-react";
 import { EvaluationReport } from "../types";
+import { syntheticTranslationDataset } from "../lib/data";
+import { RidgeTranslator } from "../lib/models";
+import { evaluateTranslator } from "../lib/evaluation";
 
 export const DemoWorkbench: React.FC = () => {
   const [samples, setSamples] = useState<number>(80);
@@ -17,27 +20,51 @@ export const DemoWorkbench: React.FC = () => {
   const runDemo = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const res = await fetch("/api/demo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          samples,
-          dimension,
-          noise,
-          regularization,
-          seed,
-        }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to run demonstration");
+      // Try API first
+      try {
+        const res = await fetch("/api/demo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            samples,
+            dimension,
+            noise,
+            regularization,
+            seed,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setReport(data.report);
+          setDatasetMeta(data.dataset_meta);
+          return;
+        }
+      } catch {
+        // Fall back to client calculation below
       }
-      const data = await res.json();
-      setReport(data.report);
-      setDatasetMeta(data.dataset_meta);
+
+      // Client-side execution fallback for iOS/offline
+      const dataset = syntheticTranslationDataset({
+        samples,
+        dimension,
+        noise,
+        seed,
+      });
+      const { train, test } = dataset.split(0.25, seed);
+      const model = new RidgeTranslator(regularization);
+      model.fit(train.source, train.target);
+      const evalReport = evaluateTranslator(model, train, test, { includeDetails: true, seed });
+
+      setReport(evalReport);
+      setDatasetMeta({
+        num_prompts: dataset.size,
+        dimension: dataset.dimension,
+        categories: Array.from(new Set(dataset.categories)),
+      });
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Failed to run demo simulation");
     } finally {
       setLoading(false);
     }
@@ -79,7 +106,7 @@ export const DemoWorkbench: React.FC = () => {
             id="run-demo-btn"
             onClick={runDemo}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-medium rounded-lg shadow-md shadow-indigo-600/20 transition-all cursor-pointer whitespace-nowrap"
+            className="flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg shadow-md shadow-indigo-600/20 transition-all cursor-pointer whitespace-nowrap touch-manipulation min-h-[44px] active:scale-95 w-full sm:w-auto"
           >
             {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4 fill-current" />}
             <span>Run Pipeline</span>
@@ -105,7 +132,7 @@ export const DemoWorkbench: React.FC = () => {
             max={500}
             value={samples}
             onChange={(e) => setSamples(Math.max(8, Number(e.target.value)))}
-            className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 sm:py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs text-white focus:outline-none focus:border-indigo-500 min-h-[40px] sm:min-h-0"
           />
         </div>
 
@@ -118,7 +145,7 @@ export const DemoWorkbench: React.FC = () => {
             max={64}
             value={dimension}
             onChange={(e) => setDimension(Math.max(2, Number(e.target.value)))}
-            className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 sm:py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs text-white focus:outline-none focus:border-indigo-500 min-h-[40px] sm:min-h-0"
           />
         </div>
 
@@ -132,7 +159,7 @@ export const DemoWorkbench: React.FC = () => {
             max={1.0}
             value={noise}
             onChange={(e) => setNoise(Math.max(0, Number(e.target.value)))}
-            className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 sm:py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs text-white focus:outline-none focus:border-indigo-500 min-h-[40px] sm:min-h-0"
           />
         </div>
 
@@ -146,7 +173,7 @@ export const DemoWorkbench: React.FC = () => {
             max={10.0}
             value={regularization}
             onChange={(e) => setRegularization(Math.max(0, Number(e.target.value)))}
-            className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 sm:py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs text-white focus:outline-none focus:border-indigo-500 min-h-[40px] sm:min-h-0"
           />
         </div>
 
@@ -157,7 +184,7 @@ export const DemoWorkbench: React.FC = () => {
             type="number"
             value={seed}
             onChange={(e) => setSeed(Number(e.target.value))}
-            className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+            className="w-full px-3 py-2 sm:py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs text-white focus:outline-none focus:border-indigo-500 min-h-[40px] sm:min-h-0"
           />
         </div>
       </div>

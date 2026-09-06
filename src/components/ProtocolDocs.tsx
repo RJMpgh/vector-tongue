@@ -87,31 +87,31 @@ export const ProtocolDocs: React.FC = () => {
       <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 space-y-4">
         <h3 className="text-base font-semibold text-white flex items-center gap-2">
           <Shield className="w-4 h-4 text-indigo-400" />
-          Falsifiability & Claims Boundaries
+          Methodology & Objective Claims Boundaries
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 bg-emerald-950/20 border border-emerald-900/40 rounded-lg space-y-2">
             <span className="text-emerald-400 font-semibold flex items-center gap-1.5 text-xs uppercase tracking-wider">
-              <Check className="w-4 h-4" /> What Vector Tongue Does
+              <Check className="w-4 h-4" /> Observable Black-Box Capabilities
             </span>
             <ul className="space-y-1.5 text-slate-300 list-disc list-inside leading-relaxed text-[11px]">
-              <li>Operates strictly on generated text output embeddings without white-box access.</li>
-              <li>Quantifies predictive advantage over declared baselines with bootstrap intervals.</li>
-              <li>Applies negative controls (shuffled pairs) to verify alignment signal exceeds chance.</li>
-              <li>Preserves the historical 2025 prototype while establishing mathematical v2 rigor.</li>
+              <li>Operates on observable output representations without requiring proprietary runtime weights.</li>
+              <li>Quantifies predictive advantage over declared baselines (Identity, Target-Mean, Mean-Shift, k-NN).</li>
+              <li>Applies negative controls (shuffled pairs) and bootstrap intervals to verify geometric alignment.</li>
+              <li>Tests graded reconstruction hierarchies (topic, intent, sentiment, retrieval) empirically.</li>
             </ul>
           </div>
 
-          <div className="p-4 bg-rose-950/20 border border-rose-900/40 rounded-lg space-y-2">
-            <span className="text-rose-400 font-semibold flex items-center gap-1.5 text-xs uppercase tracking-wider">
-              <X className="w-4 h-4" /> What Vector Tongue Does NOT Claim
+          <div className="p-4 bg-slate-950/40 border border-slate-800 rounded-lg space-y-2">
+            <span className="text-indigo-400 font-semibold flex items-center gap-1.5 text-xs uppercase tracking-wider">
+              <Shield className="w-4 h-4" /> Scientific & Scope Demarcation
             </span>
             <ul className="space-y-1.5 text-slate-300 list-disc list-inside leading-relaxed text-[11px]">
-              <li>Does NOT access proprietary latent layers or internal transformer activations.</li>
-              <li>Does NOT reconstruct exact verbatim sentences from output embeddings.</li>
-              <li>Does NOT claim AI models possess an autonomous private or emergent language.</li>
-              <li>Does NOT make commercial exclusivity or unverified legal priority assertions.</li>
+              <li><strong>Zero Internal Access:</strong> Does not require access to proprietary weights or activations; inferences are strictly behavioral.</li>
+              <li><strong>Graded Information Recovery:</strong> Dense embeddings reliably preserve topic, intent, and nearest-neighbor candidates, while exact verbatim token syntax is lost.</li>
+              <li><strong>Geometric Alignment:</strong> Tests shared representational geometry between models; avoids subjective claims of emergent private languages.</li>
+              <li><strong>Falsifiable Reporting:</strong> All empirical hypotheses include explicit null thresholds, effect sizes, and p-values.</li>
             </ul>
           </div>
         </div>

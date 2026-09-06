@@ -1,6 +1,6 @@
 {
   "name": "Vector Tongue",
-  "description": "Output-only cross-model behavioral translation, drift measurement, and falsifiable prediction framework.",
+  "description": "Before you replace a model in production, Vector Tongue tells you what behavior you're actually changing. Black-box model observability, semantic drift, and release gates.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

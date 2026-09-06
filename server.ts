@@ -197,6 +197,86 @@ p008,safety,"[0.6, 0.7, 0.2]","[0.3, 0.8, 0.3]"`;
     }
   });
 
+  // POST /api/observability-audit: complete black-box comparison, baselines, and reconstruction hierarchy
+  app.post("/api/observability-audit", async (req, res) => {
+    try {
+      const {
+        csv,
+        model_a_name = "Model-Alpha",
+        model_b_name = "Model-Beta",
+        test_fraction = 0.3,
+        seed = 42,
+      } = req.body || {};
+
+      let dataset: PairDataset;
+      if (csv && typeof csv === "string" && csv.trim().length > 0) {
+        dataset = parseEmbeddingPairsCsv(csv);
+      } else {
+        dataset = syntheticTranslationDataset({ samples: 100, dimension: 16, noise: 0.03, seed: Number(seed) });
+      }
+
+      const { runComparativeObservabilityAudit } = await import("./src/lib/observabilityEngine");
+      const auditResult = runComparativeObservabilityAudit(dataset, {
+        modelAName: String(model_a_name),
+        modelBName: String(model_b_name),
+        testFraction: Number(test_fraction),
+        seed: Number(seed),
+      });
+
+      return res.json(auditResult);
+    } catch (err: any) {
+      return res.status(400).json({ error: err.message });
+    }
+  });
+
+  // GET /api/bench/vt-bench-v1: canonical benchmark corpus
+  app.get("/api/bench/vt-bench-v1", async (_req, res) => {
+    try {
+      const { VTBENCH_PROMPTS, VTBENCH_VERSION } = await import("./src/lib/vtBench");
+      return res.json({
+        version: VTBENCH_VERSION,
+        prompt_count: VTBENCH_PROMPTS.length,
+        prompts: VTBENCH_PROMPTS,
+      });
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST /api/gate: evaluate model release gate against policy
+  app.post("/api/gate", async (req, res) => {
+    try {
+      const { evaluateReleaseGate, DEFAULT_RELEASE_POLICY } = await import("./src/lib/releaseGate");
+      const { metrics, policy } = req.body || {};
+      if (!metrics) {
+        return res.status(400).json({ error: "Missing required 'metrics' object in request body." });
+      }
+      const gateResult = evaluateReleaseGate(metrics, policy || DEFAULT_RELEASE_POLICY);
+      return res.status(gateResult.status === "PASS" ? 200 : 422).json(gateResult);
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST /api/cost-estimate: estimate token and API costs before experiment
+  app.post("/api/cost-estimate", (req, res) => {
+    try {
+      const { prompt_count = 50, avg_tokens_per_prompt = 512, price_per_million_tokens = 0.5 } = req.body || {};
+      const estTokens = Number(prompt_count) * Number(avg_tokens_per_prompt) * 2; // prompt + response
+      const estCost = (estTokens / 1_000_000) * Number(price_per_million_tokens);
+      return res.json({
+        prompt_count: Number(prompt_count),
+        estimated_tokens: estTokens,
+        estimated_api_calls: Number(prompt_count) * 2,
+        estimated_duration_sec: Math.max(3, Math.round(Number(prompt_count) * 0.05)),
+        estimated_cost_usd: Number(estCost.toFixed(4)),
+        currency: "USD",
+      });
+    } catch (err: any) {
+      return res.status(400).json({ error: err.message });
+    }
+  });
+
   // GET /api/manifest: verify priority manifest
   app.get("/api/manifest", (_req, res) => {
     try {

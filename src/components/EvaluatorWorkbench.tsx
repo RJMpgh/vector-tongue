@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Upload, FileText, Play, RefreshCw, CheckCircle, ShieldAlert, Sliders, Database } from "lucide-react";
 import { EvaluationReport, PermutationResult } from "../types";
+import { parseEmbeddingPairsCsv } from "../lib/data";
+import { RidgeTranslator, OrthogonalTranslator } from "../lib/models";
+import { evaluateTranslator } from "../lib/evaluation";
+import { pairedTargetPermutationTest } from "../lib/statistics";
+
+const EMBEDDED_SAMPLE_CSV = `prompt_id,category,source_embedding,target_embedding
+p001,factual,"[1.0, 0.0, 0.2]","[0.8, 0.3, 0.1]"
+p002,factual,"[0.9, 0.1, 0.1]","[0.7, 0.4, 0.0]"
+p003,reasoning,"[0.1, 1.0, 0.2]","[-0.2, 0.8, 0.4]"
+p004,reasoning,"[0.2, 0.8, 0.3]","[-0.1, 0.7, 0.5]"
+p005,creative,"[0.2, 0.1, 1.0]","[0.1, -0.2, 0.9]"
+p006,creative,"[0.3, 0.2, 0.8]","[0.2, -0.1, 0.7]"
+p007,safety,"[0.7, 0.6, 0.1]","[0.4, 0.7, 0.2]"
+p008,safety,"[0.6, 0.7, 0.2]","[0.3, 0.8, 0.3]"
+p009,factual,"[0.85, 0.15, 0.1]","[0.65, 0.35, 0.05]"
+p010,reasoning,"[0.15, 0.9, 0.25]","[-0.15, 0.75, 0.45]"
+p011,creative,"[0.25, 0.15, 0.9]","[0.15, -0.15, 0.8]"
+p012,safety,"[0.65, 0.65, 0.15]","[0.35, 0.75, 0.25]"`;
 
 export const EvaluatorWorkbench: React.FC = () => {
   const [csvText, setCsvText] = useState<string>("");
@@ -16,17 +34,21 @@ export const EvaluatorWorkbench: React.FC = () => {
   const [datasetMeta, setDatasetMeta] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Load sample CSV from server
+  // Load sample CSV from server with embedded fallback
   const loadSampleCsv = async () => {
     try {
       const res = await fetch("/api/sample-csv");
       if (res.ok) {
         const text = await res.text();
-        setCsvText(text);
+        if (text && text.trim().length > 0) {
+          setCsvText(text);
+          return;
+        }
       }
     } catch {
-      // ignore
+      // Fall through to embedded sample
     }
+    setCsvText(EMBEDDED_SAMPLE_CSV);
   };
 
   useEffect(() => {
@@ -39,9 +61,14 @@ export const EvaluatorWorkbench: React.FC = () => {
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;
-      if (content) setCsvText(content);
+      if (content) {
+        setCsvText(content);
+        setError(null);
+      }
     };
     reader.readAsText(file);
+    // Reset so re-uploading the same file works reliably on iOS Safari
+    e.target.value = "";
   };
 
   const runEvaluation = async () => {
@@ -51,31 +78,73 @@ export const EvaluatorWorkbench: React.FC = () => {
     }
     setLoading(true);
     setError(null);
-    try {
-      const res = await fetch("/api/evaluate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          csv: csvText,
-          model: modelType,
-          regularization,
-          test_fraction: testFraction,
-          seed,
-          run_permutation: runPermutation,
-        }),
-      });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Evaluation failed");
+    try {
+      // Attempt server-side computation
+      try {
+        const res = await fetch("/api/evaluate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            csv: csvText,
+            model: modelType,
+            regularization,
+            test_fraction: testFraction,
+            seed,
+            run_permutation: runPermutation,
+          }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setReport(data.report);
+          setPermutation(data.permutation);
+          setDatasetMeta(data.dataset_meta);
+          return;
+        }
+      } catch {
+        // Fall back to client calculation below
       }
 
-      const data = await res.json();
-      setReport(data.report);
-      setPermutation(data.permutation);
-      setDatasetMeta(data.dataset_meta);
+      // High-performance client-side fallback for iOS WebKit/offline execution
+      const dataset = parseEmbeddingPairsCsv(csvText);
+      const { train, test } = dataset.split(testFraction, seed);
+      const model = modelType === "ridge"
+        ? new RidgeTranslator(regularization)
+        : new OrthogonalTranslator();
+
+      model.fit(train.source, train.target);
+      const evalReport = evaluateTranslator(model, train, test, { includeDetails: true, seed });
+
+      let permRes: PermutationResult | null = null;
+      if (runPermutation) {
+        permRes = pairedTargetPermutationTest(
+          test.source,
+          test.target,
+          (X, Y) => {
+            const pred = model.predict(X);
+            let sumSq = 0;
+            for (let i = 0; i < pred.length; i++) {
+              for (let j = 0; j < pred[0].length; j++) {
+                const diff = pred[i][j] - Y[i][j];
+                sumSq += diff * diff;
+              }
+            }
+            return sumSq / pred.length;
+          },
+          { permutations: 40, seed }
+        );
+      }
+
+      setReport(evalReport);
+      setPermutation(permRes);
+      setDatasetMeta({
+        num_prompts: dataset.size,
+        dimension: dataset.dimension,
+        categories: Array.from(new Set(dataset.categories)),
+      });
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Evaluation failed. Please check CSV format.");
     } finally {
       setLoading(false);
     }
@@ -109,19 +178,24 @@ export const EvaluatorWorkbench: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={loadSampleCsv}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium rounded-lg border border-slate-700/60 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300 hover:text-white text-xs font-medium rounded-lg border border-slate-700/60 transition-all flex items-center gap-1.5 cursor-pointer touch-manipulation min-h-[40px] active:scale-95"
             >
               <FileText className="w-3.5 h-3.5" />
               <span>Load Preset CSV</span>
             </button>
 
-            <label className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium rounded-lg border border-slate-700/60 transition-all flex items-center gap-1.5 cursor-pointer">
+            <label className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300 hover:text-white text-xs font-medium rounded-lg border border-slate-700/60 transition-all flex items-center gap-1.5 cursor-pointer touch-manipulation min-h-[40px] active:scale-95">
               <Upload className="w-3.5 h-3.5" />
               <span>Upload CSV</span>
-              <input type="file" accept=".csv" onChange={handleFileUpload} className="hidden" />
+              <input
+                type="file"
+                accept=".csv,text/csv,text/plain,application/vnd.ms-excel,text/comma-separated-values"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
             </label>
           </div>
         </div>
@@ -135,7 +209,7 @@ export const EvaluatorWorkbench: React.FC = () => {
             <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
               Paired Embeddings CSV
             </label>
-            <span className="text-xs text-slate-500 font-mono">schema: prompt_id, category, source_embedding, target_embedding</span>
+            <span className="text-xs text-slate-500 font-mono hidden sm:inline">schema: prompt_id, category, source_embedding, target_embedding</span>
           </div>
           <textarea
             id="csv-input-textarea"
@@ -143,7 +217,7 @@ export const EvaluatorWorkbench: React.FC = () => {
             value={csvText}
             onChange={(e) => setCsvText(e.target.value)}
             placeholder={`prompt_id,category,source_embedding,target_embedding\np001,factual,"[1.0, 0.0, 0.2]","[0.8, 0.3, 0.1]"`}
-            className="w-full flex-1 p-3 bg-slate-950 border border-slate-800/80 rounded-lg text-xs font-mono text-slate-300 focus:outline-none focus:border-indigo-500 leading-relaxed resize-y"
+            className="w-full flex-1 p-3 bg-slate-950 border border-slate-800/80 rounded-lg text-sm sm:text-xs font-mono text-slate-300 focus:outline-none focus:border-indigo-500 leading-relaxed resize-y min-h-[160px]"
           />
         </div>
 
@@ -162,9 +236,9 @@ export const EvaluatorWorkbench: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setModelType("ridge")}
-                    className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
+                    className={`px-3 py-2.5 sm:py-2 text-xs font-medium rounded-lg border transition-all touch-manipulation min-h-[40px] sm:min-h-0 active:scale-95 ${
                       modelType === "ridge"
-                        ? "bg-indigo-600/20 border-indigo-500 text-indigo-300"
+                        ? "bg-indigo-600/20 border-indigo-500 text-indigo-300 font-semibold"
                         : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
                     }`}
                   >
@@ -173,9 +247,9 @@ export const EvaluatorWorkbench: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setModelType("orthogonal")}
-                    className={`px-3 py-2 text-xs font-medium rounded-lg border transition-all ${
+                    className={`px-3 py-2.5 sm:py-2 text-xs font-medium rounded-lg border transition-all touch-manipulation min-h-[40px] sm:min-h-0 active:scale-95 ${
                       modelType === "orthogonal"
-                        ? "bg-indigo-600/20 border-indigo-500 text-indigo-300"
+                        ? "bg-indigo-600/20 border-indigo-500 text-indigo-300 font-semibold"
                         : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
                     }`}
                   >
@@ -197,7 +271,7 @@ export const EvaluatorWorkbench: React.FC = () => {
                     step={0.05}
                     value={regularization}
                     onChange={(e) => setRegularization(Number(e.target.value))}
-                    className="w-full accent-indigo-500"
+                    className="w-full accent-indigo-500 h-6 sm:h-4 touch-none py-1"
                   />
                 </div>
               )}
@@ -214,7 +288,7 @@ export const EvaluatorWorkbench: React.FC = () => {
                   step={0.05}
                   value={testFraction}
                   onChange={(e) => setTestFraction(Number(e.target.value))}
-                  className="w-full accent-indigo-500"
+                  className="w-full accent-indigo-500 h-6 sm:h-4 touch-none py-1"
                 />
               </div>
 
@@ -224,17 +298,17 @@ export const EvaluatorWorkbench: React.FC = () => {
                   type="number"
                   value={seed}
                   onChange={(e) => setSeed(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 sm:py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs font-mono text-white focus:outline-none focus:border-indigo-500 min-h-[40px] sm:min-h-0"
                 />
               </div>
 
               <div className="pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                <label className="flex items-center gap-2.5 cursor-pointer text-xs text-slate-300 touch-manipulation min-h-[36px]">
                   <input
                     type="checkbox"
                     checked={runPermutation}
                     onChange={(e) => setRunPermutation(e.target.checked)}
-                    className="rounded bg-slate-950 border-slate-800 text-indigo-600 focus:ring-indigo-500 w-4 h-4"
+                    className="rounded bg-slate-950 border-slate-800 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
                   />
                   <span>Run Shuffled-Target Permutation Test</span>
                 </label>
@@ -246,7 +320,7 @@ export const EvaluatorWorkbench: React.FC = () => {
             id="run-evaluate-btn"
             onClick={runEvaluation}
             disabled={loading}
-            className="w-full mt-4 flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-semibold rounded-lg shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+            className="w-full mt-4 flex items-center justify-center gap-2 py-3 sm:py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 disabled:opacity-50 text-white text-xs font-semibold rounded-lg shadow-md shadow-indigo-600/20 transition-all cursor-pointer touch-manipulation min-h-[44px] active:scale-95"
           >
             {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4 fill-current" />}
             <span>Evaluate Translation</span>

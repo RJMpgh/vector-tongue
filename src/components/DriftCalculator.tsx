@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Compass, BookOpen, ArrowRight, RotateCcw, AlertCircle } from "lucide-react";
 import { DriftResult } from "../types";
+import { driftComponents, cosineSimilarity } from "../lib/geometry";
+import { norm } from "../lib/matrix";
 
 export const DriftCalculator: React.FC = () => {
   const [vecAStr, setVecAStr] = useState<string>("[1.0, 0.0, 0.2]");
@@ -16,17 +18,35 @@ export const DriftCalculator: React.FC = () => {
       if (!Array.isArray(a) || !Array.isArray(b)) {
         throw new Error("Vectors must be valid JSON number arrays, e.g. [1.0, 0.0, 0.2]");
       }
-      const res = await fetch("/api/drift", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vector_a: a, vector_b: b }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to calculate drift");
+      if (a.length !== b.length) {
+        throw new Error(`Vectors must have matching dimensions. (Got ${a.length} and ${b.length})`);
       }
-      const data = await res.json();
-      setResult(data);
+
+      try {
+        const res = await fetch("/api/drift", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vector_a: a, vector_b: b }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setResult(data);
+          return;
+        }
+      } catch {
+        // Fall back to client calculation below
+      }
+
+      // Client-side execution fallback for iOS/offline/iframe
+      const vecA = a.map(Number);
+      const vecB = b.map(Number);
+      const clientCalc = driftComponents(vecA, vecB);
+      setResult({
+        ...clientCalc,
+        norm_a: norm(vecA),
+        norm_b: norm(vecB),
+        cosine_similarity: cosineSimilarity(vecA, vecB),
+      });
     } catch (err: any) {
       setError(err.message);
     }
@@ -66,23 +86,23 @@ export const DriftCalculator: React.FC = () => {
       <div className="bg-slate-900/40 border border-slate-800/80 rounded-xl p-5 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-sm font-semibold text-white">Vector Pair Input</h3>
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-slate-500">Presets:</span>
             <button
               onClick={() => setPreset([1.0, 0.0, 0.0], [0.7071, 0.7071, 0.0])}
-              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700/60 cursor-pointer"
+              className="px-2.5 py-1.5 sm:py-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300 rounded border border-slate-700/60 cursor-pointer touch-manipulation min-h-[36px] sm:min-h-0 active:scale-95"
             >
               Unit Orthogonal 45°
             </button>
             <button
               onClick={() => setPreset([1.0, 0.0, 0.2], [0.8, 0.3, 0.1])}
-              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700/60 cursor-pointer"
+              className="px-2.5 py-1.5 sm:py-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300 rounded border border-slate-700/60 cursor-pointer touch-manipulation min-h-[36px] sm:min-h-0 active:scale-95"
             >
               Sample Prompt Pair
             </button>
             <button
               onClick={() => setPreset([0.0, 1.0, 0.0], [0.0, -1.0, 0.0])}
-              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700/60 cursor-pointer"
+              className="px-2.5 py-1.5 sm:py-1 bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-300 rounded border border-slate-700/60 cursor-pointer touch-manipulation min-h-[36px] sm:min-h-0 active:scale-95"
             >
               Opposing (180°)
             </button>
@@ -99,7 +119,7 @@ export const DriftCalculator: React.FC = () => {
               type="text"
               value={vecAStr}
               onChange={(e) => setVecAStr(e.target.value)}
-              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-cyan-300 focus:outline-none focus:border-indigo-500"
+              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs font-mono text-cyan-300 focus:outline-none focus:border-indigo-500 min-h-[42px] sm:min-h-0"
             />
           </div>
 
@@ -112,7 +132,7 @@ export const DriftCalculator: React.FC = () => {
               type="text"
               value={vecBStr}
               onChange={(e) => setVecBStr(e.target.value)}
-              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-emerald-300 focus:outline-none focus:border-indigo-500"
+              className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-lg text-sm sm:text-xs font-mono text-emerald-300 focus:outline-none focus:border-indigo-500 min-h-[42px] sm:min-h-0"
             />
           </div>
         </div>
@@ -121,7 +141,7 @@ export const DriftCalculator: React.FC = () => {
           <button
             id="calculate-drift-btn"
             onClick={calculateDrift}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
+            className="w-full sm:w-auto px-5 py-3 sm:py-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white text-xs font-medium rounded-lg shadow-md shadow-indigo-600/20 transition-all cursor-pointer touch-manipulation min-h-[44px] active:scale-95"
           >
             Compute Drift Metrics
           </button>
