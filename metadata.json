@@ -1,0 +1,6 @@
+{
+  "name": "Vector Tongue",
+  "description": "Output-only cross-model behavioral translation, drift measurement, and falsifiable prediction framework.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
