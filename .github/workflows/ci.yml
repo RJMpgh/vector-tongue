@@ -8,22 +8,58 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  python:
+    name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.10", "3.12", "3.14"]
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install package
+      - name: Install research package
         run: python -m pip install .
-      - name: Run tests
+      - name: Run unit tests
         run: python -m unittest discover -s tests -v
-      - name: Run demonstration
+      - name: Run deterministic demo
         run: vector-tongue demo --output /tmp/vector-tongue-demo.json
       - name: Verify provenance manifest structure
         run: vector-tongue verify-proof provenance/vector_tongue_priority_manifest.json
+
+  web:
+    name: Typecheck and production build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package.json
+      - name: Install web dependencies
+        run: npm install --no-audit --no-fund
+      - name: Typecheck
+        run: npm run lint
+      - name: Build production bundle
+        run: npm run build
+
+  truth-boundary:
+    name: Product truth boundary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block simulated commerce claims
+        shell: bash
+        run: |
+          if grep -R -n -E "License Generated Successfully|Invoice Dispatched|Verification email dispatched|handleSimulatePayment" src server.ts; then
+            echo "Blocked: simulated commercial fulfillment language detected."
+            exit 1
+          fi
+      - name: Require synthetic evidence disclosure
+        shell: bash
+        run: |
+          grep -q "SYNTHETIC_DEMO" server.ts
+          grep -q "Synthetic" src/components/IndustryLaunchWorkbench.tsx
