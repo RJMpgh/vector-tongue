@@ -2,84 +2,130 @@
 
 [![CI](https://github.com/RJMpgh/vector-tongue/actions/workflows/ci.yml/badge.svg)](https://github.com/RJMpgh/vector-tongue/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![Research status: alpha](https://img.shields.io/badge/research-alpha-orange.svg)](#scientific-status)
 [![Concept: RJ Marler](https://img.shields.io/badge/concept-RJ%20Marler-6f42c1.svg)](AUTHORS.md)
+[![Product category: Model Change Assurance](https://img.shields.io/badge/category-Model%20Change%20Assurance-4f46e5.svg)](#model-change-assurance)
 
-**A falsifiable, output-only framework for learning and testing the behavioral
-translation between AI models.**
+## Know what your AI changed before your users do.
+
+**Vector Tongue is a black-box Model Change Assurance platform for AI model migrations, upgrades, prompt changes, and release decisions.**
+
+It turns model change into four engineering questions:
+
+1. **What changed?**
+2. **Where did it change?**
+3. **Does it matter?**
+4. **Can I ship?**
+
+Vector Tongue compares observable model behavior without requiring access to proprietary weights, hidden activations, or internal latent states. It combines held-out cross-model translation, semantic drift, declared baselines, negative controls, evidence grading, and release gating in one reproducible workflow.
 
 **Concept, terminology, and original prototype: RJ Marler.**
 
-Vector Tongue asks a concrete question:
+---
 
-> After observing how Model A and Model B answer a calibration set, can we
-> predict Model B's response representation from Model A's response on prompts
-> neither model saw during calibration?
+## Model Change Assurance
 
-Version 2 turns that question into a held-out experiment. It learns translation
-operators in a shared external embedding space, evaluates them on unseen
-prompts, compares them with simple baselines, estimates uncertainty, and
-preserves the original 2025 formulation as a versioned historical artifact.
+Traditional software release systems can tell you whether code changed. They do not reliably tell you whether an AI system's behavior changed in a way that matters to production.
 
-It does **not** claim access to proprietary model activations, decode an exact
-future sentence from an embedding, or prove that a model has a private
-language.
+Vector Tongue is designed to occupy that missing control point:
 
-## The research object
-
-For prompt \(p\), model \(m\), response \(y_{m,p}\), and a fixed external
-encoder \(E\):
-
-\[
-z_{m,p}=E(y_{m,p}).
-\]
-
-For source model \(A\) and target model \(B\), Vector Tongue learns a map on
-calibration prompts:
-
-\[
-\hat z_{B,p}=f_{A\rightarrow B}(z_{A,p}).
-\]
-
-The primary affine implementation is:
-
-\[
-\hat z_{B,p}=z_{A,p}W+b,
-\]
-
-with \(W,b\) estimated only from the training split. The claim succeeds only
-to the degree that it improves held-out prediction over declared baselines.
-
-```mermaid
-flowchart TD
-    P["Matched prompts"] --> A["Model A responses"]
-    P --> B["Model B responses"]
-    A --> E["Fixed external encoder"]
-    B --> E
-    E --> C["Calibration pairs"]
-    C --> T["Learn translation"]
-    T --> H["Held-out prediction"]
-    H --> V["Baselines + uncertainty + controls"]
+```text
+Current model / prompt / provider
+            │
+            ├── representative prompts
+            │
+            ▼
+      observed outputs
+            │
+            ▼
+    fixed external encoder
+            │
+            ▼
+  held-out translation + drift
+            │
+     baselines + controls
+            │
+            ▼
+     evidence-graded verdict
+            │
+            ▼
+         release gate
 ```
 
-## Why this is different from ordinary similarity scoring
+This makes Vector Tongue relevant to:
 
-Similarity asks whether two known outputs are close. Vector Tongue asks whether
-a transformation learned from earlier paired outputs generalizes to new paired
-outputs.
+- model-provider migrations;
+- checkpoint and API-version qualification;
+- prompt and policy regressions;
+- fine-tune replacement decisions;
+- AI gateway and routing validation;
+- vendor due diligence;
+- continuous model-change monitoring;
+- enterprise release governance.
 
-The repository separates:
+---
 
-- **description:** cosine distance, Euclidean displacement, norm shift, and the
-  historical Marler Drift v1 index;
-- **prediction:** held-out cross-model translation error;
-- **advantage:** improvement over identity, target-mean, and mean-shift
-  baselines;
-- **falsification:** shuffled-pair controls and prompt-level uncertainty;
-- **provenance:** hashes and external identifiers stored separately from
-  scientific results.
+## What is differentiated here
+
+Many AI evaluation and observability tools score known outputs, trace requests, or monitor production systems. Vector Tongue focuses on a narrower and more operational question: **whether a behavioral mapping learned between two AI systems generalizes to unseen prompts, and whether the residual change is acceptable for release.**
+
+For prompt `p`, model `m`, response `y(m,p)`, and a fixed external encoder `E`:
+
+```text
+z(m,p) = E(y(m,p))
+```
+
+For source model `A` and target model `B`, Vector Tongue learns on calibration prompts:
+
+```text
+z_hat(B,p) = f_A→B(z(A,p))
+```
+
+The current affine implementation is:
+
+```text
+z_hat(B,p) = z(A,p)W + b
+```
+
+The claim succeeds only to the degree that the learned map improves held-out prediction over declared baselines and survives controls.
+
+That distinction matters: **similarity describes outputs you already have; Vector Tongue tests whether observed cross-model behavior is predictably translatable on prompts you did not fit on.**
+
+---
+
+## Evidence grades
+
+Vector Tongue now treats provenance as part of the decision contract.
+
+| Grade | Meaning | Production release use |
+|---|---|---|
+| `SYNTHETIC_DEMO` | Deterministic generated test data | **Never** |
+| `USER_SUPPLIED` | User-provided paired embeddings or outputs | Conditional on dataset provenance |
+| `LIVE_PROVIDER_CALLS` | Measured outputs from configured provider APIs | Eligible for decision support, with representative prompts and policy thresholds |
+
+Synthetic demo results are explicitly barred from producing a production pass/fail verdict.
+
+---
+
+## Live provider comparison
+
+The industry-launch branch includes a server-side live comparison path for OpenAI and Gemini endpoints. Provider credentials stay in server environment variables and are never requested in the browser UI.
+
+For a live run, Vector Tongue:
+
+1. sends the same prompt set to Model A and Model B;
+2. stores observed outputs in the returned evidence record;
+3. encodes those outputs with one fixed external encoder;
+4. runs held-out translation, baselines, drift, and release logic;
+5. marks the result `LIVE_PROVIDER_CALLS`;
+6. exports a machine-readable audit record.
+
+This starter mode is a smoke-test path. Enterprise use should replace the starter prompt suite with production-representative traffic and organization-specific thresholds.
+
+---
 
 ## Quick start
+
+### Research package
 
 ```bash
 git clone https://github.com/RJMpgh/vector-tongue.git
@@ -88,20 +134,35 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
 vector-tongue demo
-```
-
-Run the tests:
-
-```bash
 python -m unittest discover -s tests -v
 ```
 
-The demonstration uses synthetic vectors with a known transformation. It
-checks the experiment machinery; it is not evidence about real models.
+### Web application
+
+```bash
+npm install
+npm run lint
+npm run build
+npm run dev
+```
+
+Environment configuration:
+
+```bash
+cp .env.example .env
+```
+
+The public UI supports three evidence paths:
+
+- deterministic demo;
+- uploaded paired embeddings;
+- live provider comparison when server credentials are configured.
+
+---
 
 ## Evaluate real paired embeddings
 
-Prepare a CSV with embeddings created by one fixed encoder:
+Prepare a CSV using one fixed external encoder:
 
 ```csv
 prompt_id,category,source_embedding,target_embedding
@@ -119,134 +180,127 @@ vector-tongue evaluate paired_embeddings.csv \
   --output results/evaluation.json
 ```
 
-For publishable work, freeze prompts and hypotheses first, split by prompt
-family where appropriate, retain raw response metadata, repeat generations,
-compare encoders, and preregister the primary metric. See the
-[research protocol](docs/RESEARCH_PROTOCOL.md).
+For publishable or enterprise-grade work, freeze prompt families and hypotheses first, preserve raw response metadata, repeat generations when stochasticity matters, compare encoder sensitivity, and preregister the primary metric. See [`docs/RESEARCH_PROTOCOL.md`](docs/RESEARCH_PROTOCOL.md).
 
-## Historical v1 and the mathematical correction
+---
+
+## Release engineering
+
+The repository includes:
+
+- Python unit and integration tests;
+- TypeScript typecheck and production build checks;
+- a CI truth-boundary test that rejects simulated commerce language;
+- a truth-boundary check requiring synthetic-data disclosure;
+- release-gate logic and machine-readable evidence exports;
+- a provenance manifest and verification tooling.
+
+This is intentional: the product is being built so claims, evidence, and release logic can be reviewed by a technical buyer rather than hidden behind presentation-only UI.
+
+---
+
+## Strategic buyer fit
+
+Vector Tongue is especially relevant to organizations that already own one of these surfaces:
+
+- AI observability and evaluation;
+- model gateways and routing;
+- foundation-model APIs;
+- AI developer platforms;
+- enterprise software delivery and release governance;
+- cloud AI platforms;
+- model-risk, testing, or assurance infrastructure.
+
+A buyer does not need Vector Tongue to replace an existing observability stack. The stronger integration thesis is to add **model-change qualification and release assurance** as a differentiated control layer inside an existing platform.
+
+See [`docs/STRATEGIC_BUYER_BRIEF.md`](docs/STRATEGIC_BUYER_BRIEF.md).
+
+---
+
+## Historical v1 and mathematical correction
 
 The August 5, 2025 public disclosure proposed:
 
-\[
-\delta=z_B-z_A,\qquad \hat z_B=z_A+\delta
-\]
-
-and:
-
-\[
-D_{\text{Marler-v1}}=(1-\cos(z_A,z_B))\lVert z_B-z_A\rVert_2.
-\]
-
-Those equations are preserved in [`prototype_v1/`](prototype_v1/) and
-[`docs/ORIGINAL_DISCLOSURE.md`](docs/ORIGINAL_DISCLOSURE.md).
-
-Two corrections define v2:
-
-1. A delta calculated from the target being “predicted” reconstructs that
-   target by definition. V2 estimates a transformation on calibration prompts
-   and evaluates it on unseen prompts.
-2. For unit-normalized vectors, cosine distance and Euclidean distance are
-   algebraically dependent. V2 reports interpretable components separately and
-   retains the product only as the explicitly historical v1 index.
-
-Correcting the prototype strengthens the original research question instead of
-retroactively changing its history.
-
-## Vector Tongue as a measurement layer
-
-Vector Tongue can evaluate controlled interventions from other systems. In
-[Synthetic Interoception Lab](https://github.com/RJMpgh/synthetic-interoception-lab),
-for example:
-
-\[
-\text{hardware telemetry}
-\rightarrow \text{control intervention}
-\rightarrow \text{model output}
-\rightarrow \text{Vector Tongue measurement}.
-\]
-
-Other plausible uses include:
-
-- model-version regression testing;
-- fine-tune and policy-change auditing;
-- cross-provider routing diagnostics;
-- multi-agent semantic compatibility;
-- longitudinal behavior monitoring;
-- decomposing systematic translation from prompt-specific residual drift.
-
-These are proposed uses, not validated product claims.
-
-## Priority and provenance
-
-The repository records:
-
-- RJ Marler's GitHub public disclosure dated August 5, 2025;
-- user-supplied SHA-256 values and timestamp metadata for later priority and
-  provisional-package artifacts;
-- fields for Polygon transaction, contract, token, and IPFS identifiers.
-
-The referenced files and complete Polygon identifiers were not available during
-repository construction, so their hashes and on-chain linkage have **not** been
-independently recomputed or verified here. Run:
-
-```bash
-vector-tongue verify-proof provenance/vector_tongue_priority_manifest.json
+```text
+delta = z_B - z_A
+z_hat_B = z_A + delta
 ```
 
-Missing artifacts are reported as missing—not silently treated as verified.
-See [Priority and Provenance](docs/PRIORITY_AND_PROVENANCE.md).
+and the historical Marler Drift v1 index:
 
-## Scientific status
+```text
+D_Marler-v1 = (1 - cos(z_A,z_B)) * ||z_B-z_A||_2
+```
 
-Implemented and tested:
+Those equations are preserved in [`prototype_v1/`](prototype_v1/) and [`docs/ORIGINAL_DISCLOSURE.md`](docs/ORIGINAL_DISCLOSURE.md).
+
+Version 2 corrects two issues:
+
+1. A delta computed from the same target being reconstructed is tautological; v2 estimates transformations on calibration prompts and evaluates on unseen prompts.
+2. For unit-normalized vectors, cosine distance and Euclidean distance are algebraically dependent; v2 reports interpretable components separately and retains the product only as the historical v1 index.
+
+The correction is part of the provenance record rather than being hidden.
+
+---
+
+## Scientific and commercial status
+
+Implemented:
 
 - safe geometric measures;
 - historical Marler Drift v1;
 - mean-shift, affine ridge, and orthogonal translation operators;
-- truly held-out evaluation;
-- three declared baselines;
-- prompt-level bootstrap intervals;
-- shuffled-pair negative-control machinery;
+- held-out evaluation;
+- declared baselines;
+- bootstrap uncertainty;
+- shuffled-pair controls;
 - deterministic synthetic demonstration;
-- provenance-manifest and local hash validation.
+- provenance verification;
+- evidence grading;
+- release-gate logic;
+- production web build checks;
+- live provider-comparison path when credentials are configured.
 
-Not yet established:
+Not yet established as a general scientific fact:
 
-- predictive advantage on a preregistered real multi-model dataset;
-- stability across encoders, prompt families, time, or providers;
-- exact response reconstruction;
-- correspondence with any model's private latent representation;
-- commercial usefulness or legal priority.
+- universal predictive advantage across all model families;
+- universal stability across encoders and domains;
+- exact future-response reconstruction;
+- equivalence to any private model representation;
+- universal migration-safety thresholds.
 
-The strongest defensible present claim is:
+The strongest defensible product claim is:
 
-> Vector Tongue is an implemented experimental framework for testing whether
-> stable cross-model transformations can predict held-out output embeddings
-> better than simple output-only baselines.
+> **Vector Tongue is an implemented black-box Model Change Assurance system for testing whether cross-model behavioral transformations generalize on held-out outputs, quantifying residual drift, and turning that evidence into an explicit release decision.**
+
+---
 
 ## Repository map
 
 ```text
-src/vector_tongue/     tested v2 research package
-prototype_v1/          preserved 2025 proof of concept
-tests/                 deterministic unit and integration tests
-docs/                  mathematics, protocol, claims, and provenance
-provenance/            machine-readable artifact-hash manifest
-examples/              input schema and reproducible examples
+src/vector_tongue/       tested v2 research package
+src/components/          production application surfaces
+src/lib/                 model-change analysis and release logic
+prototype_v1/            preserved historical prototype
+tests/                   deterministic research tests
+docs/                    methods, claims, buyer diligence, provenance
+provenance/              machine-readable priority manifest
+examples/                reproducible input examples
+.github/workflows/        build, test, and truth-boundary CI
 ```
 
-## Authorship and citation
+---
 
-RJ Marler originated the Vector Tongue framework, Output-Only Analysis framing,
-terminology, and original prototype. Version 2 was implemented with AI
-assistance under RJ Marler's direction. See [`AUTHORS.md`](AUTHORS.md) and
-[`CITATION.cff`](CITATION.cff).
+## Authorship, rights, and strategic inquiries
 
-## License
+RJ Marler originated the Vector Tongue framework, Output-Only Analysis framing, terminology, and original prototype. Version 2 and the product implementation were developed with AI assistance under RJ Marler's direction.
 
-Copyright © 2025–2026 RJ Marler. All rights reserved. The source is public for
-inspection, reproducibility discussion, and evaluation of the claims; no reuse
-license is granted by this repository. See [`LICENSE`](LICENSE). A standard
-research or open-source license should be selected with qualified legal advice
-before inviting third-party reuse.
+- Authorship: [`AUTHORS.md`](AUTHORS.md)
+- Citation: [`CITATION.cff`](CITATION.cff)
+- Priority/provenance: [`docs/PRIORITY_AND_PROVENANCE.md`](docs/PRIORITY_AND_PROVENANCE.md)
+- Claims boundary: [`docs/CLAIMS_AND_LIMITATIONS.md`](docs/CLAIMS_AND_LIMITATIONS.md)
+- Security: [`SECURITY.md`](SECURITY.md)
+
+Copyright © 2025–2026 RJ Marler. All rights reserved. See [`LICENSE`](LICENSE).
+
+For enterprise licensing, strategic partnership, exclusive-rights discussions, or acquisition diligence: **rjmarler8@gmail.com**
