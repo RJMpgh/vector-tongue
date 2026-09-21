@@ -1,6 +1,7 @@
 """Command-line interface for Vector Tongue: demo, evaluate, and verify-proof."""
 
 import argparse
+import json
 import random
 import sys
 from typing import List, Optional
@@ -11,6 +12,7 @@ from .evaluation import evaluate_experiment
 from .statistics import bootstrap_confidence_interval, permutation_control
 from .provenance import verify_manifest
 from .io import load_paired_csv, save_results_json
+from .anchors import load_anchor_registry
 
 
 def generate_synthetic_data(num_prompts: int = 40, dim: int = 8, seed: int = 42) -> PairedDataset:
@@ -146,6 +148,14 @@ def cmd_verify_proof(args: argparse.Namespace) -> int:
     return 0 if report["is_valid_structure"] else 1
 
 
+
+def cmd_validate_anchors(args: argparse.Namespace) -> int:
+    """Validate and summarize a Marlerian Anchor Registry."""
+    registry = load_anchor_registry(args.registry_path)
+    print(json.dumps(registry.summary(), indent=2))
+    return 0
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         prog="vector-tongue",
@@ -175,6 +185,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     verify_parser = subparsers.add_parser("verify-proof", help="Verify priority manifest structure")
     verify_parser.add_argument("manifest_path", type=str, help="Path to manifest JSON")
 
+    anchor_parser = subparsers.add_parser("validate-anchors", help="Validate a Marlerian Anchor Registry")
+    anchor_parser.add_argument("registry_path", type=str, help="Path to anchor registry JSON")
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
@@ -183,6 +196,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_evaluate(args)
     elif args.command == "verify-proof":
         return cmd_verify_proof(args)
+    elif args.command == "validate-anchors":
+        return cmd_validate_anchors(args)
     else:
         parser.print_help()
         return 1
