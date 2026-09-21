@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 — 2026-09-21
+
+- Ported the Marlerian Anchor Registry onto the current launch architecture.
+- Unified web, server, and Python package version identity.
+- Added build/commit provenance to health and product metadata.
+- Added structured launch-funnel events to deployment logs without customer PII.
+- Added downloadable executive Model Change Assurance reports.
+- Added a fixed-price founding Model Migration Audit offer.
+
+
 ## 0.2.0 — 2026-07-27
 
 - Reframed prediction as held-out cross-model translation.
