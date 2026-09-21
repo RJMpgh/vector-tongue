@@ -199,6 +199,28 @@ This is intentional: the product is being built so claims, evidence, and release
 
 ---
 
+## Founding paid pilot
+
+Vector Tongue can be purchased now as a scoped **Model Migration Audit** while the platform integration surface continues to mature.
+
+**Founding price: $1,500 USD for each of the first three pilots.** The deliverable includes a representative-prompt comparison, regression/risk map, evidence grade, release-gate result, machine-readable JSON, executive report, and results review. See [docs/FOUNDING_PILOT.md](docs/FOUNDING_PILOT.md).
+
+The paid pilot is decision support, not certification and not a guarantee of universal migration safety.
+
+---
+
+## Marlerian Anchor Registry
+
+The optional Anchor Registry adds versioned, contestable shared reference coordinates for multi-model calibration. The bundled illustrative draft covers evidential certainty, harm, meaningful agency, and burden transfer.
+
+```bash
+vector-tongue validate-anchors anchors/marlerian-baseline-v0.1.json
+```
+
+See [docs/MARLERIAN_ANCHOR_REGISTRY.md](docs/MARLERIAN_ANCHOR_REGISTRY.md).
+
+---
+
 ## Strategic buyer fit
 
 Vector Tongue is especially relevant to organizations that already own one of these surfaces:
@@ -285,6 +307,8 @@ prototype_v1/            preserved historical prototype
 tests/                   deterministic research tests
 docs/                    methods, claims, buyer diligence, provenance
 provenance/              machine-readable priority manifest
+anchors/                 versioned Marlerian reference registry
+schemas/                 machine-readable registry contract
 examples/                reproducible input examples
 .github/workflows/        build, test, and truth-boundary CI
 ```
