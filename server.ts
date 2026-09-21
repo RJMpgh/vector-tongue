@@ -16,7 +16,9 @@ import { pairedTargetPermutationTest } from "./src/lib/statistics";
 import { verifyManifest } from "./src/lib/provenance";
 
 const PORT = Number(process.env.PORT || 3000);
-const BUILD = "0.3.0-industry-launch";
+const VERSION = "0.3.0";
+const BUILD_COMMIT = process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || "local";
+const BUILD = `${VERSION}+${BUILD_COMMIT.slice(0, 8)}`;
 
 type Provider = "openai" | "gemini";
 
@@ -133,12 +135,14 @@ async function startServer() {
   });
 
   app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok", framework: "vector-tongue", version: BUILD });
+    res.json({ status: "ok", framework: "vector-tongue", version: VERSION, build: BUILD, commit: BUILD_COMMIT });
   });
 
   app.get("/api/product", (_req, res) => {
     res.json({
       name: "Vector Tongue",
+      version: VERSION,
+      build: BUILD,
       category: "Model Change Assurance",
       created_by: "RJ Marler",
       positioning: "Black-box behavioral change control for AI model migrations and releases.",
@@ -357,6 +361,22 @@ async function startServer() {
     return res.json({ prompt_count: Number(prompt_count), estimated_tokens: estTokens, estimated_api_calls: Number(prompt_count) * 2, estimated_cost_usd: Number(estCost.toFixed(4)), currency: "USD", disclaimer: "Estimate only; verify current provider pricing before purchase or deployment." });
   });
 
+  app.post("/api/events", (req, res) => {
+    const allowed = new Set(["pricing_opened", "audit_started", "audit_completed", "audit_failed", "report_downloaded", "inquiry_prepared"]);
+    const event = String(req.body?.event || "");
+    if (!allowed.has(event)) return res.status(400).json({ error: "Unknown launch event." });
+    console.log(JSON.stringify({
+      type: "vector_tongue_launch_event",
+      event,
+      timestamp: new Date().toISOString(),
+      path: String(req.body?.path || "").slice(0, 200),
+      meta: req.body?.meta && typeof req.body.meta === "object" ? req.body.meta : {},
+      version: VERSION,
+      build: BUILD,
+    }));
+    return res.status(202).json({ accepted: true });
+  });
+
   app.post("/api/checkout/inquire", (req, res) => {
     try {
       const { intent = "pilot", email = "", company = "", notes = "" } = req.body || {};
@@ -364,16 +384,19 @@ async function startServer() {
       const allowedIntents = new Set(["pilot", "enterprise", "strategic"]);
       const normalizedIntent = allowedIntents.has(String(intent)) ? String(intent) : "pilot";
       const inquiryId = `VT-INQ-${Date.now().toString(36).toUpperCase()}`;
+      const offer = normalizedIntent === "pilot" ? "Founding Model Migration Audit — $1,500 USD" : normalizedIntent;
       const subject = `Vector Tongue ${normalizedIntent} inquiry — ${company || email}`;
       const body = [
         `Inquiry ID: ${inquiryId}`,
         `Intent: ${normalizedIntent}`,
+        `Offer: ${offer}`,
         `Company: ${company || "Not provided"}`,
         `Contact: ${email}`,
         "",
         String(notes || "Please contact me about Vector Tongue."),
       ].join("\n");
       const mailtoUrl = `mailto:rjmarler8@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      console.log(JSON.stringify({ type: "vector_tongue_launch_event", event: "inquiry_prepared", timestamp: new Date().toISOString(), intent: normalizedIntent, version: VERSION, build: BUILD }));
       return res.json({
         success: true,
         status: "ready_to_send",

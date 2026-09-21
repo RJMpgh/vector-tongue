@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { trackLaunchEvent } from "../lib/telemetry";
 import { ArrowRight, Building2, Check, Mail, ShieldCheck, Sparkles, X } from "lucide-react";
 
 interface PricingModalProps {
@@ -8,22 +9,25 @@ interface PricingModalProps {
 
 type Offer = "pilot" | "enterprise" | "strategic";
 
-const offerCopy: Record<Offer, { name: string; eyebrow: string; description: string; bullets: string[] }> = {
+const offerCopy: Record<Offer, { name: string; eyebrow: string; price: string; description: string; bullets: string[] }> = {
   pilot: {
     name: "Model Migration Audit",
-    eyebrow: "Paid pilot",
+    eyebrow: "Founding paid pilot",
+    price: "$1,500 fixed • first 3 pilots",
     description: "A scoped, one-time comparison of a production model and candidate replacement using your representative prompt set.",
     bullets: ["Behavioral regression map", "High-risk prompt clusters", "Evidence-graded release recommendation", "Reproducible JSON + executive report"],
   },
   enterprise: {
     name: "Enterprise License",
     eyebrow: "Platform",
+    price: "Custom annual license",
     description: "Private commercial terms for teams that want Vector Tongue in their model qualification and release workflow.",
     bullets: ["Model Change Assurance workflow", "Release-gate integration", "Custom evaluation policy", "Security and deployment review"],
   },
   strategic: {
     name: "Strategic Technology Transaction",
     eyebrow: "Confidential",
+    price: "Custom transaction",
     description: "Technology licensing, exclusive rights, strategic partnership, or acquisition discussions for qualified buyers.",
     bullets: ["IP and provenance package", "Technical diligence materials", "Product and category roadmap", "Founder-led transition discussion"],
   },
@@ -39,6 +43,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
   const [error, setError] = useState<string | null>(null);
 
   const current = useMemo(() => offerCopy[offer], [offer]);
+  useEffect(() => { if (isOpen) trackLaunchEvent("pricing_opened"); }, [isOpen]);
   if (!isOpen) return null;
 
   const submit = async () => {
@@ -58,6 +63,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Unable to prepare inquiry");
       setHandoffUrl(data.mailto_url);
+      trackLaunchEvent("inquiry_prepared", { intent: offer });
     } catch (err: any) {
       setError(err.message || "Unable to prepare inquiry");
     } finally {
@@ -76,7 +82,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
             <Building2 className="w-3.5 h-3.5" /> Enterprise & Strategic Access
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mt-3">Buy the outcome, license the platform, or discuss the technology.</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mt-3">Start with a $1,500 migration audit. Expand only if the evidence earns it.</h2>
           <p className="text-sm text-slate-400 mt-2">No simulated checkout. No fake license keys. Commercial terms are confirmed directly with RJ Marler before money changes hands.</p>
         </div>
 
@@ -92,6 +98,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
               >
                 <div className="text-[10px] uppercase tracking-wider font-bold text-indigo-300">{item.eyebrow}</div>
                 <div className="font-bold text-white mt-1">{item.name}</div>
+                <div className="text-xs font-semibold text-emerald-300 mt-1">{item.price}</div>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">{item.description}</p>
               </button>
             );
@@ -104,6 +111,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
               {offer === "strategic" ? <Sparkles className="w-4 h-4 text-amber-300" /> : <ShieldCheck className="w-4 h-4 text-emerald-300" />}
               {current.name}
             </div>
+            <div className="text-sm font-bold text-emerald-300 mt-2">{current.price}</div>
             <ul className="space-y-2 mt-4 text-sm text-slate-300">
               {current.bullets.map((bullet) => (
                 <li key={bullet} className="flex gap-2"><Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />{bullet}</li>

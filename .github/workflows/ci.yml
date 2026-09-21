@@ -28,6 +28,8 @@ jobs:
         run: vector-tongue demo --output /tmp/vector-tongue-demo.json
       - name: Verify provenance manifest structure
         run: vector-tongue verify-proof provenance/vector_tongue_priority_manifest.json
+      - name: Validate Marlerian Anchor Registry
+        run: vector-tongue validate-anchors anchors/marlerian-baseline-v0.1.json
 
   web:
     name: Typecheck and production build

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vector-tongue"
-version = "0.2.0"
+version = "0.3.0"
 description = "A falsifiable, output-only framework for learning and testing behavioral translation between AI models."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -40,6 +40,11 @@ class TestCLI(unittest.TestCase):
             if os.path.exists(out_file):
                 os.unlink(out_file)
 
+    def test_validate_anchor_registry_command(self):
+        registry_path = os.path.join(os.path.dirname(__file__), "..", "anchors", "marlerian-baseline-v0.1.json")
+        exit_code = main(["validate-anchors", registry_path])
+        self.assertEqual(exit_code, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

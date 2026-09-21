@@ -19,6 +19,7 @@ import {
   TerminalSquare,
   XCircle,
 } from "lucide-react";
+import { trackLaunchEvent } from "../lib/telemetry";
 
 type Mode = "demo" | "upload" | "live";
 
@@ -88,6 +89,7 @@ export const IndustryLaunchWorkbench: React.FC<Props> = ({ onOpenEnterprise }) =
   });
 
   const runRequest = async (url: string, payload: any) => {
+    trackLaunchEvent("audit_started", { endpoint: url, mode });
     setLoading(true);
     setError(null);
     try {
@@ -99,7 +101,9 @@ export const IndustryLaunchWorkbench: React.FC<Props> = ({ onOpenEnterprise }) =
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || data.message || "Audit failed");
       setAudit(data);
+      trackLaunchEvent("audit_completed", { endpoint: url, mode, evidence_grade: data?.evidence?.grade || "unknown" });
     } catch (err: any) {
+      trackLaunchEvent("audit_failed", { endpoint: url, mode });
       setError(err.message || "Audit failed");
     } finally {
       setLoading(false);
@@ -130,6 +134,43 @@ export const IndustryLaunchWorkbench: React.FC<Props> = ({ onOpenEnterprise }) =
     a.download = `vector-tongue-${audit.id || "audit"}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    trackLaunchEvent("report_downloaded", { format: "json", evidence_grade: evidence.grade || "unknown" });
+  };
+
+  const downloadExecutiveReport = () => {
+    if (!audit) return;
+    const lines = [
+      "# Vector Tongue — Model Change Assurance Report",
+      "",
+      `Models: ${audit.model_a_name || "Model A"} → ${audit.model_b_name || "Model B"}`,
+      `Evidence grade: ${evidence.grade || "UNKNOWN"}`,
+      `Experiment: ${audit.id || "n/a"}`,
+      `Timestamp: ${audit.timestamp || new Date().toISOString()}`,
+      "",
+      "## Decision",
+      String(decisionEligible ? (audit.verdict_category || "Decision support") : "DEMO ONLY — not eligible for a production release decision"),
+      String(audit.decision_notice || evidence.note || ""),
+      "",
+      "## Four questions",
+      `What changed? ${questions.what_changed || "See machine-readable evidence."}`,
+      `Where? ${questions.where || questions.where_changed || "See prompt-level results."}`,
+      `Does it matter? ${questions.does_it_matter || "See risk and baseline results."}`,
+      `Can I ship? ${questions.can_i_ship || "Apply the declared release policy."}`,
+      "",
+      "## Core metrics",
+      `R² translation fit: ${stat(metrics.r2_score)}`,
+      `Mean cosine similarity: ${stat(metrics.mean_cosine_sim)}`,
+      "",
+      "This report is decision support tied to the stated evidence grade; it is not a certification or universal safety guarantee.",
+    ];
+    const blob = new Blob([lines.join("\\n")], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `vector-tongue-${audit.id || "audit"}-executive.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    trackLaunchEvent("report_downloaded", { format: "executive_markdown", evidence_grade: evidence.grade || "unknown" });
   };
 
   return (
@@ -257,7 +298,10 @@ export const IndustryLaunchWorkbench: React.FC<Props> = ({ onOpenEnterprise }) =
                   <h2 className="text-xl font-bold text-white mt-2">{audit.model_a_name} → {audit.model_b_name}</h2>
                   <p className="text-xs text-slate-500 mt-1">Experiment {audit.id || "—"} • {audit.timestamp || ""}</p>
                 </div>
-                <button onClick={download} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 bg-slate-950 text-xs text-slate-300 hover:text-white"><Download className="w-4 h-4" />Export evidence JSON</button>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={downloadExecutiveReport} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white text-slate-950 text-xs font-bold hover:bg-slate-200"><Download className="w-4 h-4" />Executive report</button>
+                  <button onClick={download} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 bg-slate-950 text-xs text-slate-300 hover:text-white"><Download className="w-4 h-4" />Evidence JSON</button>
+                </div>
               </div>
 
               <div className={`rounded-xl border p-4 ${decisionEligible ? "border-emerald-500/30 bg-emerald-950/20" : "border-amber-500/30 bg-amber-950/20"}`}>

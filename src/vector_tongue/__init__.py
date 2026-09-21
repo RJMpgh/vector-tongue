@@ -2,7 +2,7 @@
 behavioral translation between AI models.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "RJ Marler"
 
 from .geometry import (
@@ -22,6 +22,7 @@ from .models import (
 )
 from .evaluation import evaluate_experiment
 from .provenance import verify_manifest
+from .anchors import Anchor, AnchorRegistry, AnchorRegistryError, AnchorSpaceCalibrator, load_anchor_registry
 
 __all__ = [
     "cosine_similarity",
@@ -39,4 +40,9 @@ __all__ = [
     "OrthogonalTranslator",
     "evaluate_experiment",
     "verify_manifest",
+    "Anchor",
+    "AnchorRegistry",
+    "AnchorRegistryError",
+    "AnchorSpaceCalibrator",
+    "load_anchor_registry",
 ]
