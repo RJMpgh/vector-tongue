@@ -43,6 +43,7 @@ const livePrompts = [
 ];
 
 const stat = (value: unknown, digits = 2) => {
+  if (value === "NOT_MEASURED") return "NOT_MEASURED";
   const n = Number(value);
   return Number.isFinite(n) ? n.toFixed(digits) : "—";
 };

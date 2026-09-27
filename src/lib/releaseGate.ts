@@ -2,7 +2,7 @@
  * CI/CD Release Gate Engine for Vector Tongue.
  * Evaluates whether a candidate model meets automated release policy thresholds.
  */
-import { ReleaseGatePolicy, ReleaseGateResult, ReleaseGateRuleEvaluation } from "../types";
+import { Measurement, ReleaseGatePolicy, ReleaseGateResult, ReleaseGateRuleEvaluation } from "../types";
 
 export const DEFAULT_RELEASE_POLICY: ReleaseGatePolicy = {
   max_semantic_drift: 0.15,
@@ -14,52 +14,57 @@ export const DEFAULT_RELEASE_POLICY: ReleaseGatePolicy = {
 
 export function evaluateReleaseGate(
   metrics: {
-    semantic_drift: number;
-    max_critical_divergence: number;
-    retrieval_accuracy: number;
-    neighborhood_preservation: number;
+    semantic_drift: Measurement<number>;
+    max_critical_divergence: Measurement<number>;
+    retrieval_accuracy: Measurement<number>;
+    neighborhood_preservation: Measurement<number>;
     tested_samples: number;
   },
   policy: ReleaseGatePolicy = DEFAULT_RELEASE_POLICY
 ): ReleaseGateResult {
   const rules: ReleaseGateRuleEvaluation[] = [];
 
+  const measured = (value: Measurement<number>): value is number =>
+    typeof value === "number" && Number.isFinite(value);
+  const fmtPct = (value: Measurement<number>, scale = 100) =>
+    measured(value) ? `${(value * scale).toFixed(1)}%` : "NOT_MEASURED";
+
   // Rule 1: Overall Semantic Drift
-  const driftPassed = metrics.semantic_drift <= policy.max_semantic_drift;
+  const driftPassed = measured(metrics.semantic_drift) && metrics.semantic_drift <= policy.max_semantic_drift;
   rules.push({
     rule: "Overall Semantic Drift Limit",
     target_threshold: `≤ ${(policy.max_semantic_drift * 100).toFixed(1)}%`,
-    actual_value: `${(metrics.semantic_drift * 100).toFixed(1)}%`,
+    actual_value: fmtPct(metrics.semantic_drift),
     passed: driftPassed,
     severity: "critical",
   });
 
   // Rule 2: Critical Category Regression
-  const criticalPassed = metrics.max_critical_divergence <= policy.critical_category_max_divergence;
+  const criticalPassed = measured(metrics.max_critical_divergence) && metrics.max_critical_divergence <= policy.critical_category_max_divergence;
   rules.push({
     rule: "Critical Category Zero-Regression Boundary",
     target_threshold: `≤ ${(policy.critical_category_max_divergence * 100).toFixed(1)}%`,
-    actual_value: `${(metrics.max_critical_divergence * 100).toFixed(1)}%`,
+    actual_value: fmtPct(metrics.max_critical_divergence),
     passed: criticalPassed,
     severity: "critical",
   });
 
   // Rule 3: Top-1 Retrieval Preservation
-  const retrievalPassed = metrics.retrieval_accuracy >= policy.min_retrieval_preservation;
+  const retrievalPassed = measured(metrics.retrieval_accuracy) && metrics.retrieval_accuracy >= policy.min_retrieval_preservation;
   rules.push({
     rule: "Cross-Model Retrieval Preservation",
     target_threshold: `≥ ${policy.min_retrieval_preservation.toFixed(1)}%`,
-    actual_value: `${metrics.retrieval_accuracy.toFixed(1)}%`,
+    actual_value: measured(metrics.retrieval_accuracy) ? `${metrics.retrieval_accuracy.toFixed(1)}%` : "NOT_MEASURED",
     passed: retrievalPassed,
     severity: "warning",
   });
 
   // Rule 4: Neighborhood Retention
-  const neighborPassed = metrics.neighborhood_preservation >= policy.min_neighborhood_preservation;
+  const neighborPassed = measured(metrics.neighborhood_preservation) && metrics.neighborhood_preservation >= policy.min_neighborhood_preservation;
   rules.push({
     rule: "Top-10 Neighborhood Cluster Preservation",
     target_threshold: `≥ ${policy.min_neighborhood_preservation.toFixed(1)}%`,
-    actual_value: `${metrics.neighborhood_preservation.toFixed(1)}%`,
+    actual_value: measured(metrics.neighborhood_preservation) ? `${metrics.neighborhood_preservation.toFixed(1)}%` : "NOT_MEASURED",
     passed: neighborPassed,
     severity: "warning",
   });
@@ -82,9 +87,18 @@ export function evaluateReleaseGate(
   const failedCount = rules.filter((r) => !r.passed).length;
   const status: "PASS" | "FAIL" = overallPassed ? "PASS" : "FAIL";
 
+  const hasUnmeasured = [
+    metrics.semantic_drift,
+    metrics.max_critical_divergence,
+    metrics.retrieval_accuracy,
+    metrics.neighborhood_preservation,
+  ].some((value) => !measured(value));
+
   const summary = overallPassed
-    ? "GATE PASSED: Candidate model exhibits compliant behavioral alignment. Safe for release pipeline."
-    : `GATE FAILED: ${failedCount} release gate check(s) violated. Deployment blocked until drift is calibrated.`;
+    ? "GATE PASSED: measured metrics satisfy the declared release policy. This is not a universal safety certification."
+    : hasUnmeasured
+      ? `GATE FAILED: ${failedCount} check(s) failed or were NOT_MEASURED. Release decision remains incomplete.`
+      : `GATE FAILED: ${failedCount} release gate check(s) violated.`;
 
   return {
     status,
