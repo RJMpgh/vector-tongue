@@ -1,3 +1,5 @@
+export type Measurement<T = number> = T | "NOT_MEASURED";
+
 export interface EmbeddingPairItem {
   prompt_id: string;
   source: number[];
@@ -69,11 +71,11 @@ export interface ReconstructionLevelResult {
   level_name: string;
   description: string;
   metric: string;
-  score: number; // 0 to 100 or ratio
-  baseline_score: number;
-  effect_size: number; // Cohen's d or delta
-  confidence_interval: [number, number];
-  falsified: boolean;
+  score: Measurement<number>; // 0 to 100 or ratio when measured
+  baseline_score: Measurement<number>;
+  effect_size: Measurement<number>;
+  confidence_interval: Measurement<[number, number]>;
+  falsified: boolean | "NOT_MEASURED";
   notes: string;
 }
 
@@ -127,10 +129,10 @@ export interface ReleaseGateResult {
 
 export interface CostEstimate {
   prompt_count: number;
-  estimated_tokens: number;
-  estimated_api_calls: number;
-  estimated_duration_sec: number;
-  estimated_cost_usd: number;
+  estimated_tokens: Measurement<number>;
+  estimated_api_calls: Measurement<number>;
+  estimated_duration_sec: Measurement<number>;
+  estimated_cost_usd: Measurement<number>;
   currency: string;
 }
 
@@ -186,8 +188,8 @@ export interface ObservabilityAuditResult {
     model_type: string;
     r2_score: number;
     mean_cosine_sim: number;
-    neighborhood_preservation_k10: number; // rank order / top-k retention
-    rank_order_spearman: number;
+    neighborhood_preservation_k10: Measurement<number>; // top-k retention when enough held-out items exist
+    rank_order_spearman: Measurement<number>;
   };
   baselines: {
     identity_mse: number;
@@ -205,16 +207,16 @@ export interface ObservabilityAuditResult {
     id: string;
     statement: string;
     status: "SUPPORTED" | "REFUTED" | "INCONCLUSIVE";
-    p_value: number;
-    observed_statistic: number;
-    null_threshold: number;
+    p_value: Measurement<number>;
+    observed_statistic: Measurement<number>;
+    null_threshold: Measurement<number>;
     implication: string;
   }[];
   // Drift & Perturbation
   perturbation_robustness: {
-    prompt_noise_decay_rate: number;
-    temperature_sensitivity_gradient: number;
-    category_resilience: Record<string, number>;
+    prompt_noise_decay_rate: Measurement<number>;
+    temperature_sensitivity_gradient: Measurement<number>;
+    category_resilience: Measurement<Record<string, number>>;
   };
   summary: {
     verdict: string;
