@@ -31,9 +31,10 @@ import {
   ObservabilityAuditResult,
   ReconstructionLevelResult,
 } from "../types";
-import { createRng } from "./statistics";
 import { evaluateReleaseGate } from "./releaseGate";
 import { VTBENCH_VERSION } from "./vtBench";
+
+const NOT_MEASURED = "NOT_MEASURED" as const;
 
 export function computeMeanSquaredError(pred: Matrix, actual: Matrix): number {
   const n = pred.length;
@@ -150,12 +151,12 @@ export function evaluateReconstructionHierarchy(
   testTarget: Matrix,
   testPredicted: Matrix,
   categories: string[],
-  seed = 42
+  _seed = 42
 ): ReconstructionLevelResult[] {
-  const rng = createRng(seed);
   const n = testTarget.length;
 
-  // 1. Constrained Candidate Retrieval (Top-1 Cross-Model Accuracy)
+  // The only reconstruction claim measured here is constrained candidate retrieval.
+  // Every other probe remains explicit until a real evaluator is implemented.
   let retrievalHits = 0;
   for (let i = 0; i < n; i++) {
     const pred = testPredicted[i];
@@ -170,129 +171,95 @@ export function evaluateReconstructionHierarchy(
     }
     if (bestIdx === i) retrievalHits++;
   }
-  const top1Acc = (retrievalHits / n) * 100;
-  const chanceAcc = (1 / Math.max(1, n)) * 100;
 
-  // 2. Topic & Category Recovery (Category centroid accuracy)
-  const uniqueCats = Array.from(new Set(categories));
-  let topicHits = 0;
-  uniqueCats.forEach((cat) => {
-    const indices = categories.map((c, idx) => (c === cat ? idx : -1)).filter((idx) => idx >= 0);
-    if (indices.length > 0) {
-      // If average predicted cosine similarity within same category exceeds cross-category
-      topicHits++;
-    }
+  const top1Acc = n > 0 ? (retrievalHits / n) * 100 : 0;
+  const chanceAcc = n > 0 ? (1 / n) * 100 : 0;
+
+  const wilson95 = (successes: number, total: number): [number, number] | typeof NOT_MEASURED => {
+    if (total <= 0) return NOT_MEASURED;
+    const z = 1.959963984540054;
+    const p = successes / total;
+    const z2 = z * z;
+    const denom = 1 + z2 / total;
+    const center = (p + z2 / (2 * total)) / denom;
+    const margin = (z * Math.sqrt((p * (1 - p) + z2 / (4 * total)) / total)) / denom;
+    return [
+      Number((Math.max(0, center - margin) * 100).toFixed(1)),
+      Number((Math.min(1, center + margin) * 100).toFixed(1)),
+    ];
+  };
+
+  const unmeasured = (
+    level_name: string,
+    description: string,
+    metric: string,
+    notes: string
+  ): ReconstructionLevelResult => ({
+    level_name,
+    description,
+    metric,
+    score: NOT_MEASURED,
+    baseline_score: NOT_MEASURED,
+    effect_size: NOT_MEASURED,
+    confidence_interval: NOT_MEASURED,
+    falsified: NOT_MEASURED,
+    notes,
   });
-  const topicScore = Math.min(100, Math.max(0, 72 + (top1Acc * 0.25) + (rng() * 4 - 2)));
-
-  // 3. Intent & Task Classification Recovery
-  const intentScore = Math.min(100, Math.max(0, 68 + (top1Acc * 0.22) + (rng() * 5 - 2.5)));
-
-  // 4. Entity & Concept Disentanglement
-  const entityScore = Math.min(100, Math.max(0, 58 + (top1Acc * 0.2) + (rng() * 4 - 2)));
-
-  // 5. Sentiment / Affect Direction Preservation
-  const sentimentScore = Math.min(100, Math.max(0, 84 + (rng() * 6 - 3)));
-
-  // 6. Semantic Proposition & Relation Recovery
-  const propositionScore = Math.min(100, Math.max(0, 52 + (top1Acc * 0.18) + (rng() * 4 - 2)));
-
-  // 7. Approximate Wording / Paraphrase Retention
-  const approxWordingScore = Math.min(100, Math.max(0, 39 + (top1Acc * 0.14) + (rng() * 3 - 1.5)));
-
-  // 8. Exact Verbatim Text Reconstruction (Falsification check)
-  // Black-box embedding translation has severe entropy loss for arbitrary exact text tokens
-  const exactVerbatimScore = Math.max(0.0, Math.min(8.5, (rng() * 2.5)));
 
   return [
-    {
-      level_name: "Topic & Domain Categorization",
-      description: "Recovery of macro-topic partition from translated output coordinates",
-      metric: "Centroid Classification F1",
-      score: Number(topicScore.toFixed(1)),
-      baseline_score: 25.0,
-      effect_size: 1.84,
-      confidence_interval: [Number((topicScore - 3.2).toFixed(1)), Number((topicScore + 3.1).toFixed(1))],
-      falsified: false,
-      notes: "Strong separability maintained across major task domains.",
-    },
-    {
-      level_name: "Task Intent Recovery",
-      description: "Identification of user task intention (code generation vs reasoning vs factual lookup)",
-      metric: "Probing Accuracy (%)",
-      score: Number(intentScore.toFixed(1)),
-      baseline_score: 25.0,
-      effect_size: 1.62,
-      confidence_interval: [Number((intentScore - 4.1).toFixed(1)), Number((intentScore + 3.8).toFixed(1))],
-      falsified: false,
-      notes: "Linear probe distinguishes user goal states cleanly.",
-    },
-    {
-      level_name: "Sentiment & Tone Alignment",
-      description: "Preservation of evaluative polarity and tone vectors",
-      metric: "Directional Cosine Sim (%)",
-      score: Number(sentimentScore.toFixed(1)),
-      baseline_score: 50.0,
-      effect_size: 2.15,
-      confidence_interval: [Number((sentimentScore - 2.5).toFixed(1)), Number((sentimentScore + 2.3).toFixed(1))],
-      falsified: false,
-      notes: "Highly preserved across model generations.",
-    },
-    {
-      level_name: "Named Entity / Concept Recovery",
-      description: "Surrogate probe detecting focal entities referenced in prompt response",
-      metric: "Precision@K (%)",
-      score: Number(entityScore.toFixed(1)),
-      baseline_score: 18.0,
-      effect_size: 1.28,
-      confidence_interval: [Number((entityScore - 5.0).toFixed(1)), Number((entityScore + 4.9).toFixed(1))],
-      falsified: false,
-      notes: "Moderate-high concept presence retrievable from output clusters.",
-    },
-    {
-      level_name: "Semantic Proposition & Relations",
-      description: "Disentanglement of relational triples (Subject-Predicate-Object)",
-      metric: "Relation Match Rate (%)",
-      score: Number(propositionScore.toFixed(1)),
-      baseline_score: 12.0,
-      effect_size: 0.94,
-      confidence_interval: [Number((propositionScore - 4.8).toFixed(1)), Number((propositionScore + 5.1).toFixed(1))],
-      falsified: false,
-      notes: "Partial relational structure preserved; complex nesting displays loss.",
-    },
+    unmeasured(
+      "Topic & Domain Categorization",
+      "Recovery of macro-topic partition from translated output coordinates",
+      "Centroid Classification F1",
+      "NOT_MEASURED: no fitted topic classifier or labeled held-out probe is executed by this audit."
+    ),
+    unmeasured(
+      "Task Intent Recovery",
+      "Identification of user task intention",
+      "Probing Accuracy (%)",
+      "NOT_MEASURED: no intent probe is trained or evaluated."
+    ),
+    unmeasured(
+      "Sentiment & Tone Alignment",
+      "Preservation of evaluative polarity and tone",
+      "Directional Sentiment Agreement",
+      "NOT_MEASURED: no sentiment or tone evaluator is executed."
+    ),
+    unmeasured(
+      "Named Entity / Concept Recovery",
+      "Recovery of named entities or focal concepts",
+      "Precision@K (%)",
+      "NOT_MEASURED: no entity extraction ground truth is available in the paired embedding dataset."
+    ),
+    unmeasured(
+      "Semantic Proposition & Relations",
+      "Recovery of proposition and relation structure",
+      "Relation Match Rate (%)",
+      "NOT_MEASURED: no relation extractor or labeled triples are evaluated."
+    ),
     {
       level_name: "Candidate Output Retrieval (Top-1)",
-      description: "Retrieval of exact target response vector from pool of candidates",
-      metric: "Top-1 Retrieval Acc (%)",
+      description: "Retrieval of the paired target vector from the held-out candidate pool",
+      metric: "Top-1 Retrieval Accuracy (%)",
       score: Number(top1Acc.toFixed(1)),
       baseline_score: Number(chanceAcc.toFixed(1)),
-      effect_size: Number(((top1Acc - chanceAcc) / (chanceAcc || 1)).toFixed(2)),
-      confidence_interval: [Math.max(0, Number((top1Acc - 4.5).toFixed(1))), Number((top1Acc + 4.5).toFixed(1))],
-      falsified: top1Acc <= chanceAcc * 1.2,
-      notes: "Direct nearest-neighbor identification in target manifold.",
+      effect_size: NOT_MEASURED,
+      confidence_interval: wilson95(retrievalHits, n),
+      falsified: top1Acc <= chanceAcc,
+      notes: `Measured directly on ${n} held-out paired vectors; confidence interval is Wilson 95% for retrieval accuracy.`,
     },
-    {
-      level_name: "Approximate Paraphrase Wording",
-      description: "Cosine proximity to paraphrase candidate cluster",
-      metric: "ROUGE-Equivalent Overlap (%)",
-      score: Number(approxWordingScore.toFixed(1)),
-      baseline_score: 10.0,
-      effect_size: 0.65,
-      confidence_interval: [Number((approxWordingScore - 3.8).toFixed(1)), Number((approxWordingScore + 4.2).toFixed(1))],
-      falsified: false,
-      notes: "Captures general sentence phrasing; misses rare lexical tokens.",
-    },
-    {
-      level_name: "Verbatim Token-Level Reconstruction",
-      description: "Deterministic synthesis of exact lexical word sequence without generative decoder",
-      metric: "Exact Match Token %",
-      score: Number(exactVerbatimScore.toFixed(1)),
-      baseline_score: 0.1,
-      effect_size: 0.12,
-      confidence_interval: [0.0, 5.0],
-      falsified: true,
-      notes: "FALSIFIED AS EXPECTED: Dense output embeddings lose fine surface syntax and token-by-token sequence entropy without autoregressive decoding.",
-    },
+    unmeasured(
+      "Approximate Paraphrase Wording",
+      "Retention of approximate wording or paraphrase structure",
+      "Text overlap / semantic paraphrase score",
+      "NOT_MEASURED: the audit operates on vectors and does not run a text-level paraphrase evaluator."
+    ),
+    unmeasured(
+      "Verbatim Token-Level Reconstruction",
+      "Deterministic recovery of exact lexical sequences",
+      "Exact Match Token %",
+      "NOT_MEASURED: no decoder or token-level reconstruction test is executed."
+    ),
   ];
 }
 
@@ -352,8 +319,14 @@ export function runComparativeObservabilityAudit(
   const r2Score = Math.max(0, 1 - bestMSE / targetVariance);
 
   const meanCosSim = computeMeanCosineSimilarity(bestPred, test.target);
-  const neighborPreserve = computeNeighborhoodPreservation(test.source, test.target, 5);
-  const spearmanRank = computeDistanceRankOrderSpearman(test.source, test.target);
+  const neighborPreserve =
+    test.source.length > 10
+      ? computeNeighborhoodPreservation(test.source, test.target, 10)
+      : NOT_MEASURED;
+  const spearmanRank =
+    test.source.length >= 4
+      ? computeDistanceRankOrderSpearman(test.source, test.target)
+      : NOT_MEASURED;
 
   // Reconstruction hierarchy
   const hierarchy = evaluateReconstructionHierarchy(
@@ -364,54 +337,61 @@ export function runComparativeObservabilityAudit(
     seed
   );
 
-  // Formal Falsifiable Hypotheses
+  // Hypotheses report only measured statistics. Significance stays NOT_MEASURED
+  // until the corresponding permutation/bootstrap procedure is actually executed here.
   const hypotheses = [
     {
       id: "H1_GENERALIZABLE_TRANSLATION",
-      statement: "A stable cross-model transformation exists that outperforms target-mean and identity on unseen held-out prompts.",
+      statement: "A held-out affine translation outperforms target-mean and identity baselines.",
       status: (baselines.ridge_mse < baselines.target_mean_mse && baselines.ridge_mse < baselines.identity_mse) ? ("SUPPORTED" as const) : ("REFUTED" as const),
-      p_value: 0.001,
+      p_value: NOT_MEASURED,
       observed_statistic: Number((baselines.target_mean_mse - baselines.ridge_mse).toFixed(4)),
       null_threshold: 0.0,
-      implication: "Behavioral output manifold is structurally aligned across models; mapping generalizes without retraining.",
+      implication: "This result is a held-out error comparison only; statistical significance is NOT_MEASURED in this audit path.",
     },
     {
       id: "H2_GEOMETRIC_NEIGHBORHOOD_CONSERVATION",
-      statement: "Semantic neighborhood topology is preserved significantly beyond random permutation (p < 0.01).",
-      status: neighborPreserve > 0.35 ? ("SUPPORTED" as const) : ("REFUTED" as const),
-      p_value: 0.003,
-      observed_statistic: Number((neighborPreserve * 100).toFixed(1)),
-      null_threshold: 12.0,
-      implication: "Cluster geometry and relative concept clusters remain invariant to model architecture changes.",
+      statement: "Top-10 semantic neighborhoods are preserved across the paired spaces.",
+      status: neighborPreserve === NOT_MEASURED
+        ? ("INCONCLUSIVE" as const)
+        : neighborPreserve > 0.35
+          ? ("SUPPORTED" as const)
+          : ("REFUTED" as const),
+      p_value: NOT_MEASURED,
+      observed_statistic: neighborPreserve === NOT_MEASURED
+        ? NOT_MEASURED
+        : Number((neighborPreserve * 100).toFixed(1)),
+      null_threshold: NOT_MEASURED,
+      implication: neighborPreserve === NOT_MEASURED
+        ? "NOT_MEASURED: more than 10 held-out items are required for Top-10 neighborhood preservation."
+        : "Measured neighborhood overlap is reported without a significance claim.",
     },
     {
       id: "H3_NONLINEAR_ADVANTAGE",
-      statement: "Nonlinear Kernel/KNN mappings explain significantly more variance than linear Ridge affine models.",
+      statement: "The implemented RBF mapping improves held-out MSE over ridge by at least 5%.",
       status: baselines.kernel_rbf_mse < baselines.ridge_mse * 0.95 ? ("SUPPORTED" as const) : ("REFUTED" as const),
-      p_value: 0.18,
+      p_value: NOT_MEASURED,
       observed_statistic: Number((baselines.ridge_mse - baselines.kernel_rbf_mse).toFixed(4)),
-      null_threshold: 0.02,
-      implication: baselines.kernel_rbf_mse < baselines.ridge_mse * 0.95 
-        ? "Substantial nonlinear curvature exists between model latent representations."
-        : "Cross-model representational differences are predominantly affine (rotation + scale + translation); linear translators capture sufficient variance.",
+      null_threshold: Number((baselines.ridge_mse * 0.05).toFixed(4)),
+      implication: "This is a deterministic held-out model comparison; significance and curvature interpretation are NOT_MEASURED.",
     },
     {
       id: "H4_VERBATIM_TRANSPARENCY",
-      statement: "Black-box embedding translation permits verbatim deterministic recovery of exact output token sequences without auxiliary decoders.",
-      status: "REFUTED" as const,
-      p_value: 0.999,
-      observed_statistic: 4.2,
-      null_threshold: 80.0,
-      implication: "Preserves privacy & safety: output vectors capture semantic coordinates rather than verbatim text leakage.",
+      statement: "Black-box vector translation permits verbatim deterministic recovery of exact token sequences.",
+      status: "INCONCLUSIVE" as const,
+      p_value: NOT_MEASURED,
+      observed_statistic: NOT_MEASURED,
+      null_threshold: NOT_MEASURED,
+      implication: "NOT_MEASURED: this audit does not execute a token decoder or exact-text reconstruction experiment.",
     },
   ];
 
-  const representationalDistance = Number((1.0 - meanCosSim).toFixed(4));
+  const representationalDistance  const representationalDistance = Number((1.0 - meanCosSim).toFixed(4));
   const semanticDrift = representationalDistance;
 
   // Determine Verdict Category
   let verdictCategory: MigrationVerdict = "SAFE";
-  if (dataset.size < 20) {
+  if (dataset.size < 25 || neighborPreserve === NOT_MEASURED) {
     verdictCategory = "INSUFFICIENT EVIDENCE";
   } else if (r2Score >= 0.82 && semanticDrift <= 0.12 && neighborPreserve >= 0.50) {
     verdictCategory = "SAFE";
@@ -423,76 +403,85 @@ export function runComparativeObservabilityAudit(
     verdictCategory = "UNSAFE";
   }
 
-  // Extract High Risk Outlier Prompts from test set
-  const sampleErrors: { idx: number; err: number }[] = [];
+  // Extract measured high-error held-out pairs. The paired embedding dataset does not
+  // contain source prompt text or raw model outputs, so those fields stay NOT_MEASURED.
+  const sampleErrors: { idx: number; cosineDistance: number }[] = [];
   for (let i = 0; i < test.source.length; i++) {
     sampleErrors.push({
       idx: i,
-      err: l2Distance(bestPred[i], test.target[i]),
+      cosineDistance: 1 - cosineSimilarity(bestPred[i], test.target[i]),
     });
   }
-  sampleErrors.sort((a, b) => b.err - a.err);
+  sampleErrors.sort((a, b) => b.cosineDistance - a.cosineDistance);
 
-  const highRiskPrompts: HighRiskPrompt[] = sampleErrors.slice(0, 4).map((item, rank) => {
+  const highRiskPrompts: HighRiskPrompt[] = sampleErrors.slice(0, 4).map((item) => {
     const origIdx = item.idx;
     const cat = test.categories[origIdx] || "general_task";
     const promptId = test.prompt_ids[origIdx] || `prompt-${origIdx}`;
-    const pText =
-      origIdx === 0
-        ? "Summarize the legal liability boundaries under Section 230 for generative LLM outputs."
-        : origIdx === 1
-        ? "Given ambiguous clinical symptoms (headache, stiff neck, photophobia), provide prioritized triage."
-        : origIdx === 2
-        ? "Optimize SQL nested CTE queries with window functions across 100M transaction records."
-        : `Edge case prompt regarding ${cat} with high syntactic variation.`;
 
     return {
       id: promptId,
-      prompt: pText,
+      prompt: NOT_MEASURED,
       category: cat,
-      divergence_score: Number(Math.min(1.0, item.err).toFixed(3)),
-      risk_factor:
-        rank === 0
-          ? "Critical tone inversion & refusal policy shift"
-          : rank === 1
-          ? "Nuanced clinical reasoning priority drift"
-          : "Formatting delimiter mismatch on markdown tables",
-      model_a_output_snippet: "Structured response emphasizing safety disclosures and conservative liability advice...",
-      model_b_output_snippet: "Direct bulleted recommendations with minimal regulatory preamble...",
-      affected_dimension: (origIdx * 3) % dataset.dimension,
+      divergence_score: Number(item.cosineDistance.toFixed(6)),
+      risk_factor: "Measured held-out cosine distance; causal interpretation NOT_MEASURED.",
+      model_a_output_snippet: NOT_MEASURED,
+      model_b_output_snippet: NOT_MEASURED,
     };
   });
 
-  // Evaluate Release Gate
+  // Evaluate Release Gate  // Evaluate Release Gate
   const releaseGate = evaluateReleaseGate({
     semantic_drift: semanticDrift,
-    max_critical_divergence: highRiskPrompts[0]?.divergence_score || 0.18,
-    retrieval_accuracy: hierarchy.find((h) => h.level_name.includes("Candidate"))?.score || 85.0,
-    neighborhood_preservation: Number((neighborPreserve * 100).toFixed(1)),
+    max_critical_divergence: highRiskPrompts[0]?.divergence_score ?? NOT_MEASURED,
+    retrieval_accuracy: hierarchy.find((h) => h.level_name.includes("Candidate"))?.score ?? NOT_MEASURED,
+    neighborhood_preservation: neighborPreserve === NOT_MEASURED
+      ? NOT_MEASURED
+      : Number((neighborPreserve * 100).toFixed(1)),
     tested_samples: dataset.size,
   });
 
-  // 4 Core Questions
+  // Summarize only what this dataset actually measures.
+  const categoryErrors = new Map<string, number[]>();
+  sampleErrors.forEach(({ idx, cosineDistance }) => {
+    const category = test.categories[idx] || "general_task";
+    const values = categoryErrors.get(category) || [];
+    values.push(cosineDistance);
+    categoryErrors.set(category, values);
+  });
+  const categorySummary = Array.from(categoryErrors.entries())
+    .map(([category, values]) => ({
+      category,
+      mean: values.reduce((a, b) => a + b, 0) / values.length,
+      n: values.length,
+    }))
+    .sort((a, b) => b.mean - a.mean);
+
+  const whereMeasured = categorySummary.length
+    ? categorySummary
+        .slice(0, 3)
+        .map((x) => `${x.category}: mean cosine distance ${x.mean.toFixed(4)} (n=${x.n})`)
+        .join("; ")
+    : NOT_MEASURED;
+
   const fourQuestions: FourQuestionsSummary = {
-    what_changed: `Observed a ${(semanticDrift * 100).toFixed(1)}% representational shift between ${modelAName} and ${modelBName}. Translation explains ${(r2Score * 100).toFixed(1)}% of behavioral variance under affine mapping.`,
-    where_it_changed: `Divergence is concentrated in creative and safety-boundary prompts. Factual and instruction-following categories remained 94% invariant.`,
-    does_it_matter: semanticDrift > 0.15
-      ? `Yes. The divergence exceeds the 15% threshold for zero-shot substitution; downstream classifiers or prompts sensitive to formatting will observe subtle tone differences.`
-      : `Minimal impact. The shared behavioral geometry is tight enough that general chat, retrieval, and extraction tasks will maintain consistency.`,
-    can_i_ship: verdictCategory === "SAFE"
-      ? `YES, SAFE TO SHIP. Candidate model passes automated release gates. No critical regressions detected across canonical benchmark territory.`
-      : verdictCategory === "SAFE WITH CAVEATS"
-      ? `PROCEED WITH CAVEATS. Safe to deploy for general traffic, but inspect high-risk outliers in creative/reasoning categories before switching 100% of production volume.`
-      : `DO NOT SHIP DIRECTLY. Significant behavioral drift detected. Run targeted prompt calibration before migration.`,
+    what_changed: `Measured held-out mean cosine similarity is ${meanCosSim.toFixed(4)} (distance ${semanticDrift.toFixed(4)}); affine translation R² is ${r2Score.toFixed(3)}.`,
+    where_it_changed: whereMeasured === NOT_MEASURED
+      ? NOT_MEASURED
+      : `Highest measured category-level divergence: ${whereMeasured}.`,
+    does_it_matter: NOT_MEASURED,
+    can_i_ship: releaseGate.status === "PASS"
+      ? "POLICY PASS: measured metrics satisfy the current declared release-gate thresholds. This is not a universal safety certification."
+      : "POLICY FAIL: one or more measured release-gate rules failed or could not be measured.",
   };
 
-  const costEstimation: CostEstimate = {
+  const costEstimation  const costEstimation: CostEstimate = {
     prompt_count: dataset.size,
-    estimated_tokens: dataset.size * 512,
-    estimated_api_calls: dataset.size * 2,
-    estimated_duration_sec: Math.max(3, Math.round(dataset.size * 0.05)),
-    estimated_cost_usd: Number(((dataset.size * 512 * 2 * 0.0000005)).toFixed(4)),
-    currency: "USD",
+    estimated_tokens: NOT_MEASURED,
+    estimated_api_calls: NOT_MEASURED,
+    estimated_duration_sec: NOT_MEASURED,
+    estimated_cost_usd: NOT_MEASURED,
+    currency: NOT_MEASURED,
   };
 
   const experimentLedger: ExperimentLedger = {
@@ -504,8 +493,8 @@ export function runComparativeObservabilityAudit(
     sample_size: dataset.size,
     dimension: dataset.dimension,
     seed: seed,
-    commit_hash: "v2.0.4-prod",
-    hardware_arch: "Cloud Run V8 Node.js + Client WebAssembly Fallback",
+    commit_hash: NOT_MEASURED,
+    hardware_arch: NOT_MEASURED,
   };
 
   return {
@@ -525,26 +514,25 @@ export function runComparativeObservabilityAudit(
       model_type: "Ridge Affine with Tikhonov Regularization",
       r2_score: Number(r2Score.toFixed(3)),
       mean_cosine_sim: Number(meanCosSim.toFixed(4)),
-      neighborhood_preservation_k10: Number((neighborPreserve * 100).toFixed(1)),
-      rank_order_spearman: Number(spearmanRank.toFixed(3)),
+      neighborhood_preservation_k10: neighborPreserve === NOT_MEASURED
+        ? NOT_MEASURED
+        : Number((neighborPreserve * 100).toFixed(1)),
+      rank_order_spearman: spearmanRank === NOT_MEASURED
+        ? NOT_MEASURED
+        : Number(spearmanRank.toFixed(3)),
     },
     baselines,
     reconstruction_hierarchy: hierarchy,
     hypotheses,
     perturbation_robustness: {
-      prompt_noise_decay_rate: 0.082,
-      temperature_sensitivity_gradient: 0.14,
-      category_resilience: {
-        factual: 94.2,
-        reasoning: 88.5,
-        creative: 73.1,
-        safety: 96.8,
-      },
+      prompt_noise_decay_rate: NOT_MEASURED,
+      temperature_sensitivity_gradient: NOT_MEASURED,
+      category_resilience: NOT_MEASURED,
     },
     summary: {
       verdict: fourQuestions.can_i_ship,
       commercial_recommendation: fourQuestions.does_it_matter,
-      safe_to_migrate: verdictCategory === "SAFE" || verdictCategory === "SAFE WITH CAVEATS",
+      safe_to_migrate: releaseGate.status === "PASS",
       representational_distance: representationalDistance,
     },
   };
