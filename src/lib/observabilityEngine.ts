@@ -386,7 +386,7 @@ export function runComparativeObservabilityAudit(
     },
   ];
 
-  const representationalDistance  const representationalDistance = Number((1.0 - meanCosSim).toFixed(4));
+  const representationalDistance = Number((1.0 - meanCosSim).toFixed(4));
   const semanticDrift = representationalDistance;
 
   // Determine Verdict Category
@@ -430,7 +430,7 @@ export function runComparativeObservabilityAudit(
     };
   });
 
-  // Evaluate Release Gate  // Evaluate Release Gate
+  // Evaluate Release Gate
   const releaseGate = evaluateReleaseGate({
     semantic_drift: semanticDrift,
     max_critical_divergence: highRiskPrompts[0]?.divergence_score ?? NOT_MEASURED,
@@ -475,7 +475,7 @@ export function runComparativeObservabilityAudit(
       : "POLICY FAIL: one or more measured release-gate rules failed or could not be measured.",
   };
 
-  const costEstimation  const costEstimation: CostEstimate = {
+  const costEstimation: CostEstimate = {
     prompt_count: dataset.size,
     estimated_tokens: NOT_MEASURED,
     estimated_api_calls: NOT_MEASURED,
