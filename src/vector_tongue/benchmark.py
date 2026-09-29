@@ -1,7 +1,7 @@
 """MEL versus natural-language benchmark aggregation.
 
 The benchmark only aggregates supplied per-case evaluator losses. It never
-invent[s] model outputs or declares a winner when one route is missing.
+invent model outputs or declares a winner when one route is missing.
 """
 
 from __future__ import annotations
