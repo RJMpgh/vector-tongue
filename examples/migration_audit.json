@@ -18,7 +18,7 @@
       "prompt_id": "p002",
       "prompt_family": "instruction_following",
       "source_output": "Answer in one sentence.",
-      "target_output": "Answer in two sentences because more context is useful.",
+      "target_output": "Answer in one sentence.",
       "constraints": ["one sentence"]
     },
     {
