@@ -153,6 +153,17 @@ It is **not** a universal prompt-injection bypass or firewall. Adversarial inten
 The security hypothesis is falsifiable: compare attack success rates for direct natural-language handoffs versus validated MEL handoffs under the same adversarial test set.
 
 
+A reference structural gateway is included:
+
+```bash
+vector-tongue mel-policy-check \
+  examples/mel_reference.json \
+  examples/mel_policy.json
+```
+
+The gateway allowlists goals, tool predicates, and action predicates, can require provenance, and caps packet size. Passing the gateway means only that the packet satisfies those declared structural authorization rules; it is not proof that the semantic content is benign.
+
+
 ## Relationship to Vector Tongue
 
 Vector Tongue measures cross-model behavioral translation from outputs.
