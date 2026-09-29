@@ -245,6 +245,8 @@ def compare_mel(reference: MELMessage, candidate: MELMessage) -> MELComparison:
 
     preservation = 0.70 * f1 + 0.20 * float(goal_match) + 0.10 * constraint_j
     semantic_loss = min(1.0, max(0.0, 1.0 - preservation))
+    if abs(semantic_loss) < 1e-12:
+        semantic_loss = 0.0
 
     return MELComparison(
         goal_match=goal_match,
