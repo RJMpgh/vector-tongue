@@ -121,6 +121,38 @@ To decode MEL back into natural language:
 - Do not add claims not represented in the packet.
 - Preserve constraints.
 
+
+## Deployment hypotheses
+
+These are concrete use cases to test, not established performance claims.
+
+### Multi-agent handoffs
+
+Modern agent systems often divide work across planning, coding, retrieval, execution, and review components. MEL provides a canonical handoff packet so goals, constraints, assumptions, evidence, tool requests, and provenance do not have to be reconstructed from free-form prose at every hop.
+
+The measurable question is whether MEL lowers handoff loss, constraint loss, and parameter invention relative to direct natural-language agent-to-agent messaging.
+
+### Auditable compliance and safety
+
+MEL makes the semantic payload explicit enough to log and compare over time. A persisted packet can show which goal, claims, assumptions, constraints, provenance, and tool intent were present at a decision boundary.
+
+That can improve auditability, but only if the surrounding system actually records the packets and separately records executed tool actions. MEL does not by itself prove why a model acted or expose hidden model state.
+
+### Cross-model benchmarking, fine-tuning, and distillation
+
+The same source task can be encoded by multiple model versions or providers, then compared with `compare_mel` and Vector Tongue's independent embedding-space measurements.
+
+This enables experiments on whether fine-tuning, distillation, provider migration, or model replacement preserves semantic state across held-out tasks.
+
+### Prompt-injection attack-surface reduction
+
+A strict MEL gateway can reject malformed packets, unknown fields, disallowed tool predicates, and messages that fail policy validation before they reach downstream agents. This can reduce ambiguity and some classes of surface-level prompt injection.
+
+It is **not** a universal prompt-injection bypass or firewall. Adversarial intent can still be expressed inside valid semantic fields, and downstream tools can still be unsafe. MEL should therefore be combined with authorization checks, tool allowlists, provenance validation, least-privilege execution, and independent policy enforcement.
+
+The security hypothesis is falsifiable: compare attack success rates for direct natural-language handoffs versus validated MEL handoffs under the same adversarial test set.
+
+
 ## Relationship to Vector Tongue
 
 Vector Tongue measures cross-model behavioral translation from outputs.
