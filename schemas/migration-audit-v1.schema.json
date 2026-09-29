@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RJMpgh/vector-tongue/schemas/migration-audit-v1.schema.json",
+  "title": "Vector Tongue Migration Audit Input",
+  "type": "object",
+  "required": ["config", "records"],
+  "properties": {
+    "config": {
+      "type": "object",
+      "required": ["source_model", "target_model"],
+      "properties": {
+        "source_model": {"type": "string", "minLength": 1},
+        "target_model": {"type": "string", "minLength": 1},
+        "semantic_drift_threshold": {"type": ["number", "null"], "minimum": 0},
+        "constraint_violation_threshold": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["prompt_id", "prompt_family", "source_output", "target_output"],
+        "properties": {
+          "prompt_id": {"type": "string", "minLength": 1},
+          "prompt_family": {"type": "string", "minLength": 1},
+          "source_output": {"type": "string"},
+          "target_output": {"type": "string"},
+          "constraints": {"type": "array", "items": {"type": "string"}},
+          "expected_format": {"type": ["string", "null"]},
+          "source_embedding": {"type": ["array", "null"], "items": {"type": "number"}},
+          "target_embedding": {"type": ["array", "null"], "items": {"type": "number"}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

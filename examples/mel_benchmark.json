@@ -1,0 +1,6 @@
+{
+  "cases": [
+    {"case_id": "p001", "direct_semantic_loss": 0.30, "mel_semantic_loss": 0.20},
+    {"case_id": "p002", "direct_semantic_loss": 0.10, "mel_semantic_loss": 0.10}
+  ]
+}

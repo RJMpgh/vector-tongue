@@ -353,3 +353,18 @@ RJ Marler originated the Vector Tongue framework, Output-Only Analysis framing, 
 Copyright © 2025–2026 RJ Marler. All rights reserved. See [`LICENSE`](LICENSE).
 
 For enterprise licensing, strategic partnership, exclusive-rights discussions, or acquisition diligence: **rjmarler8@gmail.com**
+
+
+## Evidence-first migration audit
+
+The product-facing CLI now includes a batch migration audit:
+
+    vector-tongue migration-audit examples/migration_audit.json
+
+It records per-prompt response hashes, observable output changes, declared constraint violations, format changes, and optional paired embedding MSE. If semantic evidence is not supplied, the result is explicitly NOT_MEASURED and the default gate is INSUFFICIENT_DATA. It does not infer semantic equivalence from text similarity.
+
+The MEL route comparison command aggregates only supplied evaluator losses:
+
+    vector-tongue benchmark-mel examples/mel_benchmark.json
+
+It returns WIN, LOSS, TIE, or NOT_MEASURED. Bundled fixtures are reproducibility inputs, not customer or live-provider evidence. See [docs/MIGRATION_AUDIT.md](docs/MIGRATION_AUDIT.md), [docs/TECHNICAL_BUYER_BRIEF.md](docs/TECHNICAL_BUYER_BRIEF.md), and [schemas/migration-audit-v1.schema.json](schemas/migration-audit-v1.schema.json).

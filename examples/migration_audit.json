@@ -1,0 +1,32 @@
+{
+  "config": {
+    "source_model": "fixture/source-v1",
+    "target_model": "fixture/target-v2",
+    "semantic_drift_threshold": 0.08,
+    "constraint_violation_threshold": 0
+  },
+  "records": [
+    {
+      "prompt_id": "p001",
+      "prompt_family": "structured_extraction",
+      "source_output": "{\"name\":\"Ada\",\"role\":\"engineer\"}",
+      "target_output": "{\"name\":\"Ada\",\"role\":\"engineer\"}",
+      "expected_format": "json",
+      "constraints": ["Ada"]
+    },
+    {
+      "prompt_id": "p002",
+      "prompt_family": "instruction_following",
+      "source_output": "Answer in one sentence.",
+      "target_output": "Answer in one sentence.",
+      "constraints": ["one sentence"]
+    },
+    {
+      "prompt_id": "p003",
+      "prompt_family": "factual",
+      "source_output": "The answer is unknown from the supplied evidence.",
+      "target_output": "The answer is unknown from the supplied evidence.",
+      "constraints": ["unknown"]
+    }
+  ]
+}
