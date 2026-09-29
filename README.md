@@ -265,6 +265,31 @@ The correction is part of the provenance record rather than being hidden.
 
 ---
 
+
+## Model Esperanto Layer (MEL)
+
+MEL v0.1 is an experimental canonical interchange format for testing whether
+different models can preserve the same semantic state better through a
+structured intermediate representation than through ordinary natural-language
+handoffs.
+
+It separates goals, semantic atoms, constraints, provenance, epistemic status,
+and optional confidence. It does **not** claim that models already share a
+hidden language. Its central claim is falsifiable: across frozen model chains
+and prompts, MEL-mediated handoffs should produce lower semantic loss than
+direct natural-language handoffs.
+
+```bash
+vector-tongue mel-validate examples/mel_reference.json
+
+vector-tongue mel-compare \
+  examples/mel_reference.json \
+  examples/mel_candidate.json
+```
+
+The protocol, adapter contract, scoring rules, and falsification test are in
+[docs/MEL.md](docs/MEL.md).
+
 ## Scientific and commercial status
 
 Implemented:
