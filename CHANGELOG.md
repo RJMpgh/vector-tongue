@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- MEL v0.1 (Model Esperanto Layer) canonical semantic interchange packets.
+- Explicit epistemic status, provenance, constraints, and optional confidence.
+- Structural semantic-loss comparison with measured-only confidence error.
+- MEL JSON Schema, examples, documentation, deterministic tests, and CLI commands.
+
 ## 0.3.0 — 2026-09-21
 
 - Ported the Marlerian Anchor Registry onto the current launch architecture.
