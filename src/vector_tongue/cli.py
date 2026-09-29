@@ -14,6 +14,7 @@ from .provenance import verify_manifest
 from .io import load_paired_csv, save_results_json
 from .anchors import load_anchor_registry
 from .mel import MELMessage, compare_mel
+from .mel_policy import MELPolicy, evaluate_mel_policy
 
 
 def generate_synthetic_data(num_prompts: int = 40, dim: int = 8, seed: int = 42) -> PairedDataset:
@@ -182,6 +183,16 @@ def cmd_compare_mel(args: argparse.Namespace) -> int:
             handle.write("\n")
     return 0
 
+
+def cmd_mel_policy_check(args: argparse.Namespace) -> int:
+    """Evaluate a MEL packet against an explicit gateway policy."""
+    message = _load_mel_file(args.mel_path)
+    with open(args.policy_path, "r", encoding="utf-8") as handle:
+        policy = MELPolicy.from_json(handle.read())
+    report = evaluate_mel_policy(message, policy).to_dict()
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["allowed"] else 2
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         prog="vector-tongue",
@@ -222,6 +233,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     mel_compare_parser.add_argument("candidate_path", type=str, help="Candidate MEL JSON")
     mel_compare_parser.add_argument("--output", type=str, default=None, help="Optional output JSON path")
 
+    mel_policy_parser = subparsers.add_parser("mel-policy-check", help="Check a MEL packet against an explicit gateway policy")
+    mel_policy_parser.add_argument("mel_path", type=str, help="Path to MEL JSON")
+    mel_policy_parser.add_argument("policy_path", type=str, help="Path to MEL policy JSON")
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
@@ -236,6 +251,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_validate_mel(args)
     elif args.command == "mel-compare":
         return cmd_compare_mel(args)
+    elif args.command == "mel-policy-check":
+        return cmd_mel_policy_check(args)
     else:
         parser.print_help()
         return 1
