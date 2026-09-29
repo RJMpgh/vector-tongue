@@ -90,6 +90,19 @@ The claim succeeds only to the degree that the learned map improves held-out pre
 
 That distinction matters: **similarity describes outputs you already have; Vector Tongue tests whether observed cross-model behavior is predictably translatable on prompts you did not fit on.**
 
+
+---
+
+## Agent security: VT-Sec
+
+**EDR watches the endpoint. Vector Tongue watches the policy.**
+
+VT-Sec applies Vector Tongue to authorized agent-security evaluation: compare observable agent trajectories across controlled changes in tools, permissions, failures, prompts, and environment, then measure whether behavior adapts smoothly or crosses a material behavioral boundary.
+
+The goal is not to infer hidden intent. It is to detect and quantify externally observable policy-relevant change using declared baselines, fixed external measurement, controls, and uncertainty.
+
+See [`docs/VT_SEC.md`](docs/VT_SEC.md) for the defensive benchmark design, claims boundary, OWASP/NIST alignment, and proposed machine-readable vocabulary.
+
 ---
 
 ## Evidence grades
