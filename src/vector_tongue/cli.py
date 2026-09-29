@@ -13,6 +13,7 @@ from .statistics import bootstrap_confidence_interval, permutation_control
 from .provenance import verify_manifest
 from .io import load_paired_csv, save_results_json
 from .anchors import load_anchor_registry
+from .mel import MELMessage, compare_mel
 
 
 def generate_synthetic_data(num_prompts: int = 40, dim: int = 8, seed: int = 42) -> PairedDataset:
@@ -156,6 +157,31 @@ def cmd_validate_anchors(args: argparse.Namespace) -> int:
     return 0
 
 
+
+def _load_mel_file(path: str) -> MELMessage:
+    with open(path, "r", encoding="utf-8") as handle:
+        return MELMessage.from_json(handle.read())
+
+
+def cmd_validate_mel(args: argparse.Namespace) -> int:
+    """Validate and canonicalize a MEL v0.1 packet."""
+    message = _load_mel_file(args.mel_path)
+    print(message.canonical_json())
+    return 0
+
+
+def cmd_compare_mel(args: argparse.Namespace) -> int:
+    """Compare a candidate MEL packet with a reference packet."""
+    reference = _load_mel_file(args.reference_path)
+    candidate = _load_mel_file(args.candidate_path)
+    report = compare_mel(reference, candidate).to_dict()
+    print(json.dumps(report, indent=2, sort_keys=True))
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as handle:
+            json.dump(report, handle, indent=2, sort_keys=True)
+            handle.write("\n")
+    return 0
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         prog="vector-tongue",
@@ -188,6 +214,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     anchor_parser = subparsers.add_parser("validate-anchors", help="Validate a Marlerian Anchor Registry")
     anchor_parser.add_argument("registry_path", type=str, help="Path to anchor registry JSON")
 
+    mel_validate_parser = subparsers.add_parser("mel-validate", help="Validate and canonicalize a MEL v0.1 packet")
+    mel_validate_parser.add_argument("mel_path", type=str, help="Path to MEL JSON")
+
+    mel_compare_parser = subparsers.add_parser("mel-compare", help="Measure semantic loss between two MEL packets")
+    mel_compare_parser.add_argument("reference_path", type=str, help="Reference MEL JSON")
+    mel_compare_parser.add_argument("candidate_path", type=str, help="Candidate MEL JSON")
+    mel_compare_parser.add_argument("--output", type=str, default=None, help="Optional output JSON path")
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
@@ -198,6 +232,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_verify_proof(args)
     elif args.command == "validate-anchors":
         return cmd_validate_anchors(args)
+    elif args.command == "mel-validate":
+        return cmd_validate_mel(args)
+    elif args.command == "mel-compare":
+        return cmd_compare_mel(args)
     else:
         parser.print_help()
         return 1
