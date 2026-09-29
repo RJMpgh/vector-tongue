@@ -1,0 +1,7 @@
+{
+  "allowed_goals": ["explain", "summarize", "analyze"],
+  "allowed_tool_predicates": ["SEARCH", "READ"],
+  "allowed_action_predicates": ["RETURN_RESULT"],
+  "require_provenance": true,
+  "max_atoms": 50
+}

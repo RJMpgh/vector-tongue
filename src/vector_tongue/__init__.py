@@ -23,6 +23,8 @@ from .models import (
 from .evaluation import evaluate_experiment
 from .provenance import verify_manifest
 from .anchors import Anchor, AnchorRegistry, AnchorRegistryError, AnchorSpaceCalibrator, load_anchor_registry
+from .mel import MELAtom, MELMessage, MELComparison, MELError, compare_mel, validate_mel_json
+from .mel_policy import MELPolicy, MELPolicyReport, evaluate_mel_policy
 
 __all__ = [
     "cosine_similarity",
@@ -45,4 +47,13 @@ __all__ = [
     "AnchorRegistryError",
     "AnchorSpaceCalibrator",
     "load_anchor_registry",
+    "MELAtom",
+    "MELMessage",
+    "MELComparison",
+    "MELError",
+    "compare_mel",
+    "validate_mel_json",
+    "MELPolicy",
+    "MELPolicyReport",
+    "evaluate_mel_policy",
 ]

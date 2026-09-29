@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vector-tongue.dev/schemas/mel-v0.1.schema.json",
+  "title": "Model Esperanto Layer v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mel_version", "goal", "atoms", "constraints", "provenance"],
+  "properties": {
+    "mel_version": {"const": "0.1"},
+    "goal": {"type": "string", "minLength": 1},
+    "atoms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "predicate", "arguments"],
+        "properties": {
+          "kind": {
+            "enum": ["ENTITY", "RELATION", "ACTION", "PROPERTY", "GOAL", "CLAIM", "QUESTION", "CONDITION", "CONSTRAINT", "EVIDENCE", "UNCERTAINTY", "TIME", "CAUSE", "COUNTERFACTUAL", "TOOL", "RESULT", "PROVENANCE"]
+          },
+          "predicate": {"type": "string", "minLength": 1},
+          "arguments": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          },
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "epistemic_status": {"enum": ["known", "inferred", "assumed", "unknown"]},
+          "source": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "provenance": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  }
+}

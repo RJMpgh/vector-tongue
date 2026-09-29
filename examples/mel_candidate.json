@@ -1,0 +1,16 @@
+{
+  "mel_version": "0.1",
+  "goal": "explain",
+  "atoms": [
+    {
+      "kind": "RELATION",
+      "predicate": "CAUSES",
+      "arguments": ["heavy rainfall", "river level increase"],
+      "confidence": 0.70,
+      "epistemic_status": "inferred",
+      "source": "model-b"
+    }
+  ],
+  "constraints": ["avoid jargon"],
+  "provenance": ["model-b"]
+}

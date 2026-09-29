@@ -45,6 +45,22 @@ class TestCLI(unittest.TestCase):
         exit_code = main(["validate-anchors", registry_path])
         self.assertEqual(exit_code, 0)
 
+    def test_mel_validate_and_compare_commands(self):
+        root = os.path.join(os.path.dirname(__file__), "..")
+        reference = os.path.join(root, "examples", "mel_reference.json")
+        candidate = os.path.join(root, "examples", "mel_candidate.json")
+        self.assertEqual(main(["mel-validate", reference]), 0)
+
+        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as f:
+            out_file = f.name
+        try:
+            self.assertEqual(main(["mel-compare", reference, candidate, "--output", out_file]), 0)
+            self.assertTrue(os.path.exists(out_file))
+            self.assertGreater(os.path.getsize(out_file), 10)
+        finally:
+            if os.path.exists(out_file):
+                os.unlink(out_file)
+
 
 if __name__ == "__main__":
     unittest.main()
