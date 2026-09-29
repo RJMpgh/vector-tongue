@@ -1,0 +1,23 @@
+{
+  "mel_version": "0.1",
+  "goal": "explain",
+  "atoms": [
+    {
+      "kind": "RELATION",
+      "predicate": "CAUSES",
+      "arguments": ["heavy rainfall", "river level increase"],
+      "confidence": 0.76,
+      "epistemic_status": "inferred",
+      "source": "weather-observation-001"
+    },
+    {
+      "kind": "EVIDENCE",
+      "predicate": "OBSERVED",
+      "arguments": ["heavy rainfall"],
+      "epistemic_status": "known",
+      "source": "weather-observation-001"
+    }
+  ],
+  "constraints": ["avoid jargon"],
+  "provenance": ["weather-observation-001"]
+}
