@@ -1,0 +1,2 @@
+{"user_intent":"Read issue 10 in RJMpgh/vector-tongue","service":"github","action":"get_issue","payload":{"owner":"RJMpgh","repo":"vector-tongue","issue_number":10}}
+{"user_intent":"Update demo customer to active with tier 1","service":"crm","action":"crm_update","payload":{"customer_id":"demo-only","status":"active","discount_tier":"free"}}

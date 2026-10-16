@@ -22,22 +22,26 @@ Do not pass secrets as payload fields; the MCP client and host may retain inputs
 Use Python 3.10+ in an isolated environment:
 
 ```bash
-python -m pip install -r mcp-plugin/requirements.txt
+python -m pip install -r mcp-plugin/requirements-model.txt
 # Provision and verify a fixed all-MiniLM-L6-v2 snapshot separately.
 export VT_MODEL_PATH=/absolute/path/to/verified/model-snapshot
 python mcp-plugin/server.py
 ```
 
-The host starts this command over stdio. This is not a hosted Directory submission.
-Dependency ranges are for prototype setup; freeze and audit dependencies before deployment.
+The host starts this command over stdio. A portable plugin manifest and a repo
+marketplace entry are included for local preview testing. Install the dependencies
+in the Python environment the host uses; the plugin does not auto-install them.
+Without the optional model, schema validation still works and drift is NOT_MEASURED.
+This is not an approved or hosted Directory submission.
+The MCP runtime dependencies are pinned; model dependencies are optional and their direct versions are pinned. Audit and lock the complete dependency graph before production.
 
 ```bash
 PYTHONPATH=mcp-plugin python -m unittest discover -s mcp-plugin/tests -v
 ```
 
-The core tests use deterministic vector fixtures. They do not measure MiniLM
-accuracy, savings or MCP interoperability. Integration checks should run with the
-installed dependencies and a verified local model snapshot.
+The core tests use deterministic vector fixtures. They do not measure MiniLM accuracy or savings. Integration tests exercise actual
+FastMCP discovery, in-process calls and a stdio child process. The optional local MiniLM path also passed an offline smoke test on illustrative
+fixtures; see review/ENCODER_SMOKE.md. This is not an accuracy benchmark.
 
 ## Trust boundaries
 
@@ -94,3 +98,19 @@ These document MCP plugins and custom GPT migration. The reviewed migration page
 is Enterprise-focused and does not establish a universal December 11 retirement
 date. The supplied 28–35% failure rate, $4.50–$8/1,000 query cost, 30% savings,
 $300/month ROI and Agensi 70% split need independent evidence before publication.
+
+See [PILOT.md](PILOT.md) for a scoped evaluation offer and
+[review/READINESS.md](review/READINESS.md) for the current publication blockers.
+
+## Offline pilot reports
+
+Process redacted JSONL records (intent, service, action, payload only):
+
+```bash
+python mcp-plugin/batch_audit.py mcp-plugin/examples/redacted-demo.jsonl --synthetic-demo
+```
+
+The report omits prompts and payloads, counts structural outcomes, and leaves
+accuracy and savings NOT_MEASURED. Add `--semantic` to use an independently
+provisioned local model. Limit: 1,000 records, 16 KiB per line. Demo records are
+illustrative fixtures, not production traffic.

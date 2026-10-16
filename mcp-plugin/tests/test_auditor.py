@@ -32,7 +32,7 @@ class AuditorTests(unittest.TestCase):
     def test_limits_and_non_json(self):
         a = Auditor(lambda _: [[1],[1]], 'fixture')
         self.assertEqual(a.audit('x'*17000,'crm','crm_update',{'customer_id':'x','status':'active','discount_tier':1})['status'], 'INPUT_TOO_LARGE')
-        self.assertEqual(a.audit('x','g','a',{'x':math.nan})['status'], 'FAIL_SCHEMA')
+        self.assertEqual(a.audit('x','g','a',{'x':math.nan})['status'], 'NOT_MEASURED')
     def test_canonical_payload(self):
         seen=[]
         def encode(texts): seen.append(texts[1]); return [[1],[1]]

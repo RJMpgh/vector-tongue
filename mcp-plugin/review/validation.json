@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-16",
+  "runtime": {
+    "fastmcp": "2.14.7",
+    "pydantic": "2.14.1",
+    "sentence-transformers": "5.7.0",
+    "transformers": "5.20.1",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.5.4",
+    "mcp": "1.30.0"
+  },
+  "evidence_grade": "SYNTHETIC_DEMO",
+  "mcp_tests": 16,
+  "existing_python_tests": 34,
+  "semantic_accuracy": "NOT_MEASURED",
+  "net_savings": "NOT_MEASURED",
+  "model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+}

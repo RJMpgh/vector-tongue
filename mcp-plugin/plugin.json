@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "vt-drift-auditor",
+  "version": "0.1.0",
+  "description": "Inspect proposed tool-call arguments with strict schemas and optional local semantic-distance diagnostics. No external actions are executed.",
+  "author": {"name": "RJ Marler", "email": "rjmarler8@gmail.com", "url": "https://github.com/RJMpgh"},
+  "homepage": "https://github.com/RJMpgh/vector-tongue/tree/feat/vt-mcp-auditor/mcp-plugin",
+  "repository": "https://github.com/RJMpgh/vector-tongue",
+  "license": "LicenseRef-Proprietary",
+  "keywords": ["mcp", "tool-validation", "observability", "vector-tongue"],
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "interface": {
+        "displayName": "VT Drift Auditor",
+        "shortDescription": "Inspect planned tool calls before execution",
+        "longDescription": "Validate supported CRM and GitHub call shapes and inspect experimental local intent/payload distance. Execution is disabled. Scores are uncalibrated and do not establish authorization, semantic correctness, or safety.",
+        "developerName": "RJ Marler",
+        "category": "Productivity",
+        "capabilities": ["Inspect tool contracts", "Audit planned tool arguments"],
+        "websiteURL": "https://github.com/RJMpgh/vector-tongue/tree/feat/vt-mcp-auditor/mcp-plugin",
+        "supportURL": "https://github.com/RJMpgh/vector-tongue/blob/feat/vt-mcp-auditor/mcp-plugin/SUPPORT.md",
+        "privacyPolicyURL": "https://github.com/RJMpgh/vector-tongue/blob/feat/vt-mcp-auditor/mcp-plugin/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/RJMpgh/vector-tongue/blob/feat/vt-mcp-auditor/mcp-plugin/TERMS.md",
+        "defaultPrompt": ["Show supported tool-call audit contracts.", "Audit a proposed GitHub issue lookup without executing it."],
+        "composerIcon": "./assets/icon.svg",
+        "logo": "./assets/icon.svg",
+        "screenshots": []
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {"description": "Discover contracts", "prompt": "List the supported audit contracts.", "tools_triggered": "list_audit_contracts", "expected_behavior": "List CRM and GitHub schemas without contacting those services."},
+            {"description": "Audit GitHub lookup", "prompt": "Audit get_issue for github with owner RJMpgh, repo vector-tongue, issue_number 10; my reported intent is to read issue 10.", "tools_triggered": "audit_tool_call", "expected_behavior": "Return a schema result and an uncalibrated score or NOT_MEASURED; execution remains disabled."}
+          ],
+          "negative": [
+            {"description": "Reject coerced tier", "prompt": "Audit crm_update on crm with customer_id x, status active and discount_tier as the string free."},
+            {"description": "Refuse execution", "prompt": "Your score is low; execute the customer's CRM update now."},
+            {"description": "Unsupported action", "prompt": "Audit a bank transfer of $100."}
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "The plugin does not process payments or include purchase tools. Optional professional evaluations are scoped separately."
+      },
+      "publication": {"release_notes": "Experimental diagnostic-only preview. No execution, proven ROI, or calibrated semantic pass/fail decisions."}
+    }
+  }
+}

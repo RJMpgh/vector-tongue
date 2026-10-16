@@ -1,0 +1,4 @@
+interface:
+  display_name: "VT Tool-call Auditor"
+  short_description: "Inspect planned tool arguments and drift diagnostics"
+  default_prompt: "Use $vt-audit-tool-call to inspect a planned tool call without executing it."
