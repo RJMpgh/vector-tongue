@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+  title: VT Audit REST Adapter Contract (not implemented)
+  version: 0.1.0
+  description: Future audit-only REST contract. MCP is served over stdio by server.py.
+paths:
+  /audit:
+    post:
+      operationId: auditToolCall
+      description: Diagnostic only; does not authorize, rotate credentials or execute actions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [user_intent, service, action, payload]
+              properties:
+                user_intent: {type: string, minLength: 1}
+                service: {type: string, minLength: 1}
+                action: {type: string, minLength: 1}
+                payload: {type: object}
+      responses:
+        '200':
+          description: Diagnostic result, never execution authorization.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, g, execution]
+                properties:
+                  status: {type: string}
+                  g: {type: [number, 'null'], minimum: 0, maximum: 4}
+                  execution: {const: DISABLED}
