@@ -65,3 +65,18 @@ jobs:
         run: |
           grep -q "SYNTHETIC_DEMO" server.ts
           grep -q "Synthetic" src/components/IndustryLaunchWorkbench.tsx
+
+  mcp-plugin:
+    name: MCP plugin protocol and contract tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: mcp-plugin/requirements.txt
+      - name: Install diagnostic runtime
+        run: python -m pip install -r mcp-plugin/requirements.txt
+      - name: Test audit core and actual MCP stdio protocol
+        run: PYTHONPATH=mcp-plugin python -m unittest discover -s mcp-plugin/tests -v
