@@ -24,6 +24,7 @@ A convenience command may also be exposed as `vector-tongue mel-assurance`. The 
 - Argument-level aliases allow only manually reviewed, **frozen** whole-argument equivalences; they are not automatic entailment. Review labels are unauthenticated strings, not proof of actual independent review.
 - Atom match preserves predicate, argument order and epistemic status; flags certainty changes and novel "known" assertions relative to the supplied reference.
 - Constraint F1, provenance F1, atom source recall and goal preservation are **separate** measurements. The comparator reports unexpected TOOL/ACTION atoms but does not execute them.
+- Optional `vt_observation` accepts one declared frozen external encoder identifier and reference/direct/MEL embeddings of matching nonzero dimensions; Vector Tongue's existing `geometry.compute_pair_metrics` supplies cosine distance, Euclidean distance, and historical Marler drift. These observations remain **diagnostic-only** and never influence semantic anchor scoring or prove ground truth. The declared encoder ID is not independently authenticated.
 - Source identifiers and the ground-truth reference are treated as input data, **not authenticated evidence**. Source equality is not source authenticity.
 - The declared **protocol loss** is a tunable engineering convention:
 
