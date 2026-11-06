@@ -15,6 +15,7 @@ from .io import load_paired_csv, save_results_json
 from .anchors import load_anchor_registry
 from .mel import MELMessage, compare_mel
 from .mel_policy import MELPolicy, evaluate_mel_policy
+from .mel_assurance import main as mel_assurance_main
 
 
 def generate_synthetic_data(num_prompts: int = 40, dim: int = 8, seed: int = 42) -> PairedDataset:
@@ -237,6 +238,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     mel_policy_parser.add_argument("mel_path", type=str, help="Path to MEL JSON")
     mel_policy_parser.add_argument("policy_path", type=str, help="Path to MEL policy JSON")
 
+    assurance_parser = subparsers.add_parser(
+        "mel-assurance", help="Paired, ground-truth-led audit of direct vs MEL handoffs"
+    )
+    assurance_parser.add_argument("benchmark_path", type=str)
+    assurance_parser.add_argument("--output", type=str, default=None)
+    assurance_parser.add_argument("--seed", type=int, default=42)
+    assurance_parser.add_argument("--resamples", type=int, default=2000)
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
@@ -253,6 +262,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         return cmd_compare_mel(args)
     elif args.command == "mel-policy-check":
         return cmd_mel_policy_check(args)
+    elif args.command == "mel-assurance":
+        call = [args.benchmark_path, "--seed", str(args.seed), "--resamples", str(args.resamples)]
+        if args.output:
+            call += ["--output", args.output]
+        return mel_assurance_main(call)
     else:
         parser.print_help()
         return 1
