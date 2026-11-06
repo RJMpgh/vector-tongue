@@ -61,6 +61,21 @@
         ],
         "constraints": [],
         "provenance": []
+      },
+      "vt_observation": {
+        "encoder_id": "fixture-fixed-encoder-not-authenticated",
+        "reference_embedding": [
+          1,
+          0
+        ],
+        "direct_embedding": [
+          0.96,
+          0.04
+        ],
+        "mel_embedding": [
+          1,
+          0
+        ]
       }
     },
     {
