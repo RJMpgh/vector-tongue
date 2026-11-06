@@ -142,6 +142,18 @@ class TestAssurance(unittest.TestCase):
         with self.assertRaises(AssuranceError):
             evaluate_benchmark(bench)
 
+    def test_confidence_change_is_not_exact_handoff(self):
+        a = atom()
+        a['confidence'] = 0.9
+        reference = packet(a)
+        b = atom()
+        b['confidence'] = 0.3
+        candidate = packet(b)
+        score = score_packet(reference, candidate)
+        self.assertFalse(score['exact_handoff'])
+        self.assertAlmostEqual(score['confidence_mae_when_measured'], 0.6)
+        self.assertEqual(score['protocol_loss'], 0.0)
+
     def test_all_empty_atoms_do_not_score_as_improvement(self):
         r = packet()
         result = score_packet(r, r)
