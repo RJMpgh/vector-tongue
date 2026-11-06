@@ -290,6 +290,24 @@ vector-tongue mel-compare \
 The protocol, adapter contract, scoring rules, and falsification test are in
 [docs/MEL.md](docs/MEL.md).
 
+### MEL Assurance: measure handoff integrity
+
+MEL Assurance is an experimental **ground-truth-led, output-only regression benchmark** for
+direct natural-language vs. MEL-mediated cross-model handoffs. It detects directional
+relation errors, loss of constraints or source identifiers, unsupported increases in
+certainty, and additional tool/action atoms. Reviewed aliases avoid penalizing specified
+paraphrases solely because their strings differ.
+
+```bash
+vector-tongue mel-assurance examples/mel_assurance_demo.json --output assurance-report.json
+python -m unittest discover -s tests -v
+```
+
+The demo is **synthetic** and intentionally includes MEL failures. It is not evidence
+that any provider or model performs better with MEL. The scoring formula is a declared
+protocol convention, and independent model trials and adjudicated real-world references
+are still needed. See [the research guide](docs/MEL_ASSURANCE.md).
+
 ## Scientific and commercial status
 
 Implemented:
