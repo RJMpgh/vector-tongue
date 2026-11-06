@@ -10,13 +10,13 @@ Models can hand off perfectly schema-conformant payloads that nonetheless corrup
 
 ## Run
 
-\`\`\`bash
+```bash
 python -m vector_tongue.mel_assurance examples/mel_assurance_demo.json \
   --seed 42 --resamples 2000 --output assurance-report.json
 python -m unittest discover -s tests -v
-\`\`\`
+```
 
-A convenience command may also be exposed as \`vector-tongue mel-assurance\`. The bundled examples are **SYNTHETIC_DEMO** only. They include an explicit MEL regression and a case where both routes fail, so do not use the demo score to claim efficacy.
+A convenience command may also be exposed as `vector-tongue mel-assurance`. The bundled examples are **SYNTHETIC_DEMO** only. They include an explicit MEL regression and a case where both routes fail, so do not use the demo score to claim efficacy.
 
 ## Contract and measurements
 
@@ -27,15 +27,15 @@ A convenience command may also be exposed as \`vector-tongue mel-assurance\`. Th
 - Source identifiers and the ground-truth reference are treated as input data, **not authenticated evidence**. Source equality is not source authenticity.
 - The declared **protocol loss** is a tunable engineering convention:
 
-\`\`\`text
+```text
 L = 1 - (0.55*atom_F1 + 0.15*constraint_F1
          + 0.10*goal_match + 0.10*provenance_F1
          + 0.10*atom_source_recall)
-\`\`\`
+```
 
 It is **not** a universal semantic distance. Also report component metrics, exact anchor match and a confidence MAE only when both packets include measured confidence. "Exact handoff" means equality against the provided reference, not that the underlying claim is true.
 
-For two routes, compute a **paired** improvement for every \`case_id\`: \`protocol_loss(direct) - protocol_loss(mel)\`. Resample whole cases (never individual atoms), and report paired percentile bootstrap 95% intervals, per-family outcomes, and any MEL regressions. A synthetic run must report \`model_capability_advantage: NOT_MEASURED\`.
+For two routes, compute a **paired** improvement for every `case_id`: `protocol_loss(direct) - protocol_loss(mel)`. Resample whole cases (never individual atoms), and report paired percentile bootstrap 95% intervals, per-family outcomes, and any MEL regressions. A synthetic run must report `model_capability_advantage: NOT_MEASURED`.
 
 ## Research motivation and adversarial controls
 
