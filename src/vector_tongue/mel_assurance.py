@@ -253,6 +253,41 @@ def score_packet(reference: Any, candidate: Any, aliases: Mapping[str, str] | No
     }
 
 
+def score_vt_diagnostic(raw: Any) -> dict[str, Any]:
+    """Optional independent fixed-encoder drift; never a semantic truth label.
+
+    Vector Tongue geometry is deliberately kept out of MEL protocol loss.
+    """
+    value = _object(raw, "vt_observation")
+    keys = {"encoder_id", "reference_embedding", "direct_embedding", "mel_embedding"}
+    if set(value) != keys:
+        raise AssuranceError("vt_observation requires encoder_id and three fixed-encoder embeddings")
+    encoder_id = _text(value["encoder_id"], "encoder_id")
+    vectors = []
+    for field in ("reference_embedding", "direct_embedding", "mel_embedding"):
+        vector = value[field]
+        if not isinstance(vector, list) or not vector or any(
+            isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
+            for v in vector
+        ):
+            raise AssuranceError(f"{field} must be a nonempty array of finite numbers")
+        if not any(v != 0 for v in vector):
+            raise AssuranceError("zero embeddings have undefined cosine similarity")
+        vectors.append(vector)
+    if len(set(map(len, vectors))) != 1:
+        raise AssuranceError("VT vectors must have equal embedding dimensions")
+    from .geometry import compute_pair_metrics
+    ref, direct, mel = vectors
+    return {
+        "encoder_id_declared": encoder_id,
+        "direct": compute_pair_metrics(ref, direct),
+        "mel": compute_pair_metrics(ref, mel),
+        "diagnostic_only": True,
+        "verified_external_encoder": False,
+        "warning": "Geometry does not establish factual correctness or internal model state",
+    }
+
+
 def _paired_ci(deltas: list[float], seed: int, resamples: int) -> list[float] | None:
     if len(deltas) < 2:
         return None
@@ -285,8 +320,9 @@ def evaluate_benchmark(raw: Any, seed: int = 42, resamples: int = 2000) -> dict[
     seen: set[str] = set()
     for case in cases:
         case = _object(case, "case")
-        if set(case) != {"case_id", "family", "reference", "direct", "mel"}:
-            raise AssuranceError("each case requires case_id, family, reference, direct, mel")
+        required = {"case_id", "family", "reference", "direct", "mel"}
+        if not required <= set(case) or set(case) - required - {"vt_observation"}:
+            raise AssuranceError("each case requires case_id, family, reference, direct, mel; VT observation is optional")
         case_id = _text(case["case_id"], "case_id")
         if case_id in seen:
             raise AssuranceError("duplicate case_id; paired bootstrap requires independent case units")
@@ -295,10 +331,13 @@ def evaluate_benchmark(raw: Any, seed: int = 42, resamples: int = 2000) -> dict[
         direct = score_packet(case["reference"], case["direct"], aliases)
         mel = score_packet(case["reference"], case["mel"], aliases)
         delta = direct["protocol_loss"] - mel["protocol_loss"]
-        rows.append({
+        row = {
             "case_id": case_id, "family": family, "direct": direct,
             "mel": mel, "mel_improvement_positive": round(delta, 12)
-        })
+        }
+        if "vt_observation" in case:
+            row["vt_diagnostic"] = score_vt_diagnostic(case["vt_observation"])
+        rows.append(row)
 
     improvements = [row["mel_improvement_positive"] for row in rows]
     group: dict[str, list[float]] = defaultdict(list)
