@@ -229,9 +229,16 @@ def score_packet(reference: Any, candidate: Any, aliases: Mapping[str, str] | No
         0.55 * f1 + 0.15 * constraint_f1 + 0.10 * float(goal_match)
         + 0.10 * provenance_f1 + 0.10 * source_recall
     )
+    confidence_preserved = all(
+        ref_atom["confidence"] == next(
+            (a["confidence"] for a in cand["atoms"] if _signature(a, aliases) == _signature(ref_atom, aliases)), None
+        )
+        for ref_atom in ref["atoms"]
+    )
     exact_handoff = bool(
         ref_keys == cand_keys and goal_match and ref_constraints == cand_constraints
         and ref_provenance == cand_provenance and source_recall == 1.0
+        and confidence_preserved
     )
     return {
         "atom_precision": precision, "atom_recall": recall, "atom_f1": f1,
