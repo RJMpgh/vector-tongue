@@ -1,0 +1,473 @@
+{
+  "benchmark_version": "0.1",
+  "evidence_grade": "SYNTHETIC_DEMO",
+  "aliases": [
+    {
+      "canonical": "permit expires Friday",
+      "variants": [
+        "authorization lapses Friday"
+      ],
+      "reviewed_by": "fixture author; illustrative only"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "paraphrase-neutral",
+      "family": "paraphrase",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "permit expires Friday"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "authorization lapses Friday"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "permit expires Friday"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "vt_observation": {
+        "encoder_id": "fixture-fixed-encoder-not-authenticated",
+        "reference_embedding": [
+          1,
+          0
+        ],
+        "direct_embedding": [
+          0.96,
+          0.04
+        ],
+        "mel_embedding": [
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "case_id": "epistemic-escalation",
+      "family": "epistemic",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "evidence is incomplete"
+            ],
+            "epistemic_status": "unknown"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "evidence is incomplete"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "evidence is incomplete"
+            ],
+            "epistemic_status": "unknown"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      }
+    },
+    {
+      "case_id": "constraint-drop",
+      "family": "constraints",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "ACTION",
+            "predicate": "RETURN_RESULT",
+            "arguments": [
+              "summary"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [
+          "never send email"
+        ],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "ACTION",
+            "predicate": "RETURN_RESULT",
+            "arguments": [
+              "summary"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "ACTION",
+            "predicate": "RETURN_RESULT",
+            "arguments": [
+              "summary"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [
+          "never send email"
+        ],
+        "provenance": []
+      }
+    },
+    {
+      "case_id": "predicate-flip",
+      "family": "relations",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "RELATION",
+            "predicate": "PREVENTS",
+            "arguments": [
+              "safety lock",
+              "unauthorized execution"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "RELATION",
+            "predicate": "ENABLES",
+            "arguments": [
+              "safety lock",
+              "unauthorized execution"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "RELATION",
+            "predicate": "PREVENTS",
+            "arguments": [
+              "safety lock",
+              "unauthorized execution"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      }
+    },
+    {
+      "case_id": "source-substitution",
+      "family": "provenance",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "EVIDENCE",
+            "predicate": "RECORDED",
+            "arguments": [
+              "measurement id 42"
+            ],
+            "epistemic_status": "known",
+            "source": "record-42"
+          }
+        ],
+        "constraints": [],
+        "provenance": [
+          "record-42"
+        ]
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "EVIDENCE",
+            "predicate": "RECORDED",
+            "arguments": [
+              "measurement id 42"
+            ],
+            "epistemic_status": "known",
+            "source": "model-guess"
+          }
+        ],
+        "constraints": [],
+        "provenance": [
+          "model-guess"
+        ]
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "EVIDENCE",
+            "predicate": "RECORDED",
+            "arguments": [
+              "measurement id 42"
+            ],
+            "epistemic_status": "known",
+            "source": "record-42"
+          }
+        ],
+        "constraints": [],
+        "provenance": [
+          "record-42"
+        ]
+      }
+    },
+    {
+      "case_id": "extra-action",
+      "family": "agent-security",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "ACTION",
+            "predicate": "RETURN_RESULT",
+            "arguments": [
+              "summary"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "ACTION",
+            "predicate": "RETURN_RESULT",
+            "arguments": [
+              "summary"
+            ],
+            "epistemic_status": "known"
+          },
+          {
+            "kind": "TOOL",
+            "predicate": "SEND_DATA",
+            "arguments": [
+              "external target"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "ACTION",
+            "predicate": "RETURN_RESULT",
+            "arguments": [
+              "summary"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      }
+    },
+    {
+      "case_id": "mel-regression",
+      "family": "counterexample",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "approved"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "approved"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "CLAIM",
+            "predicate": "STATES",
+            "arguments": [
+              "rejected"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      }
+    },
+    {
+      "case_id": "both-fail",
+      "family": "counterexample",
+      "reference": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "RELATION",
+            "predicate": "CAUSES",
+            "arguments": [
+              "A",
+              "B"
+            ],
+            "epistemic_status": "inferred"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "direct": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "RELATION",
+            "predicate": "CAUSES",
+            "arguments": [
+              "B",
+              "A"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      },
+      "mel": {
+        "mel_version": "0.1",
+        "goal": "explain",
+        "atoms": [
+          {
+            "kind": "RELATION",
+            "predicate": "CAUSES",
+            "arguments": [
+              "B",
+              "A"
+            ],
+            "epistemic_status": "known"
+          }
+        ],
+        "constraints": [],
+        "provenance": []
+      }
+    }
+  ]
+}
